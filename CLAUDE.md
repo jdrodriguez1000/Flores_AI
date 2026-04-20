@@ -36,13 +36,14 @@ Para garantizar la organización y trazabilidad, se sigue esta jerarquía de car
 
 | Directorio   | Propósito                                   | Regla de Oro                                                 |
 | :----------- | :------------------------------------------ | :----------------------------------------------------------- |
-| `docs/`      | Documentación técnica y de negocio oficial. | Segmentado por fases (`Phase_discovery` a `Phase_delivery`).                  |
-| `src/`       | Código fuente productivo (.py).             | Modularizado según el SAD (Ingesta, Modelado, API).          |
-| `data/`      | Almacenamiento de datos.                    | Estructura Bronze (crudo), Silver (limpio), Gold (features). |
-| `models/`    | Artefactos de modelos serializados.         | Solo modelos certificados (ONNX, Pickle, Joblib).            |
-| `notebooks/` | Investigación y experimentación.            | Archivos `.ipynb` documentados y numerados.                  |
-| `tests/`     | Suite de pruebas técnicas.                  | Unit, Integration, E2E y Model QA.                           |
-| `infra/`     | Infraestructura como Código (IaC).          | Scripts de Docker, Terraform o K8s.                          |
+| `docs/`             | Documentación técnica y de negocio oficial. | Segmentado por fases (`Phase_discovery` a `Phase_delivery`).                  |
+| `docs/design-system/` | Sistema de diseño del cliente (Brand).    | **Fuente de verdad de UI.** Obligatorio leer antes de generar cualquier interfaz. Contiene tokens de color, tipografía, reglas de componentes y referencia visual. |
+| `src/`              | Código fuente productivo (.py).             | Modularizado según el SAD (Ingesta, Modelado, API).          |
+| `data/`             | Almacenamiento de datos.                    | Estructura Bronze (crudo), Silver (limpio), Gold (features). |
+| `models/`           | Artefactos de modelos serializados.         | Solo modelos certificados (ONNX, Pickle, Joblib).            |
+| `notebooks/`        | Investigación y experimentación.            | Archivos `.ipynb` documentados y numerados.                  |
+| `tests/`            | Suite de pruebas técnicas.                  | Unit, Integration, E2E y Model QA.                           |
+| `infra/`            | Infraestructura como Código (IaC).          | Scripts de Docker, Terraform o K8s.                          |
 
 ---
 

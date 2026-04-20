@@ -6,6 +6,12 @@ agent: ai-frontend-engineer
 allowed-tools: [Read, Write, Edit, Python-Interpreter]
 ---
 
+## 🎨 0. Pre-Flight: Design System
+Antes de diseñar botones, formularios o alertas de feedback:
+1. **Verificar** si existe `docs/design-system/`.
+2. **Si existe:** Leer `docs/design-system/DESIGN.md` sección "Components" para aplicar los estilos correctos a botones de acción (Continue/Change), alertas de estado y formularios de corrección. Los colores de "Acción Primaria" vs "Acción Secundaria" deben seguir la jerarquía definida por el cliente.
+3. **Si no existe:** Preguntar — *"¿Tienes colores o estilo definido para botones de acción y alertas? Si no, aplicaré convenciones estándar de Streamlit."* Crear `docs/design-system/DESIGN.md` si el usuario responde, o continuar con defaults si omite.
+
 ## 🏗️ I. Captura de "Ground Truth" Humano
 El agente debe diseñar los mecanismos para que el usuario aprenda del modelo y viceversa:
 1. **Botón de Reporte de Error:** Implementar un flujo para que el usuario marque una predicción como incorrecta, enviando la metadata al MLOps.

@@ -16,21 +16,25 @@
 | :------------------ | :--------------------------------------------------------------------------------- |
 | **Proyecto**        | Flores AI - Iris                                                                   |
 | **Fase Actual**     | Phase Discovery — COMPLETADA AL 100%                                               |
-| **Iteracion**       | Sesion de integracion NotebookLM y auditoria de agnosticismo (2026-04-20)          |
-| **Estado General**  | Gobernanza normalizada. NotebookLM integrado. Todos los agentes y skills auditados como 100% agnosticos. |
+| **Iteracion**       | Sesion de Design System y gobernanza de marca (2026-04-20)                         |
+| **Estado General**  | Gobernanza normalizada. Design System integrado como convencion agnostica. Todos los agentes y skills de UI actualizados con flujo de 3 caminos. |
 | **Progreso Global** | 40% — Phase Engineering pendiente de inicio                                        |
 
 ---
 
-## 2. Logros de la Sesion (2026-04-20 — Integracion NotebookLM y Auditoria de Agnosticismo)
+## 2. Logros de la Sesion (2026-04-20 — Design System y Gobernanza de Marca)
 
 | # | Entregable / Accion | Archivos Afectados | Estado |
 | :- | :------------------ | :----------------- | :----- |
-| 1 | Creacion del notebook NotebookLM "Flores AI — Cerebro del Proyecto" (ID: `35c8760b-4797-4df2-8c91-cbf5b2df0240`) con 7 documentos de gobernanza cargados como fuentes | Externo (NotebookLM) | Completado |
-| 2 | `config.md` actualizado: NotebookLM ID registrado en seccion 4.2, listado de 7 fuentes cargadas y nota de re-sincronizacion | `docs/references/config.md` | Completado |
-| 3 | `session-management/SKILL.md` actualizado: paso de sincronizacion NotebookLM añadido al ritual de cierre, con tabla de documentos sincronizables y patron de actualizacion | `.claude/skills/session-management/SKILL.md` | Completado |
-| 4 | `session-management/SKILL.md` refactorizado a 100% agnostico: NOTEBOOK_ID hardcodeado eliminado; el skill ahora lee el ID desde `config.md` (seccion 4.2) | `.claude/skills/session-management/SKILL.md` | Completado |
-| 5 | Auditoria de agnosticismo de 63+ archivos (agentes, skills, CLAUDE.md, ai_process.md): resultado 100% agnostico tras la correccion del skill de session-management | Todos los `.md` del proyecto | Completado |
+| 1 | Creacion de `docs/design-system/` con contenido copiado de `parameters/` | `docs/design-system/DESIGN.md`, `docs/design-system/code.html`, `docs/design-system/screen.png` | Completado |
+| 2 | `CLAUDE.md` actualizado: nueva fila `docs/design-system/` en tabla de directorios con regla de lectura obligatoria | `CLAUDE.md` | Completado |
+| 3 | `config.md` actualizado: carpeta registrada en estructura de repositorio y tabla de documentos de gobernanza | `docs/references/config.md` | Completado |
+| 4 | Agente `ai-ux-designer` actualizado: seccion "Design System Pre-Flight" con flujo de 3 caminos | `.claude/agents/ai-ux-designer.md` | Completado |
+| 5 | Agente `ai-frontend-engineer` actualizado: seccion "Design System Pre-Flight" con traduccion a `.streamlit/config.toml` y flujo de 3 caminos | `.claude/agents/ai-frontend-engineer.md` | Completado |
+| 6 | Skill `ui-ux-prototyping` actualizado: regla "Design System First" con flujo de 3 caminos | `.claude/skills/ui-ux-prototyping/SKILL.md` | Completado |
+| 7 | Skill `interactive-dashboard-builder` actualizado: paso `0. Pre-Flight` completo con traduccion Streamlit + React/Next.js y flujo de 3 caminos | `.claude/skills/interactive-dashboard-builder/SKILL.md` | Completado |
+| 8 | Skill `xai-visualizer-specialist` actualizado: Pre-flight para paleta semantica de graficos SHAP | `.claude/skills/xai-visualizer-specialist/SKILL.md` | Completado |
+| 9 | Skill `ux-feedback-loop-designer` actualizado: Pre-flight para botones y alertas de feedback | `.claude/skills/ux-feedback-loop-designer/SKILL.md` | Completado |
 
 ---
 
@@ -38,15 +42,16 @@
 
 | Documento      | Ruta                                              | Estado                                   |
 | :------------- | :------------------------------------------------ | :--------------------------------------- |
-| config.md      | `docs/references/config.md`                       | DONE — 2026-04-20 (actualizado con NotebookLM ID) |
+| config.md      | `docs/references/config.md`                       | DONE — 2026-04-20 (design-system registrado) |
 | brd.md         | `docs/governance/brd.md`                          | DONE — 2026-04-19                        |
 | feasibility.md | `docs/Phase_discovery/feasibility.md`             | DONE — 2026-04-19                        |
 | mockup         | `mockup/index.html` + `docs/Phase_discovery/mockup.md` | DONE — 2026-04-19 (aprobado Stakeholder) |
 | sad.md         | `docs/governance/sad.md`                          | DONE — 2026-04-19 (v1.0.0)              |
 | specdd.md      | `docs/governance/specdd.md`                       | DONE — 2026-04-19 (v1.0.0)              |
 | contract.md    | `docs/governance/contract.md`                     | DONE — 2026-04-19 (v1.0.0)              |
+| design-system  | `docs/design-system/`                             | DONE — 2026-04-20 (DESIGN.md + code.html + screen.png) |
 | AGENTS.md      | `AGENTS.md` (raiz)                                | DONE — 2026-04-20                        |
-| session-management/SKILL.md | `.claude/skills/session-management/SKILL.md` | DONE — 2026-04-20 (actualizado y agnostico) |
+| session-management/SKILL.md | `.claude/skills/session-management/SKILL.md` | DONE — 2026-04-20 (agnostico) |
 
 ---
 
@@ -63,9 +68,9 @@
 | specdd.md        | `docs/governance/specdd.md`                     | Cargado — 2026-04-20 |
 | contract.md      | `docs/governance/contract.md`                   | Cargado — 2026-04-20 |
 | feasibility.md   | `docs/Phase_discovery/feasibility.md`           | Cargado — 2026-04-20 |
-| decisions.md     | `docs/references/decisions.md`                  | Pendiente re-sincronizacion (entrada #5 añadida hoy) |
+| decisions.md     | `docs/references/decisions.md`                  | Pendiente re-sincronizacion (entrada #6 añadida hoy) |
 
-> **Accion requerida al inicio de la proxima sesion:** Re-sincronizar `decisions.md` en NotebookLM (entrada #5 fue añadida en esta sesion). Ver patron de actualizacion en `.claude/skills/session-management/SKILL.md`.
+> **Accion requerida al inicio de la proxima sesion:** Re-sincronizar `decisions.md` en NotebookLM (entrada #6 fue añadida en esta sesion). Ver patron de actualizacion en `.claude/skills/session-management/SKILL.md`.
 
 ---
 
@@ -100,19 +105,19 @@
 | D-006 | Monolito Modular + Medallion Architecture (Bronze/Silver/Gold)        | Las tres carpetas `data/` son el contrato fisico de las capas           |
 | D-008 | StandardScaler dentro de sklearn.Pipeline                             | El pipeline Gold NO normaliza; la normalizacion va en trainer.py        |
 | D-009 | pathlib.Path en `src/config.py` como unico gestor de rutas            | Todos los paths en `src/data/` se importan desde `config.py`           |
+| D-016 | `docs/design-system/` como convencion agnostica de marca del cliente  | Los agentes de UI leen esta carpeta antes de generar cualquier interfaz |
 
 ---
 
 ## 8. Contexto para el Siguiente Agente
 
-La Phase Discovery esta completamente cerrada. En esta sesion se establecio la integracion con NotebookLM como parte del ritual de cierre. Puntos clave:
+La Phase Discovery esta completamente cerrada. En esta sesion se establecio la convencion `docs/design-system/` como estandar agnostico para la identidad visual del cliente. Puntos clave:
 
-- **NotebookLM:** El notebook "Flores AI — Cerebro del Proyecto" (ID: `35c8760b-4797-4df2-8c91-cbf5b2df0240`) es la herramienta de consulta de gobernanza. El ID vive en `docs/references/config.md` seccion 4.2 como unica fuente de verdad.
-- **Sincronizacion:** `decisions.md` debe re-sincronizarse al iniciar la proxima sesion (se modifico hoy). Los demas documentos en NotebookLM estan vigentes.
-- **Agnosticismo:** Todos los agentes (21) y skills del proyecto son 100% agnosticos. Ninguno tiene IDs de proyecto hardcodeados. El skill `session-management/SKILL.md` lee el NOTEBOOK_ID desde `config.md`.
+- **Design System:** `docs/design-system/` es la fuente de verdad de marca. Contiene `DESIGN.md` (reglas), `code.html` (tokens Tailwind) y `screen.png` (referencia visual). Los agentes `ai-ux-designer` y `ai-frontend-engineer` la leen en Pre-Flight obligatorio.
+- **Flujo de 3 caminos:** Si `docs/design-system/` no existe, los agentes de UI preguntan al usuario antes de aplicar defaults. Si el usuario provee datos, crean el archivo. Si omite, usan defaults del framework.
+- **Streamlit:** Los tokens del `code.html` se traducen a `.streamlit/config.toml` + CSS custom via `st.markdown`. El agente `ai-frontend-engineer` tiene el patron completo documentado.
+- **NotebookLM:** El notebook "Flores AI — Cerebro del Proyecto" (ID: `35c8760b-4797-4df2-8c91-cbf5b2df0240`) debe re-sincronizarse con `decisions.md` al inicio de la proxima sesion.
 - **`docs/governance/specdd.md`** contiene las firmas exactas de cada funcion en `src/`.
 - **`docs/governance/contract.md`** define los invariantes por capa: Bronze (6 cols + `Id`), Silver (147 filas, 5 cols, sin nulos), Gold (arrays NumPy).
-- **`docs/governance/sad.md`** define la estructura de modulos. No se pueden crear `.py` fuera de esa jerarquia.
-- **`docs/Phase_discovery/feasibility.md`** documenta los 3 near-duplicates a eliminar en Silver.
 
 El primer paso de la sesion siguiente es ejecutar `ai-session-steward.start_session`.

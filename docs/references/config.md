@@ -110,6 +110,7 @@ Flores_AI/
 │   ├── Phase_modeling/                    # Validacion de Modelos (MODEL QA)
 │   ├── Phase_delivery/                    # Certificados E2E y Stress Testing
 │   ├── governance/                # BACKLOG, BRD, SAD, SpecDD, CONTRACT
+│   ├── design-system/             # Brand del cliente: DESIGN.md, code.html, screen.png
 │   └── references/                # handoff, decisions, config
 ├── src/                           # Codigo fuente productivo (.py)
 ├── data/
@@ -134,6 +135,7 @@ Flores_AI/
 | SpecDD          | docs/governance/             | Completado - 2026-04-19 (v1.0.0) |
 | contract        | docs/governance/             | Completado - 2026-04-19 (v1.0.0) |
 | mockup          | mockup/ (raíz del proyecto)           | Completado y aprobado por Stakeholder - 2026-04-19 (v1.0.0) |
+| design-system   | docs/design-system/                   | Completado - 2026-04-20 (DESIGN.md + code.html + screen.png) |
 | FEASIBILITY     | docs/Phase_discovery/                 | Completado - 2026-04-19 |
 | handoff         | docs/references/             | Completado - 2026-04-19 |
 | decisions       | docs/references/             | Completado - 2026-04-19 |

@@ -31,11 +31,39 @@ Liderar el desarrollo de la interfaz en la Phase Delivery. Debes construir dashb
 - **[xai-visualizer-specialist](../skills/xai-visualizer-specialist/SKILL.md)**: El protocolo para la representación visual de SHAP y semáforos de confianza.
 - **[ux-feedback-loop-designer](../skills/ux-feedback-loop-designer/SKILL.md)**: El protocolo para capturar la interacción humana y re-inyectarla al sistema.
 
+## 🎨 Design System (Pre-Flight Obligatorio)
+Antes de escribir cualquier línea de UI, ejecuta este protocolo:
+
+1. **Verificar existencia:** Comprueba si existe `docs/design-system/` en el proyecto.
+2. **Si existe:** Lee `docs/design-system/DESIGN.md` y `docs/design-system/code.html`. Extrae los tokens de color y tipografía.
+3. **Traducción a Streamlit:** Mapea los tokens al archivo `.streamlit/config.toml`:
+   ```toml
+   [theme]
+   primaryColor             = "<primary del design-system>"
+   backgroundColor          = "<surface del design-system>"
+   secondaryBackgroundColor = "<surface-container-low del design-system>"
+   textColor                = "<on-surface del design-system>"
+   ```
+4. **CSS Custom:** Inyecta fuentes y reglas adicionales via `st.markdown("<style>...</style>", unsafe_allow_html=True)`.
+5. **Si no existe:** Pregunta al usuario antes de continuar:
+   > "No encontré un Design System en `docs/design-system/`. ¿Deseas definir uno básico ahora? Solo necesito:
+   > - Color primario (hex)
+   > - Color de fondo (hex)
+   > - Color de texto (hex)
+   > - Fuente principal (ej: Inter, Roboto, Poppins)
+   >
+   > Si prefieres omitirlo, aplicaré el tema estándar de Streamlit."
+   - **Si el usuario proporciona datos:** Crear `docs/design-system/DESIGN.md` con los tokens y generar `.streamlit/config.toml` automáticamente antes de continuar.
+   - **Si el usuario omite:** Aplicar convenciones estándar de Streamlit.
+
+> **Regla cardinal:** El Design System es inmutable. No "mejorar" ni "modernizar" los colores del cliente.
+
 ## 📋 Reglas de Oro (Hard Rules)
-1. **"Clarity over Complexity"**: Nunca sacrifiques la usabilidad por mostrar más datos técnicos. La UI debe ser limpia y enfocada en la toma de decisiones.
-2. **"Consistency with SAD"**: Asegura que el Frontend sea capaz de manejar los estados definidos en el contrato del Backend.
-3. **"Transparency is Confidence"**: Siempre acompaña una predicción con su explicación o nivel de confianza. Una caja negra genera desconfianza en el usuario.
-4. **"Feedback is Data"**: Cada clic de corrección del usuario es un dato de entrenamiento futuro. Trata la captura de feedback con la misma rigurosidad que una ingesta de datos.
+1. **"Brand First"**: El Design System del cliente tiene precedencia absoluta sobre preferencias propias de diseño.
+2. **"Clarity over Complexity"**: Nunca sacrifiques la usabilidad por mostrar más datos técnicos. La UI debe ser limpia y enfocada en la toma de decisiones.
+3. **"Consistency with SAD"**: Asegura que el Frontend sea capaz de manejar los estados definidos en el contrato del Backend.
+4. **"Transparency is Confidence"**: Siempre acompaña una predicción con su explicación o nivel de confianza. Una caja negra genera desconfianza en el usuario.
+5. **"Feedback is Data"**: Cada clic de corrección del usuario es un dato de entrenamiento futuro. Trata la captura de feedback con la misma rigurosidad que una ingesta de datos.
 
 ---
 

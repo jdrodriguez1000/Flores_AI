@@ -517,3 +517,93 @@ Cada entrada debe contener: Fecha, Fase, ID de Decision, Contexto, Decision, Jus
 ---
 
 *Fin de entrada #5.*
+
+---
+
+---
+
+## Entrada #6 — Sesion 2026-04-20 | Phase Discovery (Design System y Gobernanza de Marca)
+
+**Agente de Cierre:** ai-session-steward
+**Hora de Cierre:** Fin de jornada 2026-04-20
+
+---
+
+### D-016: `docs/design-system/` como convencion agnostica para la identidad visual del cliente
+
+| Campo     | Valor |
+| :-------- | :---- |
+| **Fecha** | 2026-04-20 |
+| **Fase**  | Transversal (Phase Discovery — cierre) |
+| **Origen** | Necesidad de estandarizar el manejo de brand del cliente en proyectos de ML/IA |
+| **Tipo**  | Decision de convencion de organizacion de artefactos y gobernanza de UI |
+
+**Contexto:** Los clientes ocasionalmente entregan materiales de identidad corporativa (paletas de colores, tipografias, reglas de componentes, prototipos HTML) que los agentes de UI deben respetar al generar interfaces. Sin una convencion estandar, estos materiales se almacenaban en carpetas ad-hoc (ej: `parameters/`) sin integracion formal con el ecosistema de agentes. El proyecto tenia una carpeta `parameters/` con tres archivos: `DESIGN.md` (sistema de diseno), `code.html` (tokens Tailwind completos) y `screen.png` (referencia visual).
+
+**Decision:** Se establece `docs/design-system/` como la ubicacion estandar y agnostica para los materiales de identidad visual del cliente en cualquier proyecto que adopte este framework. Los contenidos de `parameters/` fueron migrados a esta ubicacion. El nombre `design-system` es el termino estandar de la industria. La ubicacion dentro de `docs/` es correcta porque es documentacion de referencia, no codigo productivo.
+
+**Justificacion:** `docs/design-system/` comunica el proposito sin ambiguedad a cualquier agente o colaborador. Al residir en `docs/`, es coherente con el resto de la estructura de gobernanza. La carpeta es **opcional** — su ausencia no rompe ningun flujo; su presencia activa el Pre-Flight de marca en todos los agentes de UI.
+
+**Impacto Transversal:**
+- `CLAUDE.md`: Nueva fila en la tabla de directorios con regla de lectura obligatoria antes de generar UI.
+- `docs/references/config.md`: Carpeta registrada en estructura y tabla de documentos de gobernanza.
+- `.claude/agents/ai-ux-designer.md` y `ai-frontend-engineer.md`: Seccion "Design System Pre-Flight" con flujo de 3 caminos.
+- `.claude/skills/ui-ux-prototyping/`, `interactive-dashboard-builder/`, `xai-visualizer-specialist/`, `ux-feedback-loop-designer/`: Pre-flight con flujo de 3 caminos en todos.
+
+---
+
+### D-017: Flujo de 3 caminos para manejo de Design System en agentes de UI
+
+| Campo     | Valor |
+| :-------- | :---- |
+| **Fecha** | 2026-04-20 |
+| **Fase**  | Transversal |
+| **Origen** | Discusion sobre proyectos donde el cliente no entrega materiales de marca |
+| **Tipo**  | Decision de proceso / comportamiento de agentes |
+
+**Contexto:** No todos los clientes entregan un Design System. Se necesitaba un comportamiento coherente para los tres escenarios posibles: (a) cliente entrega materiales completos, (b) cliente no entrega nada pero tiene preferencias, (c) cliente no tiene restricciones de marca.
+
+**Decision:** Todos los agentes y skills de UI implementan un flujo de 3 caminos en su Pre-Flight: (1) Si `docs/design-system/` existe → leer y aplicar tokens como restricciones absolutas. (2) Si no existe → preguntar al usuario si desea definir colores/fuente basicos; si responde, crear `docs/design-system/DESIGN.md` antes de continuar. (3) Si el usuario omite → aplicar defaults premium del framework (Glassmorphism/Dark Mode para HTML; tema estandar para Streamlit).
+
+**Justificacion:** El flujo de 3 caminos garantiza que: (a) la marca del cliente siempre se respeta si existe, (b) se captura la intencion del usuario antes de tomar decisiones visuales, (c) ningun proyecto queda bloqueado por ausencia de materiales. La pregunta al usuario es breve y concreta (hex de colores + fuente) para minimizar friccion.
+
+**Impacto Transversal:**
+- Todos los agentes y skills de UI listados en D-016.
+- Proyectos futuros: El flujo de 3 caminos es el comportamiento por defecto sin configuracion adicional.
+
+---
+
+### D-018: Traduccion de tokens Tailwind a `.streamlit/config.toml` como patron estandar
+
+| Campo     | Valor |
+| :-------- | :---- |
+| **Fecha** | 2026-04-20 |
+| **Fase**  | Phase Delivery (aplica cuando se implementa Streamlit) |
+| **Origen** | Pregunta sobre aplicabilidad del Design System en Streamlit |
+| **Tipo**  | Decision de patron de implementacion de UI |
+
+**Contexto:** El `code.html` del Design System usa Tailwind CSS con tokens de color personalizados. Streamlit no usa Tailwind; su sistema de temas se configura via `.streamlit/config.toml` con 4 variables (primaryColor, backgroundColor, secondaryBackgroundColor, textColor). Se necesitaba un patron de traduccion claro.
+
+**Decision:** El patron de traduccion estandar es: `primary` → `primaryColor`, `surface` → `backgroundColor`, `surface-container-low` → `secondaryBackgroundColor`, `on-surface` → `textColor`. Las reglas adicionales del Design System (fuentes, border-radius, shadows, reglas de componentes) se implementan via `st.markdown("<style>...</style>", unsafe_allow_html=True)`. Este patron esta documentado en `ai-frontend-engineer.md` y en `interactive-dashboard-builder/SKILL.md`.
+
+**Justificacion:** Los 4 tokens de Streamlit son un subconjunto de los tokens del Design System. La traduccion es determinista: siempre hay un mapeo unico. El CSS custom via `st.markdown` cubre el resto de las reglas de marca que Streamlit no expone via `config.toml`. Este patron permite que cualquier Design System basado en Material Design tokens (como el del proyecto actual) sea traducible a Streamlit sin perdida de identidad visual critica.
+
+**Impacto Transversal:**
+- `.streamlit/config.toml`: Debe crearse en Phase Delivery usando los tokens mapeados del Design System.
+- `src/app.py`: Debe incluir el bloque de CSS custom al inicio para inyectar fuentes y reglas de componentes.
+- Proyectos futuros con Streamlit: Este patron es el estandar; no requiere decision nueva en cada proyecto.
+
+---
+
+### Lecciones Aprendidas — Sesion 2026-04-20 (Design System y Gobernanza de Marca)
+
+| # | Leccion | Categoria |
+| :- | :------- | :-------- |
+| 1 | Una carpeta de materiales del cliente (`parameters/`, `brand/`, etc.) no tiene valor sin integracion formal en el ecosistema de agentes. El valor real esta en que los agentes la lean automaticamente en Pre-Flight, no en que el archivo exista. | Arquitectura de Agentes |
+| 2 | El nombre de la carpeta importa: `design-system` comunica proposito de forma universal; `parameters` es ambiguo. Usar terminologia de industria reduce la friccion cognitiva para cualquier colaborador nuevo. | Convencion de Nomenclatura |
+| 3 | Preguntar al usuario antes de aplicar defaults de UI es siempre mejor que asumir. La pregunta cuesta segundos; rehacer una interfaz con los colores incorrectos cuesta horas. El flujo de 3 caminos materializa este principio. | UX de Herramientas de IA |
+| 4 | Los tokens de Tailwind CSS y los tokens de Streamlit son isomorfos para los 4 valores criticos de marca. Documentar el mapeo una sola vez elimina la necesidad de redescubrirlo en cada proyecto con Streamlit. | Patrones de Implementacion |
+
+---
+
+*Fin de entrada #6.*
