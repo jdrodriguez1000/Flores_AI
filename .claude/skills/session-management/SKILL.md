@@ -3,7 +3,7 @@ name: session-management
 description: Protocolo para la gestión sincronizada de apertura y cierre de sesiones de trabajo mediante Handoffs y Logs de Decisiones.
 user-invocable: false
 agent: ai-session-steward
-allowed-tools: [Read, Write, Edit, Bash]
+allowed-tools: [Read, Write, Edit, Bash, notebooklm]
 ---
 
 # Skill: Gestión de Sesión (Session Management)
@@ -31,11 +31,34 @@ Esta habilidad instrumenta los rituales definidos en **CLAUDE.md** para garantiz
     - **Fase:** Fase activa según el config.
     - **Decisiones:** Justificación de cambios estructurales o lógicos.
     - **Learnings:** Lecciones aprendidas (técnicas de datos, errores resueltos, etc.).
+- **Sincronización con NotebookLM:** Leer el `NOTEBOOK_ID` y el nombre del notebook desde `docs/references/config.md` (sección 4.2 — Fuentes Externas). Actualizar únicamente los documentos que fueron **creados o modificados** durante la sesión. El mapa de documentos sincronizables es:
+
+    | Documento | Ruta local | Cuándo sincronizar |
+    | :-------- | :--------- | :----------------- |
+    | `ai_process.md` | `docs/methodology/ai_process.md` | Si se modificó la metodología |
+    | `brd.md` | `docs/governance/brd.md` | Si se creó o modificó el BRD |
+    | `sad.md` | `docs/governance/sad.md` | Si se creó o modificó el SAD |
+    | `specdd.md` | `docs/governance/specdd.md` | Si se creó o modificó el SpecDD |
+    | `contract.md` | `docs/governance/contract.md` | Si se creó o modificó el contrato de datos |
+    | `feasibility.md` | `docs/Phase_discovery/feasibility.md` | Si se creó o modificó el reporte de factibilidad |
+    | `decisions.md` | `docs/references/decisions.md` | **Siempre** — se modifica en cada cierre |
+
+    **Patrón de actualización por documento:**
+    ```bash
+    # NOTEBOOK_ID se obtiene leyendo docs/references/config.md (sección 4.2)
+    NOTEBOOK_ID="<leer desde config.md>"
+    # Reemplazar <titulo> por el nombre exacto del archivo (ej: "brd.md")
+    notebooklm source delete-by-title "<titulo>" --notebook $NOTEBOOK_ID
+    notebooklm source add <ruta_local> --notebook $NOTEBOOK_ID
+    ```
+
+    **Regla:** `decisions.md` se sincroniza en **todos** los cierres de sesión sin excepción. Los demás documentos solo si fueron tocados en la sesión actual.
 
 ## Criterios de Éxito
 ✅ **Continuidad Cognitiva:** Un nuevo agente debe ser capaz de retomar el trabajo leyendo únicamente el `handoff.md`.
 ✅ **Trazabilidad de Decisiones:** Cualquier cambio en el SAD o SpecDD debe tener una entrada correspondiente en el `decisions.md`.
 ✅ **Higiene de Archivos:** Las carpetas `docs/references/` contienen archivos actualizados y sin inconsistencias.
+✅ **Sincronización NotebookLM:** Al finalizar cada cierre, `decisions.md` y todos los docs modificados en la sesión están actualizados en el notebook definido en `config.md` (sección 4.2).
 
 ## Reglas Técnicas
 - **Formato Mandatorio:** Los archivos deben usar Markdown con tablas o listas para máxima legibilidad.

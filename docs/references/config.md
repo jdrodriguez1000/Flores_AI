@@ -79,12 +79,21 @@ las cuatro dimensiones muestre el tipo de especie predicha.
 
 ### 4.2 Fuentes Externas Adicionales
 
-| Tipo                 | ID / URL       | Descripcion                     | Estado    |
-| :------------------- | :------------- | :------------------------------ | :-------- |
-| NotebookLM           | No definido    | Sin fuente externa por definir  | Pendiente |
-| Documentacion externa| No definida    | Sin fuente externa por definir  | Pendiente |
+| Tipo                 | ID / URL                                     | Descripcion                                               | Estado       |
+| :------------------- | :------------------------------------------- | :-------------------------------------------------------- | :----------- |
+| NotebookLM           | `35c8760b-4797-4df2-8c91-cbf5b2df0240`       | "Flores AI — Cerebro del Proyecto" — 7 fuentes de gobernanza cargadas | Activo |
+| Documentacion externa| No definida                                  | Sin fuente externa por definir                            | Pendiente    |
 
-> **Nota:** Esta tabla se actualizara cuando se incorporen nuevas fuentes externas al proyecto.
+**Fuentes cargadas en NotebookLM (2026-04-20):**
+- `ai_process.md` — Marco metodologico
+- `brd.md` — Objetivos y KPIs
+- `sad.md` — Arquitectura tecnica
+- `specdd.md` — Contratos de interfaces
+- `contract.md` — Invariantes de datos por capa
+- `feasibility.md` — Diagnostico del dataset
+- `decisions.md` — Historial de decisiones (re-sincronizar al cierre de cada fase)
+
+> **Nota:** `decisions.md` debe re-sincronizarse en NotebookLM al cierre de cada fase cuando acumule decisiones nuevas.
 
 ---
 
@@ -142,3 +151,4 @@ Flores_AI/
 | 2026-04-19  | sad, specdd y contract completados; progreso actualizado a 30% | ai-solutions-architect |
 | 2026-04-19  | mockup aprobado por Stakeholder; progreso actualizado a 35%; stack tecnologico ampliado con Joblib y Pydantic v2 | ai-session-steward |
 | 2026-04-19  | backlog.md creado (F1-T08 DONE); Phase Discovery completada al 100%; progreso global actualizado a 40% | ai-backlog-manager |
+| 2026-04-20  | NotebookLM integrado: notebook "Flores AI — Cerebro del Proyecto" creado con 7 fuentes de gobernanza | ai-session-steward |

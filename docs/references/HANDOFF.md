@@ -1,7 +1,7 @@
 # handoff.md: Estado Operativo del Proyecto
 
 > **Definicion del Documento**
-> Este archivo es la foto nítida y actual del proyecto. Es sobrescribible al cierre de cada sesion.
+> Este archivo es la foto nitida y actual del proyecto. Es sobrescribible al cierre de cada sesion.
 > Un nuevo agente debe poder retomar el trabajo leyendo unicamente este archivo.
 >
 > **Ultima actualizacion:** 2026-04-20
@@ -12,26 +12,25 @@
 
 ## 1. Resumen de Estado
 
-| Campo               | Valor                                                                    |
-| :------------------ | :----------------------------------------------------------------------- |
-| **Proyecto**        | Flores AI - Iris                                                         |
-| **Fase Actual**     | Phase Discovery — COMPLETADA AL 100%                                     |
-| **Iteracion**       | Sesion de ajustes de gobernanza y nomenclatura (2026-04-20)              |
-| **Estado General**  | Gobernanza normalizada. Nomenclatura de fases y carpetas estandarizada.  |
-| **Progreso Global** | 40% — Phase Engineering pendiente de inicio                              |
+| Campo               | Valor                                                                              |
+| :------------------ | :--------------------------------------------------------------------------------- |
+| **Proyecto**        | Flores AI - Iris                                                                   |
+| **Fase Actual**     | Phase Discovery — COMPLETADA AL 100%                                               |
+| **Iteracion**       | Sesion de integracion NotebookLM y auditoria de agnosticismo (2026-04-20)          |
+| **Estado General**  | Gobernanza normalizada. NotebookLM integrado. Todos los agentes y skills auditados como 100% agnosticos. |
+| **Progreso Global** | 40% — Phase Engineering pendiente de inicio                                        |
 
 ---
 
-## 2. Logros de la Sesion (2026-04-20 — Ajustes de Gobernanza)
+## 2. Logros de la Sesion (2026-04-20 — Integracion NotebookLM y Auditoria de Agnosticismo)
 
 | # | Entregable / Accion | Archivos Afectados | Estado |
 | :- | :------------------ | :----------------- | :----- |
-| 1 | Renombrado de carpetas de fases: `Fase_1→Phase_discovery`, `Fase_2→Phase_engineering`, `Fase_3→Phase_modeling`, `Fase_4→Phase_delivery` | `docs/Phase_discovery/`, `docs/Phase_engineering/`, `docs/Phase_modeling/`, `docs/Phase_delivery/` | Completado |
-| 2 | Actualizacion masiva de referencias en 52 archivos (agentes, skills, governance, metodologia, CLAUDE.md) | Todos los `.md` del proyecto | Completado |
-| 3 | Carpeta `mockup/` movida a la raiz del proyecto (desde `docs/Phase_discovery/mockup/`) | `mockup/index.html` | Completado |
-| 4 | Referencias al mockup actualizadas en 5 archivos | `mockup.md`, `handoff.md`, `config.md`, `ui-ux-prototyping/SKILL.md`, `repository-governance/SKILL.md` | Completado |
-| 5 | `ai_process.md` actualizado: agente `ai-ux-designer` añadido a Phase Discovery (seccion 2), ruta de mockup corregida en tabla de artefactos, entrada `mockup/` añadida a Regla de Oro | `docs/methodology/ai_process.md` | Completado |
-| 6 | `AGENTS.md` creado en la raiz del proyecto: catalogo agnostico con 21 agentes, organizados por fase, con descripcion de cuando usarlos y skills asociados | `AGENTS.md` | Completado |
+| 1 | Creacion del notebook NotebookLM "Flores AI — Cerebro del Proyecto" (ID: `35c8760b-4797-4df2-8c91-cbf5b2df0240`) con 7 documentos de gobernanza cargados como fuentes | Externo (NotebookLM) | Completado |
+| 2 | `config.md` actualizado: NotebookLM ID registrado en seccion 4.2, listado de 7 fuentes cargadas y nota de re-sincronizacion | `docs/references/config.md` | Completado |
+| 3 | `session-management/SKILL.md` actualizado: paso de sincronizacion NotebookLM añadido al ritual de cierre, con tabla de documentos sincronizables y patron de actualizacion | `.claude/skills/session-management/SKILL.md` | Completado |
+| 4 | `session-management/SKILL.md` refactorizado a 100% agnostico: NOTEBOOK_ID hardcodeado eliminado; el skill ahora lee el ID desde `config.md` (seccion 4.2) | `.claude/skills/session-management/SKILL.md` | Completado |
+| 5 | Auditoria de agnosticismo de 63+ archivos (agentes, skills, CLAUDE.md, ai_process.md): resultado 100% agnostico tras la correccion del skill de session-management | Todos los `.md` del proyecto | Completado |
 
 ---
 
@@ -39,37 +38,34 @@
 
 | Documento      | Ruta                                              | Estado                                   |
 | :------------- | :------------------------------------------------ | :--------------------------------------- |
-| config.md      | `docs/references/config.md`                       | DONE — 2026-04-19                        |
+| config.md      | `docs/references/config.md`                       | DONE — 2026-04-20 (actualizado con NotebookLM ID) |
 | brd.md         | `docs/governance/brd.md`                          | DONE — 2026-04-19                        |
 | feasibility.md | `docs/Phase_discovery/feasibility.md`             | DONE — 2026-04-19                        |
 | mockup         | `mockup/index.html` + `docs/Phase_discovery/mockup.md` | DONE — 2026-04-19 (aprobado Stakeholder) |
 | sad.md         | `docs/governance/sad.md`                          | DONE — 2026-04-19 (v1.0.0)              |
 | specdd.md      | `docs/governance/specdd.md`                       | DONE — 2026-04-19 (v1.0.0)              |
 | contract.md    | `docs/governance/contract.md`                     | DONE — 2026-04-19 (v1.0.0)              |
-| AGENTS.md      | `AGENTS.md` (raiz)                                | DONE — 2026-04-20 (nuevo)               |
+| AGENTS.md      | `AGENTS.md` (raiz)                                | DONE — 2026-04-20                        |
+| session-management/SKILL.md | `.claude/skills/session-management/SKILL.md` | DONE — 2026-04-20 (actualizado y agnostico) |
 
 ---
 
-## 4. Estructura de Carpetas Vigente (Post-Ajuste)
+## 4. Fuentes en NotebookLM (Estado al Cierre)
 
-```
-Flores_AI/
-├── AGENTS.md                        ← NUEVO: catalogo maestro de agentes
-├── CLAUDE.md
-├── mockup/                          ← MOVIDO: prototipo visual (antes en docs/Phase_discovery/)
-│   └── index.html
-├── docs/
-│   ├── governance/                  (BRD, SAD, SpecDD, contract, backlog)
-│   ├── methodology/                 (ai_process.md — actualizado)
-│   ├── Phase_discovery/             ← RENOMBRADO (antes Fase_1)
-│   ├── Phase_engineering/           ← RENOMBRADO (antes Fase_2)
-│   ├── Phase_modeling/              ← RENOMBRADO (antes Fase_3)
-│   ├── Phase_delivery/              ← RENOMBRADO (antes Fase_4)
-│   └── references/                  (config, handoff, decisions)
-└── .claude/
-    ├── agents/                      (21 agentes actualizados)
-    └── skills/                      (skills actualizados)
-```
+**Notebook:** "Flores AI — Cerebro del Proyecto"
+**ID:** `35c8760b-4797-4df2-8c91-cbf5b2df0240`
+
+| Documento        | Ruta Local                                      | Estado en NotebookLM |
+| :--------------- | :---------------------------------------------- | :------------------- |
+| ai_process.md    | `docs/methodology/ai_process.md`               | Cargado — 2026-04-20 |
+| brd.md           | `docs/governance/brd.md`                        | Cargado — 2026-04-20 |
+| sad.md           | `docs/governance/sad.md`                        | Cargado — 2026-04-20 |
+| specdd.md        | `docs/governance/specdd.md`                     | Cargado — 2026-04-20 |
+| contract.md      | `docs/governance/contract.md`                   | Cargado — 2026-04-20 |
+| feasibility.md   | `docs/Phase_discovery/feasibility.md`           | Cargado — 2026-04-20 |
+| decisions.md     | `docs/references/decisions.md`                  | Pendiente re-sincronizacion (entrada #5 añadida hoy) |
+
+> **Accion requerida al inicio de la proxima sesion:** Re-sincronizar `decisions.md` en NotebookLM (entrada #5 fue añadida en esta sesion). Ver patron de actualizacion en `.claude/skills/session-management/SKILL.md`.
 
 ---
 
@@ -90,9 +86,7 @@ Flores_AI/
 
 ## 6. Bloqueos Activos
 
-**Ninguno.** La Phase Discovery esta formalmente cerrada y la gobernanza esta completamente normalizada. El proyecto puede iniciar Phase Engineering sin dependencias externas pendientes.
-
-**Pendiente menor (tarea 9):** Enlazar documentos con NotebookLM (ajuste #9 de `ajustes.txt`) quedó pendiente para la proxima sesion.
+**Ninguno.** La Phase Discovery esta formalmente cerrada, la gobernanza esta completamente normalizada y el notebook de NotebookLM esta activo. El proyecto puede iniciar Phase Engineering sin dependencias externas pendientes.
 
 ---
 
@@ -111,11 +105,11 @@ Flores_AI/
 
 ## 8. Contexto para el Siguiente Agente
 
-La Phase Discovery esta completamente cerrada y la gobernanza fue normalizada en esta sesion. Puntos clave:
+La Phase Discovery esta completamente cerrada. En esta sesion se establecio la integracion con NotebookLM como parte del ritual de cierre. Puntos clave:
 
-- **Nomenclatura de fases:** Las carpetas usan ahora `Phase_discovery`, `Phase_engineering`, `Phase_modeling`, `Phase_delivery`. Todos los documentos estan actualizados.
-- **Mockup:** `mockup/index.html` en la raiz es la referencia visual oficial aprobada por el Stakeholder.
-- **AGENTS.md:** Nuevo archivo en la raiz con el catalogo completo de 21 agentes.
+- **NotebookLM:** El notebook "Flores AI — Cerebro del Proyecto" (ID: `35c8760b-4797-4df2-8c91-cbf5b2df0240`) es la herramienta de consulta de gobernanza. El ID vive en `docs/references/config.md` seccion 4.2 como unica fuente de verdad.
+- **Sincronizacion:** `decisions.md` debe re-sincronizarse al iniciar la proxima sesion (se modifico hoy). Los demas documentos en NotebookLM estan vigentes.
+- **Agnosticismo:** Todos los agentes (21) y skills del proyecto son 100% agnosticos. Ninguno tiene IDs de proyecto hardcodeados. El skill `session-management/SKILL.md` lee el NOTEBOOK_ID desde `config.md`.
 - **`docs/governance/specdd.md`** contiene las firmas exactas de cada funcion en `src/`.
 - **`docs/governance/contract.md`** define los invariantes por capa: Bronze (6 cols + `Id`), Silver (147 filas, 5 cols, sin nulos), Gold (arrays NumPy).
 - **`docs/governance/sad.md`** define la estructura de modulos. No se pueden crear `.py` fuera de esa jerarquia.

@@ -425,3 +425,95 @@ Cada entrada debe contener: Fecha, Fase, ID de Decision, Contexto, Decision, Jus
 | 1 | Un cambio de nomenclatura masivo (52 archivos) es manejable con `sed` en bash sobre el arbol de archivos. El patron es: hacer mv de carpetas primero, luego sed en todos los .md. El orden importa. | Gestion de Repositorio |
 | 2 | La separacion entre "carpeta de artefacto de presentacion" (`mockup/`) y "carpeta de documentacion tecnica" (`docs/`) reduce ambiguedad para los agentes que generan HTML vs. los que generan Markdown. | Arquitectura de Artefactos |
 | 3 | Un archivo `AGENTS.md` agnostico en la raiz es mas util que el directorio `.claude/agents/` para onboarding rapido, porque incluye el "cuando usarlo" ademas del "que hace". | Documentacion de Gobernanza |
+
+---
+
+*Fin de entrada #4.*
+
+---
+
+---
+
+## Entrada #5 — Sesion 2026-04-20 | Phase Discovery (Integracion NotebookLM y Auditoria de Agnosticismo)
+
+**Agente de Cierre:** ai-session-steward
+**Hora de Cierre:** Fin de jornada 2026-04-20
+
+---
+
+### D-013: NotebookLM como herramienta de consulta de gobernanza del proyecto
+
+| Campo     | Valor |
+| :-------- | :---- |
+| **Fecha** | 2026-04-20 |
+| **Fase**  | Transversal (Phase Discovery — cierre) |
+| **Origen** | Ajuste pendiente registrado en sesion anterior (handoff.md seccion 6) |
+| **Tipo**  | Decision de integracion de herramienta externa |
+
+**Contexto:** El handoff de la sesion anterior registraba como pendiente la integracion con NotebookLM (ajuste #9 de `ajustes.txt`). El proyecto acumula 7 documentos de gobernanza densos que un agente o colaborador nuevo necesita asimilar antes de cada sesion. Se necesitaba un mecanismo de consulta semantica sobre esos documentos.
+
+**Decision:** Se crea el notebook "Flores AI — Cerebro del Proyecto" en NotebookLM (ID: `35c8760b-4797-4df2-8c91-cbf5b2df0240`) con 7 documentos de gobernanza cargados como fuentes. El notebook es la herramienta oficial de consulta semantica del proyecto. El ID queda registrado en `docs/references/config.md` seccion 4.2 como unica fuente de verdad.
+
+**Justificacion:** Un notebook semantico sobre los 7 documentos de gobernanza permite hacer consultas en lenguaje natural ("que invariantes debe cumplir la capa Silver?", "cual es la firma de ingestion.py?") sin tener que abrir y leer cada documento individualmente. Esto reduce el tiempo de sincronizacion al inicio de sesion y disminuye el riesgo de que un agente omita una restriccion documentada por no haber leido el archivo correcto.
+
+**Impacto Transversal:**
+- `docs/references/config.md`: Seccion 4.2 actualizada con ID del notebook y listado de fuentes.
+- `.claude/skills/session-management/SKILL.md`: Ritual de cierre actualizado con paso de sincronizacion NotebookLM.
+- Sesiones futuras: `decisions.md` debe re-sincronizarse en NotebookLM en cada cierre donde se añadan entradas nuevas.
+
+---
+
+### D-014: NOTEBOOK_ID reside en config.md, no en el skill de session-management
+
+| Campo     | Valor |
+| :-------- | :---- |
+| **Fecha** | 2026-04-20 |
+| **Fase**  | Transversal |
+| **Origen** | Auditoria de agnosticismo del skill session-management/SKILL.md |
+| **Tipo**  | Decision de arquitectura de documentacion (agnosticismo) |
+
+**Contexto:** Al añadir la sincronizacion NotebookLM al skill `session-management/SKILL.md`, la primera version hardcodeaba el NOTEBOOK_ID directamente en el skill. Esto violaba el principio de agnosticismo: el skill pertenece al framework de agentes reutilizables, no al proyecto Flores AI. Cualquier proyecto que adopte el framework heredaria el ID de Flores AI.
+
+**Decision:** El NOTEBOOK_ID no se hardcodea en ningun skill ni agente. El skill `session-management/SKILL.md` fue refactorizado para que el paso de sincronizacion lea el NOTEBOOK_ID desde `docs/references/config.md` seccion 4.2. El patron de actualizacion incluye explicitamente la instruccion de leer config.md antes de ejecutar los comandos de notebooklm.
+
+**Justificacion:** El principio "config.md como unica fuente de verdad de los IDs del proyecto" (establecido en D-009 para rutas de codigo) aplica igualmente a los identificadores de herramientas externas. Si el notebook se recrea o migra, el cambio se hace en un solo lugar (config.md) y todos los skills lo recogen automaticamente. Un skill que contiene IDs especificos de un proyecto no puede reusarse en otro proyecto sin edicion manual, lo que rompe el valor del framework de agentes.
+
+**Impacto Transversal:**
+- `.claude/skills/session-management/SKILL.md`: Patron de actualizacion corregido; NOTEBOOK_ID se lee de config.md.
+- Proyectos futuros que adopten este framework: Solo necesitan actualizar su propio `config.md` con su NOTEBOOK_ID; los skills funcionan sin modificacion.
+
+---
+
+### D-015: Politica de sincronizacion NotebookLM — decisions.md siempre, resto solo si modificado
+
+| Campo     | Valor |
+| :-------- | :---- |
+| **Fecha** | 2026-04-20 |
+| **Fase**  | Transversal |
+| **Origen** | Diseno del ritual de cierre en session-management/SKILL.md |
+| **Tipo**  | Decision de proceso (ritual de cierre) |
+
+**Contexto:** Al definir que documentos sincronizar con NotebookLM en cada cierre, se plantearon dos extremos: (a) sincronizar todos los 7 documentos siempre, o (b) sincronizar solo los que cambiaron. La opcion (a) es costosa en operaciones de API (delete + upload por cada documento); la opcion (b) requiere que el agente de cierre sepa exactamente que se toco en la sesion.
+
+**Decision:** La politica de sincronizacion es: `decisions.md` se sincroniza en TODOS los cierres de sesion sin excepcion (porque siempre recibe una entrada nueva al cerrar). Los demas documentos del mapa de sincronizacion (`ai_process.md`, `brd.md`, `sad.md`, `specdd.md`, `contract.md`, `feasibility.md`) solo se sincronizan si fueron modificados durante la sesion actual. `handoff.md` queda excluido permanentemente del mapa de sincronizacion porque se desactualiza en cada sesion y no tiene valor semantico persistente para consulta.
+
+**Justificacion:** `decisions.md` es el unico documento que crece garantizadamente en cada sesion. Su sincronizacion es no negociable para que el notebook refleje el historial completo de decisiones. Sincronizar documentos no modificados desperdicia operaciones de API y puede introducir versiones identicas sin valor. `handoff.md` es un documento transitorio de estado operativo, no un documento de gobernanza con valor historico; cargarlo en NotebookLM generaria confusion al consultar el notebook con el estado de una sesion pasada.
+
+**Impacto Transversal:**
+- `.claude/skills/session-management/SKILL.md`: Tabla de sincronizacion refleja esta politica con la columna "Cuando sincronizar".
+- Sesiones futuras: El agente de cierre debe evaluar explicitamente que documentos del mapa fueron tocados antes de ejecutar los comandos de sincronizacion.
+
+---
+
+### Lecciones Aprendidas — Sesion 2026-04-20 (Integracion NotebookLM y Auditoria de Agnosticismo)
+
+| # | Leccion | Categoria |
+| :- | :------- | :-------- |
+| 1 | El agnosticismo de los skills no es solo cuestion de nombres de proyecto — tambien aplica a IDs de herramientas externas. Un ID hardcodeado en un skill es tan acoplado como un nombre de proyecto. La regla es: todo identificador especifico del proyecto vive en `config.md`. | Arquitectura de Agentes |
+| 2 | Al disenar la sincronizacion de una herramienta externa, la primera pregunta no es "que sincronizar" sino "que documentos tienen valor semantico persistente". `handoff.md` parece importante pero es transitorio; excluirlo del notebook evita confusion en consultas futuras. | Diseno de Integraciones |
+| 3 | Auditar el agnosticismo de 63+ archivos es viable si se hace con busqueda sistematica de strings especificos del proyecto. El patron es: buscar el nombre del proyecto, el nombre del dataset y los IDs conocidos. Si no aparecen fuera de config.md, el repositorio es agnostico. | Proceso de Auditoria |
+| 4 | La sincronizacion con herramientas de consulta semantica (NotebookLM, embeddings, RAG) debe diseñarse en Phase Discovery, no en Phase Delivery. Integrarla tarde obliga a re-leer documentos que ya se leyeron y puede generar inconsistencias si el notebook no esta al dia durante el desarrollo. | Proceso / Metodologia |
+
+---
+
+*Fin de entrada #5.*
