@@ -721,3 +721,71 @@ Cada entrada debe contener: Fecha, Fase, ID de Decision, Contexto, Decision, Jus
 ---
 
 *Fin de entrada #7.*
+
+---
+
+---
+
+## Entrada #8 — Sesion 2026-04-20 | Phase Engineering (Apertura y Expansion del Backlog F2)
+
+**Agente de Cierre:** ai-session-steward
+**Hora de Cierre:** Fin de jornada 2026-04-20
+**Rama activa:** `feat/F2-engineering` (commit `802b22a`)
+
+---
+
+### D-023: Ciclo IA-TDD completo como estructura obligatoria del backlog por fase
+
+| Campo     | Valor |
+| :-------- | :---- |
+| **Fecha** | 2026-04-20 |
+| **Fase**  | Phase Engineering (aplicable a todas las fases tecnicas) |
+| **Origen** | Expansion del backlog F2 de 6 a 11 tareas |
+| **Tipo**  | Decision de proceso / estructura del backlog |
+
+**Contexto:** El backlog original de Phase Engineering tenia 6 tareas que cubrian solo los pasos RED y GREEN del ciclo IA-TDD definido en CLAUDE.md §4. Los pasos REFACTOR, CERTIFICACION y VALIDACION no estaban representados como tareas atomicas. Esto significaba que el ciclo quedaria incompleto sin trazabilidad formal de la calidad del codigo y del cumplimiento del linaje de datos.
+
+**Decision:** Cada iteracion tecnica del backlog debe contener obligatoriamente tres tareas: [RED] (tests primero), [GREEN] (implementacion minima que pasa los tests) y [REFACTOR] (calidad de codigo + EDA/documentacion del resultado de la capa). Adicionalmente, cada fase tecnica debe cerrar con una iteracion de [CERTIFICACION] (auditoria de linaje completo) y [VALIDACION] (verificacion contra KPIs del BRD). Esta estructura se aplico retroactivamente a Phase Engineering (F2) y debe aplicarse al disenar el backlog de Phase Modeling (F3) y Phase Delivery (F4).
+
+**Justificacion:** Sin las tareas [REFACTOR], el codigo GREEN (minimo para pasar tests) queda en produccion sin tipado estricto, sin documentacion de la transformacion y sin el EDA que valida el resultado de la capa. Esto viola el principio "Soberania Documental" de CLAUDE.md. Sin [CERTIFICACION] y [VALIDACION], una fase puede declararse completa sin haber verificado el linaje de datos de extremo a extremo ni haber confirmado que el Feature Set cumple los thresholds del BRD.
+
+**Impacto Transversal:**
+- `docs/governance/backlog.md`: Phase Engineering actualizada de 6 a 11 tareas con ciclo completo.
+- Phase Modeling (F3) y Phase Delivery (F4): Cuando se atomicen, deben incluir las tareas [REFACTOR], [CERTIFICACION] y [VALIDACION] correspondientes.
+- `ai-backlog-manager`: Al disenar backlogs de fases tecnicas futuras, debe usar esta estructura de 3 tareas por iteracion + iteracion de cierre como plantilla mandatoria.
+
+---
+
+### D-024: Sincronizacion de rama siempre desde origin/dev, no desde dev local
+
+| Campo     | Valor |
+| :-------- | :---- |
+| **Fecha** | 2026-04-20 |
+| **Fase**  | Transversal (gestion de ramas) |
+| **Origen** | Error de creacion de `feat/F2-engineering` desde `dev` local desactualizado |
+| **Tipo**  | Decision de protocolo Git |
+
+**Contexto:** Al crear la rama `feat/F2-engineering`, se uso `git checkout -b feat/F2-engineering dev` sin haber ejecutado `git fetch origin` previamente. La rama `dev` local estaba desactualizada respecto a `origin/dev` (le faltaba el commit del Merge PR #1). Esto produjo una rama que no incluia el ultimo merge y requirio correccion con `git reset --hard origin/dev` + `git rebase dev`.
+
+**Decision:** El protocolo obligatorio para crear ramas de feature es: (1) `git fetch origin`, (2) `git checkout -b feat/<nombre> origin/dev`. Nunca crear ramas desde referencias locales sin verificar su estado respecto al remoto. Si ya se creo una rama desde una referencia local desactualizada, el procedimiento de correccion es `git reset --hard origin/<base>` antes de realizar cualquier commit en la rama nueva.
+
+**Justificacion:** Una rama creada desde `dev` local desactualizado producira conflictos en el PR o perdera commits del merge mas reciente. El paso `git fetch origin` es gratuito en costo y elimina completamente este riesgo. El protocolo `origin/<rama>` como referencia explicita garantiza que siempre se parte del estado remoto verificado, independientemente del estado local.
+
+**Impacto Transversal:**
+- Todas las ramas `feat/F3-*` y `feat/F4-*` futuras deben crearse con `git checkout -b feat/<nombre> origin/dev`.
+- El ritual de apertura de sesion debe incluir `git fetch origin` como primer comando Git antes de cualquier operacion de ramas.
+
+---
+
+### Lecciones Aprendidas — Sesion 2026-04-20 (Apertura Phase Engineering)
+
+| # | Leccion | Categoria |
+| :- | :------- | :-------- |
+| 1 | El ciclo IA-TDD definido en CLAUDE.md §4 tiene 5 pasos, pero un backlog que solo atomiza RED y GREEN deja 3 pasos sin trazabilidad. La estructura del backlog debe reflejar el ciclo completo desde el primer borrador, no corregirse antes de empezar la fase. | Proceso / Backlog |
+| 2 | `git fetch origin` debe ser el primer comando de cualquier sesion que involucre trabajo con ramas. El costo es cero y el riesgo de omitirlo es crear ramas desde referencias obsoletas, lo que genera retrabajo de correccion. | Gestion de Versiones |
+| 3 | Las tareas [REFACTOR] no son opcionales ni "si hay tiempo" — son el paso que transforma codigo funcional en codigo industrializable. Sin ellas, el pipeline de datos puede pasar los tests pero no cumple el contrato del SpecDD (tipado estricto, importabilidad, sin rutas absolutas). | Calidad de Codigo |
+| 4 | La iteracion de CERTIFICACION al cierre de cada fase tecnica es el mecanismo que garantiza que el linaje Bronze → Silver → Gold es trazable antes de iniciar la siguiente fase. Sin este paso formal, la Phase Modeling podria iniciarse con un dataset Gold sin linaje verificado. | Trazabilidad de Datos |
+
+---
+
+*Fin de entrada #8.*
