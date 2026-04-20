@@ -1,4 +1,4 @@
-# MOCKUP.md — Visual Prototype v1.0
+# mockup.md — Visual Prototype v1.0
 ## Proyecto: Flores AI - Iris
 
 > **Documento:** Visual Mockup & UX Design Rationale
@@ -7,7 +7,7 @@
 > **Fecha:** 2026-04-19
 > **Autor:** ai-ux-designer
 > **Stakeholder:** jdrodriguez1000@gmail.com
-> **Archivo del prototipo:** `docs/governance/MOCKUP/index.html`
+> **Archivo del prototipo:** `docs/Fase_1/mockup/index.html`
 
 ---
 
@@ -15,10 +15,10 @@
 
 | Artefacto | Ruta relativa |
 |:----------|:--------------|
-| Prototipo interactivo (HTML) | `docs/governance/MOCKUP/index.html` |
-| Este documento | `docs/governance/MOCKUP.md` |
+| Prototipo interactivo (HTML) | `docs/Fase_1/mockup/index.html` |
+| Este documento | `docs/Fase_1/mockup.md` |
 
-Para visualizar el prototipo, abrir `docs/governance/MOCKUP/index.html` directamente en cualquier navegador web moderno (Chrome, Edge, Firefox). No requiere servidor ni dependencias externas.
+Para visualizar el prototipo, abrir `docs/Fase_1/mockup/index.html` directamente en cualquier navegador web moderno (Chrome, Edge, Firefox). No requiere servidor ni dependencias externas.
 
 ---
 
@@ -189,7 +189,7 @@ Los siguientes elementos visuales del prototipo implican logica de implementacio
 
 Para validar el prototipo:
 
-1. Abrir el archivo `docs/governance/MOCKUP/index.html` en su navegador (doble clic o arrastrar al navegador).
+1. Abrir el archivo `docs/Fase_1/mockup/index.html` en su navegador (doble clic o arrastrar al navegador).
 2. Navegar entre los 4 estados usando los botones en la barra superior.
 3. Verificar que cada pantalla representa correctamente el comportamiento esperado segun las User Stories del BRD.
 4. Proporcionar feedback a jdrodriguez1000@gmail.com con aprobacion o cambios solicitados.
@@ -207,4 +207,4 @@ Criterio de aprobacion: el Stakeholder confirma por escrito que las 4 pantallas 
 
 ---
 
-> **Nota de Gobernanza:** Este artefacto es el entregable de la tarea de prototipado de la Fase 1. Su aprobacion por el Stakeholder es prerequisito para el inicio de la Fase 2 (EDA y preprocesamiento de datos). Cualquier cambio solicitado debe registrarse en el DECISIONS_LOG.md antes de ser implementado.
+> **Nota de Gobernanza:** Este artefacto es el entregable de la tarea de prototipado de la Fase 1. Su aprobacion por el Stakeholder es prerequisito para el inicio de la Fase 2 (EDA y preprocesamiento de datos). Cualquier cambio solicitado debe registrarse en el decisions.md antes de ser implementado.

@@ -14,9 +14,104 @@ Esta habilidad instrumenta las reglas de **CLAUDE.md** y la metodología de 4 fa
 
 ### 1. Bootstrap de Estructura Industrial
 **Acción:** `initialize_repo`
-- Crea las carpetas raíz: `docs/Fase_1..4`, `src/`, `data/Bronze..Gold`, `models/`, `notebooks/`, `tests/`, `infra/`.
+- Crea las carpetas raíz: `docs/Fase_1..4`, `docs/governance/`, `docs/references/`, `docs/methodology/`, `src/`, `data/Bronze..Gold`, `models/`, `notebooks/`, `tests/`, `infra/`.
 - Crea el `.gitignore` estándar para DS (excluyendo `.csv`, `.parquet`, `.pkl`, `.h5`, `.env`, `__pycache__`, etc.).
 - Crea un `README.md` base con la ficha técnica del proyecto.
+- **Entregable Obligatorio:** Al finalizar la creación de carpetas, genera automáticamente `docs/governance/backlog.md` con el roadmap inicial de **Fase 1 completo** (ver sección *Backlog Inicial de Fase 1* más abajo). Este es el primer artefacto del proyecto y hoja de ruta para el equipo.
+
+### Backlog Inicial de Fase 1 (Generado en Bootstrap)
+
+El archivo `docs/governance/backlog.md` debe ser creado con la siguiente estructura al ejecutar `initialize_repo`:
+
+```markdown
+# Backlog del Proyecto
+
+> Generado automáticamente en el Bootstrap del repositorio.
+> Fuente de verdad: CLAUDE.md | Metodología: ai_process.md
+
+---
+
+## FASE 1: Discovery — Línea Base Documental
+
+**Entregable Principal:** Documentación de Gobernanza completa (config + BRD + Factibilidad + Mockup + SAD + SpecDD + Contract).
+
+### Iteración 1.1: Configuración e Identidad del Proyecto
+
+#### [F1-T01] Crear config.md
+- **Responsable:** @config-manager
+- **Iteración:** 1.1
+- **Entregable:** `docs/references/config.md`
+- **Acción:** Documentation
+- **DoD:** El archivo existe con las 4 secciones mandatorias (Definición, Identidad, Estado, Fuentes). Todos los campos obligatorios tienen valor real (no placeholder).
+- **Estado:** TODO
+
+### Iteración 1.2: Documentación de Negocio
+
+#### [F1-T02] Crear BRD (Business Requirements Document)
+- **Responsable:** @ai-business-strategist
+- **Iteración:** 1.2
+- **Entregable:** `docs/governance/brd.md`
+- **Acción:** Documentation
+- **DoD:** BRD contiene objetivos de negocio, KPIs con thresholds definidos y criterios de aceptación verificables.
+- **Estado:** TODO
+
+### Iteración 1.3: Factibilidad y Diseño de Experiencia
+
+#### [F1-T03] Ejecutar Análisis de Factibilidad
+- **Responsable:** @ai-data-auditor
+- **Iteración:** 1.3
+- **Entregable:** `docs/Fase_1/feasibility.md`
+- **Acción:** Documentation
+- **DoD:** Reporte incluye diagnóstico de calidad de datos (completitud, distribución, outliers) y veredicto GO/NO-GO para continuar a Fase 2.
+- **Estado:** TODO
+
+#### [F1-T04] Crear Mockup de Interfaz
+- **Responsable:** @ai-ux-designer
+- **Iteración:** 1.3
+- **Entregable:** `docs/Fase_1/mockup.md`
+- **Acción:** Documentation
+- **DoD:** Mockup aprobado por el Stakeholder principal. Cubre flujos principales de la aplicación.
+- **Estado:** TODO
+
+### Iteración 1.4: Arquitectura y Especificaciones Técnicas
+
+#### [F1-T05] Crear SAD (Software Architecture Document)
+- **Responsable:** @ai-solutions-architect
+- **Iteración:** 1.4
+- **Entregable:** `docs/governance/sad.md`
+- **Acción:** Documentation
+- **DoD:** SAD define el stack tecnológico, diagrama de arquitectura de 4 capas (Bronze/Silver/Gold/Model) y las interfaces entre componentes.
+- **Estado:** TODO
+
+#### [F1-T06] Crear SpecDD (Specification-Driven Development)
+- **Responsable:** @ai-solutions-architect
+- **Iteración:** 1.4
+- **Entregable:** `docs/governance/specdd.md`
+- **Acción:** Documentation
+- **DoD:** SpecDD contiene las firmas de todas las funciones `.py` del pipeline, contratos de entrada/salida y criterios de aceptación técnicos por módulo.
+- **Estado:** TODO
+
+### Iteración 1.5: Contrato de Datos
+
+#### [F1-T07] Crear Data Contract
+- **Responsable:** @ai-data-auditor
+- **Iteración:** 1.5
+- **Entregable:** `docs/governance/contract.md`
+- **Acción:** Documentation
+- **DoD:** Contract define esquema de variables (tipo, rango, cardinalidad), reglas de validación matemáticas y criterios de rechazo de datos.
+- **Estado:** TODO
+
+---
+
+## FASE 2: Engineering — Feature Set Certificado
+> Tareas pendientes de atomización. Se poblará al completar Fase 1.
+
+## FASE 3: Modeling — Modelo Predictivo Certificado
+> Tareas pendientes de atomización. Se poblará al completar Fase 2.
+
+## FASE 4: Delivery — Sistema en Producción
+> Tareas pendientes de atomización. Se poblará al completar Fase 3.
+```
 
 ### 2. Auditoría de Higiene Git
 **Acción:** `audit_git_health`
@@ -27,7 +122,7 @@ Esta habilidad instrumenta las reglas de **CLAUDE.md** y la metodología de 4 fa
 ### 3. Orquestación de Commits y PRs
 **Acción:** `semantic_commit_manager`
 - Valida que el mensaje de commit empiece con: `feat(data):`, `feat(model):`, `feat(api):`, `test(qa):`, `docs(f-X):`.
-- Genera el borrador del Pull Request vinculándolo a los documentos de la Fase activa (ej: "Resolves tasks defined in SAD.md").
+- Genera el borrador del Pull Request vinculándolo a los documentos de la Fase activa (ej: "Resolves tasks defined in sad.md").
 
 ### 4. Cumplimiento de Linaje (Fase 3)
 **Acción:** `verify_lineage_link`

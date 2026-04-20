@@ -15,7 +15,7 @@ El agente debe aplicar este protocolo para convertir el lenguaje coloquial en un
    - **No Supervisado:** Clustering, Detección de Anomalías o Reducción de Dimensionalidad.
    - **Especializado:** Series temporales, Recomendación o NLP.
 2. **Definición de la Variable Objetivo ($y$):** Identificar exactamente qué se quiere predecir y si esa variable está disponible en los sistemas actuales o debe ser construida (Labeling).
-3. **Documentación Obligatoria:** El Business Requirements Document (BRD) debe guardarse en `docs/Fase_1/BRD.md`.
+3. **Documentación Obligatoria:** El Business Requirements Document (BRD) debe guardarse en `docs/governance/brd.md`.
 
 ## 📐 II. Arquitectura de Métricas de Éxito
 
@@ -38,4 +38,4 @@ No basta con elegir una métrica; hay que justificarla mediante el **Análisis d
 > - [ ] ¿La tarea de ML seleccionada cubre el 100% del caso de uso de negocio?
 > - [ ] ¿He definido qué métrica técnica se usará para el ciclo "RED" de los agentes de QA?
 > - [ ] ¿He cuantificado el costo monetario de un error del modelo?
-> - [ ] ¿El BRD está guardado en `docs/Fase_1/BRD.md`?
+> - [ ] ¿El BRD está guardado en `docs/governance/brd.md`?

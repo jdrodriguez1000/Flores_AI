@@ -7,7 +7,7 @@
 > **Fecha de creacion:** 2026-04-19
 > **Ultima actualizacion:** 2026-04-19
 > **Autor:** ai-solutions-architect
-> **Trazabilidad:** SpecDD v1.0.0 -> DATA_CONTRACT v1.0.0 -> BRD v1.0.0 -> DATA_FEASIBILITY_REPORT v1.0.0
+> **Trazabilidad:** SpecDD v1.0.0 -> DATA_CONTRACT v1.0.0 -> BRD v1.0.0 -> feasibility v1.0.0
 > **Version del Contrato:** v1.0.0
 > **Aceptado por:** ai-data-engineer (Fase 2), ai-ml-engineer (Fase 3)
 
@@ -271,7 +271,7 @@ Estas estadisticas son los parametros base para la deteccion de data drift en pr
 | petal_length | 3.758 | 1.764 | 1.0 | 1.6 | 4.3 | 5.1 | 6.9 |
 | petal_width | 1.197 | 0.763 | 0.1 | 0.3 | 1.3 | 1.8 | 2.5 |
 
-*Nota: Estadisticas derivadas del DATA_FEASIBILITY_REPORT. Deben ser recalculadas sobre el dataset Silver definitivo en Fase 2 y almacenadas en `data/gold/reference_stats.json` para uso en el modulo de drift detection.*
+*Nota: Estadisticas derivadas del feasibility. Deben ser recalculadas sobre el dataset Silver definitivo en Fase 2 y almacenadas en `data/gold/reference_stats.json` para uso en el modulo de drift detection.*
 
 ### 8.3 Matriz de Correlacion de Referencia
 
@@ -456,4 +456,4 @@ Todos los mensajes de error visibles al usuario en la UI de Streamlit deben segu
 
 > **Nota de Gobernanza:** Este documento es vinculante para los agentes `ai-data-engineer` (Fase 2) y `ai-ml-engineer` (Fase 3). Ninguna transformacion de datos o proceso de entrenamiento puede producir esquemas que violen los invariantes aqui definidos. Cualquier desviacion debe pasar por el Protocolo de Control de Cambios antes de ser implementada. El `ai-solutions-architect` es el unico agente con autoridad para modificar este documento.
 >
-> **Trazabilidad:** DATA_CONTRACT v1.0.0 <- SpecDD v1.0.0 <- SAD v1.0.0 <- BRD v1.0.0 <- DATA_FEASIBILITY_REPORT v1.0.0
+> **Trazabilidad:** DATA_CONTRACT v1.0.0 <- SpecDD v1.0.0 <- SAD v1.0.0 <- BRD v1.0.0 <- feasibility v1.0.0

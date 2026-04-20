@@ -1,4 +1,4 @@
-# PROJECT_config.md: Cédula de Identidad del Proyecto
+# config.md: Cédula de Identidad del Proyecto
 
 > **Definición del Documento**
 > Este archivo es la instancia local del protocolo general definido en [CLAUDE.md](../../CLAUDE.md).
@@ -34,15 +34,15 @@ las cuatro dimensiones muestre el tipo de especie predicha.
 | Campo                  | Valor                          |
 | :--------------------- | :----------------------------- |
 | **Fase Actual**        | Fase 1 - Discovery             |
-| **Hito Activo**        | Fase 1 al 85% — MOCKUP, SAD, SpecDD y DATA_CONTRACT entregados. Pendiente: BACKLOG |
-| **Progreso Estimado**  | 35% (Fase 1 al 85% — falta solo BACKLOG) |
+| **Hito Activo**        | Fase 1 completada — todos los entregables de gobernanza entregados. Próximo: iniciar Fase 2 |
+| **Progreso Estimado**  | 40% (Fase 1 al 100%) |
 | **Estado**             | En curso                       |
 
 ### Mapa de Fases
 
 | Fase   | Nombre          | Estado      | Notas                          |
 | :----- | :-------------- | :---------- | :----------------------------- |
-| Fase 1 | Discovery       | En curso (85%) | MOCKUP, SAD, SpecDD, DATA_CONTRACT completados. Pendiente: BACKLOG |
+| Fase 1 | Discovery       | Completada (100%) | Todos los entregables completados — 2026-04-19 |
 | Fase 2 | Data & EDA      | Pendiente   |                                |
 | Fase 3 | Modeling        | Pendiente   |                                |
 | Fase 4 | Deployment      | Pendiente   |                                |
@@ -101,7 +101,7 @@ Flores_AI/
 │   ├── Fase_3/                    # Validacion de Modelos (MODEL QA)
 │   ├── Fase_4/                    # Certificados E2E y Stress Testing
 │   ├── governance/                # BACKLOG, BRD, SAD, SpecDD, CONTRACT
-│   └── references/                # HANDOFF, DECISIONS, PROJECT_config
+│   └── references/                # handoff, decisions, config
 ├── src/                           # Codigo fuente productivo (.py)
 ├── data/
 │   ├── bronze/                    # Datos crudos (raw)
@@ -119,15 +119,15 @@ Flores_AI/
 
 | Documento       | Ruta de Destino              | Estado      |
 | :-------------- | :--------------------------- | :---------- |
-| BACKLOG         | docs/governance/             | Pendiente — responsable: ai-backlog-manager |
+| BACKLOG         | docs/governance/             | Completado - 2026-04-19 |
 | BRD             | docs/governance/             | Completado - 2026-04-19 |
 | SAD             | docs/governance/             | Completado - 2026-04-19 (v1.0.0) |
 | SpecDD          | docs/governance/             | Completado - 2026-04-19 (v1.0.0) |
-| DATA_CONTRACT   | docs/governance/             | Completado - 2026-04-19 (v1.0.0) |
-| MOCKUP          | docs/governance/             | Completado y aprobado por Stakeholder - 2026-04-19 (v1.0.0) |
+| contract        | docs/governance/             | Completado - 2026-04-19 (v1.0.0) |
+| mockup          | docs/Fase_1/                 | Completado y aprobado por Stakeholder - 2026-04-19 (v1.0.0) |
 | FEASIBILITY     | docs/Fase_1/                 | Completado - 2026-04-19 |
-| HANDOFF         | docs/references/             | Completado - 2026-04-19 |
-| DECISIONS_LOG   | docs/references/             | Completado - 2026-04-19 |
+| handoff         | docs/references/             | Completado - 2026-04-19 |
+| decisions       | docs/references/             | Completado - 2026-04-19 |
 
 ---
 
@@ -138,6 +138,7 @@ Flores_AI/
 | 2026-04-19  | Creacion inicial del archivo        | project-config     |
 | 2026-04-19  | BRD completado y estado actualizado | ai-business-strategist |
 | 2026-04-19  | FEASIBILITY completado y estado actualizado | ai-data-auditor |
-| 2026-04-19  | HANDOFF y DECISIONS_LOG creados; progreso actualizado a 25% | ai-session-steward |
-| 2026-04-19  | SAD, SpecDD y DATA_CONTRACT completados; progreso actualizado a 30% | ai-solutions-architect |
-| 2026-04-19  | MOCKUP aprobado por Stakeholder; progreso actualizado a 35%; stack tecnologico ampliado con Joblib y Pydantic v2 | ai-session-steward |
+| 2026-04-19  | handoff y decisions creados; progreso actualizado a 25% | ai-session-steward |
+| 2026-04-19  | sad, specdd y contract completados; progreso actualizado a 30% | ai-solutions-architect |
+| 2026-04-19  | mockup aprobado por Stakeholder; progreso actualizado a 35%; stack tecnologico ampliado con Joblib y Pydantic v2 | ai-session-steward |
+| 2026-04-19  | backlog.md creado (F1-T08 DONE); Fase 1 completada al 100%; progreso global actualizado a 40% | ai-backlog-manager |

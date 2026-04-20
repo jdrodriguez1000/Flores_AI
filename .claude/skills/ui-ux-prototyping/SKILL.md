@@ -29,4 +29,4 @@ Esta habilidad permite al equipo validar la "cara" del proyecto antes de constru
 ## Reglas Técnicas
 - **Velocidad sobre Perfección:** Un mockup al 80% visualmente atractivo hoy es mejor que uno al 100% perfecto la próxima semana.
 - **Interactividad Simulada:** Usa animaciones CSS simples para dar sensación de vida sin escribir JavaScript pesado.
-- **Aislamiento:** El código del Mockup reside solo en `docs/governance/MOCKUP/`.
+- **Aislamiento:** El código del Mockup reside solo en `docs/Fase_1/mockup/`.

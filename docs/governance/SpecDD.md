@@ -493,7 +493,7 @@ def load_bronze(csv_path: Path = config.DATA_BRONZE) -> pd.DataFrame:
 ```python
 def clean_bronze(df_bronze: pd.DataFrame) -> pd.DataFrame:
     """
-    Aplica las mutaciones de calidad de datos definidas en el DATA_FEASIBILITY_REPORT.
+    Aplica las mutaciones de calidad de datos definidas en el feasibility.
     Cada transformacion es atomica y aplicada en el orden documentado.
 
     Transformaciones aplicadas (en orden):
@@ -972,4 +972,4 @@ def validate_input(sepal_length, sepal_width, petal_length, petal_width) -> Iris
 
 > **Nota de Gobernanza:** Este documento es la fuente de verdad para la implementacion de todos los modulos en `src/`. El agente `ai-developer` (Fase 4) y el agente `ai-ml-engineer` (Fase 3) deben verificar que cada funcion implementada cumple exactamente con la firma, pre-condiciones, post-condiciones y excepciones documentadas aqui. El `ai-solutions-architect` es el unico agente con autoridad para modificar este documento.
 >
-> **Trazabilidad:** SpecDD v1.0.0 <- SAD v1.0.0 <- BRD v1.0.0 <- DATA_FEASIBILITY_REPORT v1.0.0
+> **Trazabilidad:** SpecDD v1.0.0 <- SAD v1.0.0 <- BRD v1.0.0 <- feasibility v1.0.0

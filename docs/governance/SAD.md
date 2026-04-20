@@ -7,7 +7,7 @@
 > **Fecha de creacion:** 2026-04-19
 > **Ultima actualizacion:** 2026-04-19
 > **Autor:** ai-solutions-architect
-> **Trazabilidad:** BRD v1.0.0 -> DATA_FEASIBILITY_REPORT v1.0.0 -> SAD v1.0.0
+> **Trazabilidad:** BRD v1.0.0 -> feasibility v1.0.0 -> SAD v1.0.0
 > **Repositorio:** https://github.com/jdrodriguez1000/Flores_AI.git
 
 ---
@@ -58,7 +58,7 @@ Ningun cambio en `src/app.py`, `src/data/`, ni en `tests/` es necesario si la fi
 | **Decoupling is King** | `app.py` solo invoca `predictor.predict()`. No importa nada de `data/` ni de `training/`. |
 | **Strict Typing** | Todos los modulos usan Pydantic v2 para validacion de entrada. Ninguna funcion acepta `dict` no tipado en sus fronteras. |
 | **Fail-Fast Design** | La validacion de rango ocurre en `validators.py` antes de que el tensor llegue al modelo. El modelo nunca recibe datos fuera de contrato. |
-| **Spec Before Code** | Ningun archivo `.py` en `src/` se crea sin su seccion correspondiente en `SpecDD.md`. |
+| **Spec Before Code** | Ningun archivo `.py` en `src/` se crea sin su seccion correspondiente en `specdd.md`. |
 | **Rutas Relativas** | `pathlib.Path(__file__).parent` es el unico mecanismo de resolucion de rutas. Cero strings hardcodeados. |
 
 ---
@@ -361,7 +361,7 @@ src/
 
 ### 6.1 Tipos de Datos Compartidos (Pydantic v2)
 
-Los siguientes tipos son los contratos de frontera. Estan definidos aqui como especificacion; su implementacion precisa se documenta en `SpecDD.md`.
+Los siguientes tipos son los contratos de frontera. Estan definidos aqui como especificacion; su implementacion precisa se documenta en `specdd.md`.
 
 **IrisInput** — Contrato de entrada de usuario:
 ```
@@ -489,7 +489,7 @@ Regla arquitectonica: Ningun modulo del pipeline online (`app`, `validators`, `p
 | **Fecha** | 2026-04-19 |
 | **Autor** | ai-solutions-architect |
 
-**Contexto:** La M-06 del DATA_FEASIBILITY_REPORT indica que los algoritmos basados en distancia (SVM, KNN) requieren Feature Scaling, mientras que los basados en arboles (Random Forest, Decision Tree) no lo requieren. La Fase 3 explorara multiples algoritmos. El riesgo RT3 del BRD alerta sobre Data Leakage si el scaler se ajusta con datos de test.
+**Contexto:** La M-06 del feasibility indica que los algoritmos basados en distancia (SVM, KNN) requieren Feature Scaling, mientras que los basados en arboles (Random Forest, Decision Tree) no lo requieren. La Fase 3 explorara multiples algoritmos. El riesgo RT3 del BRD alerta sobre Data Leakage si el scaler se ajusta con datos de test.
 
 **Decision:** El StandardScaler se incluye **siempre** en el `sklearn.Pipeline`, independientemente del algoritmo elegido en Fase 3. El Pipeline garantiza que el `scaler.fit()` solo ocurre sobre `X_train`. La llamada `pipeline.predict()` aplica automaticamente la transformacion sobre datos nuevos.
 
@@ -568,7 +568,7 @@ FEEDBACK_LOG = PROJECT_ROOT / "logs" / "feedback.log"
 | Requisito | Implementacion |
 | :--- | :--- |
 | Cobertura de tests >= 80% | Medida con `pytest-cov`. Reportada en Fase 4. |
-| Trazabilidad SpecDD | 100% de las funciones en `src/` tienen su firma definida en `SpecDD.md` antes de ser implementadas. |
+| Trazabilidad SpecDD | 100% de las funciones en `src/` tienen su firma definida en `specdd.md` antes de ser implementadas. |
 | Linaje de datos | Cada capa de datos (Bronze, Silver, Gold) tiene su archivo persistido en `data/`. El pipeline es reproducible ejecutando los modulos en orden. |
 
 ---
@@ -645,4 +645,4 @@ Este comando ejecuta toda la suite y falla si la cobertura de `src/` cae por deb
 
 > **Nota de Gobernanza:** Este documento es la fuente de verdad arquitectonica para los agentes `ai-data-engineer`, `ai-ml-engineer` y `ai-developer` en las Fases 2, 3 y 4. Cualquier desviacion de la topologia de modulos, los tipos de datos o los ADRs aqui definidos debe pasar por el Protocolo de Control de Cambios antes de ser implementada. El `ai-solutions-architect` es el unico agente con autoridad para modificar este documento.
 >
-> **Trazabilidad:** SAD v1.0.0 <- BRD v1.0.0 <- DATA_FEASIBILITY_REPORT v1.0.0
+> **Trazabilidad:** SAD v1.0.0 <- BRD v1.0.0 <- feasibility v1.0.0

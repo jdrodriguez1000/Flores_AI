@@ -2,9 +2,9 @@
 
 Este archivo define las convenciones y protocolos agnósticos para Claude Code en proyectos de **Ciencia de Datos, Machine Learning e Ingeniería de IA**, siguiendo las metodologías **SpecDD** (Specification-Driven Development) y **TDD** (Test-Driven Development).
 
-Para configuración específica del proyecto actual (nombre, stack, IDs), consulta siempre **[docs/references/PROJECT_config.md](docs/references/PROJECT_config.md)**.
+Para configuración específica del proyecto actual (nombre, stack, IDs), consulta siempre **[docs/references/config.md](docs/references/config.md)**.
 
-Seguir la metodologia de trabajo para proyectos de ciencia de datos y machine learning, qeu se encuentra en el archivo **[ai_metodology.md](docs/references/ai_metodology.md)**.
+Seguir la metodologia de trabajo para proyectos de ciencia de datos y machine learning, qeu se encuentra en el archivo **[ai_process.md](docs/methodology/ai_process.md)**.
 ---
 
 ## 🎯 1. Directivas Fundamentales
@@ -46,7 +46,7 @@ Para garantizar la organización y trazabilidad, se sigue esta jerarquía de car
 
 ---
 
-## 📝 3. Documentos de Gobernanza (Alineados con ai_metodology.md)
+## 📝 3. Documentos de Gobernanza (Alineados con ai_process.md)
 
 | Documento       | Ubicación          | Propósito                                                 |
 | :-------------- | :----------------- | :-------------------------------------------------------- |
@@ -115,11 +115,11 @@ Obligatorio cuando se detecta una desviación de los documentos de gobernanza.
 
 ### Ritual de Apertura (Session Kickoff)
 1.  **Sincronización:** Ejecutar `ai-session-steward.start_session`.
-2.  **Lectura Obligatoria:** `HANDOFF.md`, `DECISIONS_LOG.md`, `BACKLOG.md` y `PROJECT_config.md`.
+2.  **Lectura Obligatoria:** `handoff.md`, `decisions.md`, `backlog.md` y `config.md`.
 3.  **Priorización:** Seleccionar la siguiente tarea atómica del Backlog.
 
 ### Ritual de Cierre (Session Wrap-up)
 1.  **Commit:** Versionar el progreso con mensaje semántico.
 2.  **Validación:** Asegurar que los tests sean verdes.
-3.  **Handoff:** Actualizar `HANDOFF.md` (Logros, Pendientes, Bloqueos).
-4.  **Memoria:** Registrar en `DECISIONS_LOG.md` (Decisiones, Lecciones).
+3.  **Handoff:** Actualizar `handoff.md` (Logros, Pendientes, Bloqueos).
+4.  **Memoria:** Registrar en `decisions.md` (Decisiones, Lecciones).

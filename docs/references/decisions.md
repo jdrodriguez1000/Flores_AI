@@ -1,4 +1,4 @@
-# DECISIONS_LOG.md: Registro Historico de Decisiones
+# decisions.md: Registro Historico de Decisiones
 
 > **Definicion del Documento**
 > Este archivo es la memoria historica del proyecto. NUNCA se sobrescribe.
@@ -31,7 +31,7 @@ Cada entrada debe contener: Fecha, Fase, ID de Decision, Contexto, Decision, Jus
 | :---------------------- | :---------------------------------------------------------------------------------------- |
 | **Fecha**               | 2026-04-19                                                                                |
 | **Fase**                | Fase 1 - Discovery                                                                        |
-| **Origen**              | DATA_FEASIBILITY_REPORT — Analisis de data leakage                                        |
+| **Origen**              | feasibility — Analisis de data leakage                                        |
 | **Tipo**                | Decision de preprocesamiento de datos                                                     |
 
 **Contexto:** Durante el analisis de factibilidad del dataset Iris se detecto que la columna `Id` es un identificador secuencial correlacionado con el orden de recoleccion de las muestras. Las filas estan ordenadas por especie (primeras 50: Setosa, siguientes 50: Versicolor, ultimas 50: Virginica), lo que genera una correlacion espuria entre el `Id` y la variable objetivo.
@@ -41,7 +41,7 @@ Cada entrada debe contener: Fecha, Fase, ID de Decision, Contexto, Decision, Jus
 **Justificacion:** Si el modelo aprende a usar el `Id` como feature, obtendra artificialmente metricas de rendimiento infladas en entrenamiento que no se replicaran en produccion real (donde el `Id` no tiene valor predictivo). Mantener el `Id` constituye data leakage clasico.
 
 **Impacto Transversal:**
-- `docs/governance/SpecDD.md`: La firma del modulo de preprocesamiento debe incluir explicitamente la exclusion de `Id`.
+- `docs/governance/specdd.md`: La firma del modulo de preprocesamiento debe incluir explicitamente la exclusion de `Id`.
 - `docs/governance/CONTRACT.md`: El Contrato de Datos debe prohibir `Id` como feature valida.
 - `src/`: El pipeline Silver debe implementar esta eliminacion como paso no negociable.
 - `tests/`: Debe existir un test unitario que valide la ausencia de `Id` en el conjunto de features.
@@ -64,7 +64,7 @@ Cada entrada debe contener: Fecha, Fase, ID de Decision, Contexto, Decision, Jus
 **Justificacion:** Un modelo que logre Accuracy >= 95% pero falle sistematicamente en distinguir Versicolor de Virginica seria inaceptable. El F1-Score Macro obliga al modelo a rendir bien en las tres clases individualmente, no solo en promedio ponderado. Con 150 muestras balanceadas, el 95% de Accuracy implica un maximo de 7-8 errores en el conjunto de prueba.
 
 **Impacto Transversal:**
-- `docs/governance/SAD.md`: Los experimentos de benchmarking deben reportar ambas metricas.
+- `docs/governance/sad.md`: Los experimentos de benchmarking deben reportar ambas metricas.
 - `docs/Fase_3/MODEL_QA.md`: El modelo candidato no puede ser certificado si no supera ambos thresholds.
 - `tests/`: Los tests de Model QA deben incluir assertions sobre ambas metricas.
 
@@ -76,7 +76,7 @@ Cada entrada debe contener: Fecha, Fase, ID de Decision, Contexto, Decision, Jus
 | :---------------------- | :---------------------------------------------------------------------------------------- |
 | **Fecha**               | 2026-04-19                                                                                |
 | **Fase**                | Fase 1 - Discovery                                                                        |
-| **Origen**              | PROJECT_config.md — Definicion de stack                                                   |
+| **Origen**              | config.md — Definicion de stack                                                           |
 | **Tipo**                | Decision de arquitectura tecnologica                                                      |
 
 **Contexto:** El proyecto requiere un lenguaje de ML y una interfaz web para la demostracion de predicciones. Se evaluaron las opciones disponibles segun el protocolo CLAUDE.md (Python 3.12+ obligatorio) y los requisitos del stakeholder.
@@ -86,7 +86,7 @@ Cada entrada debe contener: Fecha, Fase, ID de Decision, Contexto, Decision, Jus
 **Justificacion:** Python 3.12+ es mandatorio segun CLAUDE.md. Streamlit fue elegido sobre Flask/FastAPI por su velocidad de desarrollo para prototipos de ML con interfaces de prediccion simples, su integracion nativa con pandas y su capacidad de despliegue rapido. Para un problema de clasificacion multi-clase con cuatro inputs numericos, Streamlit provee la interfaz optima sin overhead de desarrollo de frontend.
 
 **Impacto Transversal:**
-- `docs/governance/SAD.md`: Debe documentar la justificacion arquitectonica de Streamlit.
+- `docs/governance/sad.md`: Debe documentar la justificacion arquitectonica de Streamlit.
 - `requirements.txt`: Primera dependencia a registrar sera streamlit.
 - `infra/`: La containerizacion (Docker) debe basarse en imagen Python 3.12.
 
@@ -98,7 +98,7 @@ Cada entrada debe contener: Fecha, Fase, ID de Decision, Contexto, Decision, Jus
 | :---------------------- | :---------------------------------------------------------------------------------------- |
 | **Fecha**               | 2026-04-19                                                                                |
 | **Fase**                | Fase 1 - Discovery                                                                        |
-| **Origen**              | DATA_FEASIBILITY_REPORT — Veredicto final                                                 |
+| **Origen**              | feasibility — Veredicto final                                                 |
 | **Tipo**                | Decision de habilitacion de fase                                                          |
 
 **Contexto:** El analisis de factibilidad del dataset Iris evaluo: completitud de datos, calidad estadistica, alcanzabilidad de KPIs, riesgos de data leakage y near-duplicates.
@@ -117,7 +117,7 @@ Cada entrada debe contener: Fecha, Fase, ID de Decision, Contexto, Decision, Jus
 
 | # | Leccion                                                                                                                                          | Categoria              |
 | :- | :----------------------------------------------------------------------------------------------------------------------------------------------- | :--------------------- |
-| 1 | El orden correcto de documentacion es: PROJECT_config -> estructura de carpetas -> BRD -> FEASIBILITY -> SAD -> SpecDD. Saltarse pasos genera retrabajo. | Proceso / Metodologia  |
+| 1 | El orden correcto de documentacion es: config -> estructura de carpetas -> BRD -> FEASIBILITY -> SAD -> SpecDD. Saltarse pasos genera retrabajo. | Proceso / Metodologia  |
 | 2 | El data leakage por columnas de ID es el riesgo mas comun y menos visible en datasets tabulares clasicos. Siempre revisar columnas de identificadores primero. | Calidad de Datos       |
 | 3 | Un dataset balanceado no garantiza ausencia de near-duplicates. La inspeccion de duplicados debe hacerse sobre el vector de features, no sobre el ID. | Calidad de Datos       |
 | 4 | Documentar la hipotesis de confusion entre clases (Versicolor/Virginica) en el BRD desde el inicio obliga al equipo a disenar el modelo con ese riesgo en mente desde la arquitectura. | Diseño de Modelos      |
@@ -143,7 +143,7 @@ Cada entrada debe contener: Fecha, Fase, ID de Decision, Contexto, Decision, Jus
 | :---------------------- | :---------------------------------------------------------------------------------------- |
 | **Fecha**               | 2026-04-19                                                                                |
 | **Fase**                | Fase 1 - Discovery                                                                        |
-| **Origen**              | MOCKUP.md — Revision de prototipo con Stakeholder                                         |
+| **Origen**              | mockup.md — Revision de prototipo con Stakeholder                                         |
 | **Tipo**                | Decision de diseno de interfaz de usuario                                                 |
 
 **Contexto:** El agente `ai-ux-designer` produjo un prototipo HTML interactivo de alta fidelidad con cuatro estados de pantalla: estado inicial (formulario con 4 sliders), resultado exitoso (alta confianza), resultado de baja confianza (advertencia prominente) y error de validacion (campos invalidos con mensajes descriptivos). El prototipo fue presentado al Stakeholder en sesion.
@@ -154,7 +154,7 @@ Cada entrada debe contener: Fecha, Fase, ID de Decision, Contexto, Decision, Jus
 
 **Impacto Transversal:**
 - `src/app.py`: Debe replicar los cuatro estados del mockup (inicial, exito, baja confianza, error) usando los mismos colores, jerarquia visual y mensajes de texto.
-- `docs/governance/SpecDD.md`: La seccion de `src/app.py` esta condicionada por los estados de pantalla del mockup.
+- `docs/governance/specdd.md`: La seccion de `src/app.py` esta condicionada por los estados de pantalla del mockup.
 - `tests/`: Los tests de `app.py` deben validar que cada estado de pantalla se dispara con las condiciones correctas (confidence < 0.60 para baja confianza, validacion fallida para error).
 
 ---
@@ -176,7 +176,7 @@ Cada entrada debe contener: Fecha, Fase, ID de Decision, Contexto, Decision, Jus
 
 **Impacto Transversal:**
 - `src/`: La estructura de modulos es mandatoria. No se pueden crear archivos `.py` fuera de la jerarquia definida en el SAD.
-- `docs/governance/SpecDD.md`: Cada modulo de `src/` tiene su seccion de especificacion de interfaz en el SpecDD.
+- `docs/governance/specdd.md`: Cada modulo de `src/` tiene su seccion de especificacion de interfaz en el SpecDD.
 - `tests/`: Los tests se organizan en espejo de la estructura de `src/`: `tests/unit/`, `tests/integration/`, `tests/e2e/`, `tests/model_qa/`.
 - `data/`: Las tres subcarpetas `bronze/`, `silver/`, `gold/` corresponden a las capas Medallion definidas en el SAD.
 
@@ -288,4 +288,73 @@ Cada entrada debe contener: Fecha, Fase, ID de Decision, Contexto, Decision, Jus
 
 ---
 
-*Fin de entrada #2. La proxima entrada se agregara al cierre de la siguiente sesion.*
+*Fin de entrada #2.*
+
+---
+
+---
+
+## Entrada #3 — Sesion 2026-04-19 | Fase 1 - Discovery (Cierre Formal y Consolidacion)
+
+**Agente de Cierre:** ai-session-steward
+**Hora de Cierre:** Fin de jornada 2026-04-19 (tercera sesion — cierre formal de Fase 1)
+
+---
+
+### D-011: backlog.md como primer entregable automatico del proceso de inicializacion
+
+| Campo                   | Valor                                                                                     |
+| :---------------------- | :---------------------------------------------------------------------------------------- |
+| **Fecha**               | 2026-04-19                                                                                |
+| **Fase**                | Fase 1 - Discovery                                                                        |
+| **Origen**              | Ajuste #7 a skills `repository-governance` y `project-config`                             |
+| **Tipo**                | Decision de proceso / metodologia de inicializacion de proyectos                         |
+
+**Contexto:** Durante la sesion se detecto que el skill `repository-governance` no generaba el `backlog.md` como parte del proceso `initialize_repo`, y que el skill `project-config` no gestionaba el ciclo de vida de ese archivo (marcarlo IN_PROGRESS al iniciar, DONE al finalizar). El `backlog.md` fue el ultimo entregable de Fase 1 en completarse, lo que significo que durante la mayor parte de la fase no existia el documento de orquestacion de tareas.
+
+**Decision:** Se actualizaron ambos skills para que en cualquier proyecto futuro que use esta metodologia, el `backlog.md` sea generado automaticamente por `initialize_repo` como parte de la estructura inicial del repositorio, con las tareas de Fase 1 pre-cargadas. El skill `project-config` ahora verifica la existencia del backlog y gestiona su estado durante el Bootstrap.
+
+**Justificacion:** El backlog es el documento de orquestacion central. Iniciar cualquier fase sin un backlog aprobado significa trabajar sin trazabilidad de tareas, sin Definition of Done verificable y sin capacidad de medir progreso. La decision de crear el backlog al final de Fase 1 (en lugar de al inicio) fue una deuda de proceso que se corrigio retroactivamente. En proyectos futuros, el backlog debe existir desde el dia cero para que todos los agentes operen con visibilidad completa de lo que falta.
+
+**Impacto Transversal:**
+- `.claude/skills/repository-governance/SKILL.md`: `initialize_repo` ahora incluye la generacion de `backlog.md` con estructura de Fase 1.
+- `.claude/skills/project-config/SKILL.md`: El Bootstrap verifica existencia de `backlog.md` y gestiona el estado de `[F1-T01]`.
+- Proyectos futuros: El `backlog.md` sera el primer archivo de gobernanza en existir, antes que el BRD.
+
+---
+
+### D-012: Convencion de nombres canonica para documentos de gobernanza — minusculas sin prefijos
+
+| Campo                   | Valor                                                                                     |
+| :---------------------- | :---------------------------------------------------------------------------------------- |
+| **Fecha**               | 2026-04-19                                                                                |
+| **Fase**                | Fase 1 - Discovery                                                                        |
+| **Origen**              | Renombrado de `DATA_FEASIBILITY_REPORT.md` a `feasibility.md`                             |
+| **Tipo**                | Decision de convencion de nombres / higiene documental                                    |
+
+**Contexto:** El documento de factibilidad fue creado originalmente con el nombre `DATA_FEASIBILITY_REPORT.md` (SCREAMING_SNAKE_CASE con prefijo descriptivo). Este nombre era inconsistente con el resto de los documentos de gobernanza (`brd.md`, `sad.md`, `specdd.md`, `contract.md`, `backlog.md`), todos en minusculas sin prefijos. Ademas, las referencias a este archivo en `contract.md`, `sad.md`, `specdd.md` y `decisions.md` usaban el nombre antiguo, creando inconsistencias internas.
+
+**Decision:** El documento de factibilidad se renombra a `feasibility.md`. La convencion de nombres para todos los documentos de gobernanza queda fijada como: **nombre semantico en minusculas, sin prefijos descriptivos, extension `.md`**. Todas las referencias cruzadas fueron actualizadas para usar el nuevo nombre.
+
+**Justificacion:** La consistencia en los nombres de archivo reduce la carga cognitiva del agente que lee el repositorio y elimina la posibilidad de referencias rotas por divergencia de nombres. El patron minusculas-sin-prefijos es mas robusto en sistemas de archivos case-sensitive (Linux, CI/CD) y es la convencion dominante en la industria para documentacion tecnica en repositorios de software.
+
+**Impacto Transversal:**
+- `docs/Fase_1/feasibility.md`: Nombre canonico definitivo. El nombre antiguo no debe usarse en ningun documento nuevo.
+- `docs/governance/contract.md`, `sad.md`, `specdd.md`, `backlog.md`: Referencias actualizadas.
+- `docs/references/decisions.md`: Referencias anteriores al nombre antiguo ya fueron corregidas en las entradas previas.
+- Proyectos futuros: El skill `project-config` debe generar el archivo con el nombre `feasibility.md` desde el inicio.
+
+---
+
+### Lecciones Aprendidas — Sesion 2026-04-19 (Tercera sesion — Cierre Formal)
+
+| # | Leccion                                                                                                                                                                                           | Categoria              |
+| :- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | :--------------------- |
+| 1 | El backlog debe crearse al inicio del proyecto, no al final de la primera fase. Sin backlog, los agentes no tienen visibilidad de las tareas pendientes ni pueden verificar el DoD de cada entregable. Esto genero que la Fase 1 se completara sin un registro formal de progreso hasta el ultimo momento. | Proceso / Metodologia  |
+| 2 | La convencion de nombres de archivos debe definirse en el primer documento de gobernanza (config.md) y no debe modificarse posteriormente. Un nombre inconsistente como `DATA_FEASIBILITY_REPORT.md` obligo a actualizar referencias en cinco archivos distintos, lo que es trabajo de retrabajo evitable. | Higiene Documental     |
+| 3 | Al actualizar el nombre de un archivo referenciado en multiples documentos, la busqueda de referencias cruzadas debe hacerse sistematicamente antes de renombrar. El orden correcto es: (1) identificar todas las referencias, (2) renombrar el archivo, (3) actualizar todas las referencias en una sola pasada. | Proceso de Refactoring |
+| 4 | Los skills de los agentes especializados son documentos vivos que deben evolucionar con las lecciones del proyecto. Un skill que no refleja las decisiones tomadas en el proyecto genera inconsistencias en sesiones futuras. Actualizar los skills es tan importante como actualizar el codigo. | Gestion de Agentes     |
+
+---
+
+*Fin de entrada #3. La proxima entrada se agregara al cierre de la primera sesion de Fase 2.*

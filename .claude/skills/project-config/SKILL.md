@@ -8,20 +8,23 @@ allowed-tools: [Read, Write, Edit, Bash]
 
 # Skill: Gestión de Configuración de Proyecto (Setup)
 
-Esta habilidad es la dueña de la integridad del archivo **docs/references/PROJECT_config.md**. Su propósito es instanciar las reglas generales de **CLAUDE.md** en un contexto local específico para definir la identidad y las fuentes de verdad.
+Esta habilidad es la dueña de la integridad del archivo **docs/references/config.md**. Su propósito es instanciar las reglas generales de **CLAUDE.md** en un contexto local específico para definir la identidad y las fuentes de verdad.
 
 ## Jerarquía de Verdad
 1. **CLAUDE.md**: Fuente suprema de protocolos y convenciones agnósticas.
-2. **PROJECT_config.md**: Implementación local y depósito de metadatos específicos del proyecto.
+2. **config.md**: Implementación local y depósito de metadatos específicos del proyecto.
 
 ## Modos de Operación
 
 ### Modo 1: Inicialización (Bootstrap)
-**Condición:** Proyecto nuevo, no existe docs/references/PROJECT_config.md
+**Condición:** Proyecto nuevo, no existe docs/references/config.md
 **Acciones:**
-- Crea la estructura de directorios `docs/references/`
+- Verifica que `docs/governance/backlog.md` exista (generado en el bootstrap del repo). Si no existe, detener y alertar al usuario para ejecutar primero `repository-governance.initialize_repo`.
+- Marca la tarea **[F1-T01]** en `docs/governance/backlog.md` como `IN_PROGRESS` antes de comenzar.
+- Crea la estructura de directorios `docs/references/` si no existe.
 - Interroga al usuario por la Identidad y Fuentes de Verdad.
 - Genera el archivo con el encabezado de definición estándar.
+- Al finalizar, marca **[F1-T01]** como `DONE` en `docs/governance/backlog.md`.
 
 ### Modo 2: Gestión de Estado y Fuentes
 **Condición:** Cambio de IDs de fuentes externas, repositorios o avance de Fase.
@@ -29,7 +32,7 @@ Esta habilidad es la dueña de la integridad del archivo **docs/references/PROJE
 - Actualiza la sección **🌍 Fuentes de Verdad**.
 - Actualiza la sección **📈 Estado del Proyecto**.
 
-## Estructura Mandatoria del PROJECT_config.md
+## Estructura Mandatoria del config.md
 
 El archivo debe seguir este orden estricto de secciones:
 1. **Definición del Documento**: Encabezado que referencia a CLAUDE.md.
@@ -39,7 +42,7 @@ El archivo debe seguir este orden estricto de secciones:
 
 ## Protocolo de Actualización
 1. **Lectura Previa**: Siempre leer el estado actual antes de modificar.
-2. **Validación de Ruta**: Forzar siempre la escritura en `docs/references/PROJECT_config.md`.
+2. **Validación de Ruta**: Forzar siempre la escritura en `docs/references/config.md`.
 
 ## Criterios de Éxito
 ✅ **Centralización**: Todo ID externo (NotebookLM, Notion, Git) debe residir aquí.
@@ -47,5 +50,5 @@ El archivo debe seguir este orden estricto de secciones:
 
 ## Notas Críticas
 - **Prohibición de Alucinación**: La habilidad fallará si intenta escribir un campo obligatorio sin tener la respuesta explícita del usuario.
-- **Ruta Fija**: Siempre `docs/references/PROJECT_config.md`.
+- **Ruta Fija**: Siempre `docs/references/config.md`.
 

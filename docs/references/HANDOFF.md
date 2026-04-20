@@ -1,4 +1,4 @@
-# HANDOFF.md: Estado Operativo del Proyecto
+# handoff.md: Estado Operativo del Proyecto
 
 > **Definicion del Documento**
 > Este archivo es la foto nítida y actual del proyecto. Es sobrescribible al cierre de cada sesion.
@@ -6,7 +6,7 @@
 >
 > **Ultima actualizacion:** 2026-04-19
 > **Responsable de cierre:** ai-session-steward
-> **Fase activa:** Fase 1 - Discovery (cierre de fase en progreso)
+> **Fase activa:** Fase 1 - Discovery (CERRADA) | Proxima: Fase 2 - Data & EDA
 
 ---
 
@@ -15,77 +15,99 @@
 | Campo               | Valor                                                                    |
 | :------------------ | :----------------------------------------------------------------------- |
 | **Proyecto**        | Flores AI - Iris                                                         |
-| **Fase Actual**     | Fase 1 - Discovery                                                       |
-| **Iteracion**       | Sesion de arquitectura y diseno — cierre de Fase 1                      |
-| **Estado General**  | Fase 1 al 85% completada. Unico pendiente: BACKLOG.                     |
-| **Progreso Fase 1** | 85% (BRD + FEASIBILITY + MOCKUP + SAD + SpecDD + DATA_CONTRACT entregados) |
+| **Fase Actual**     | Fase 1 - Discovery — COMPLETADA AL 100%                                 |
+| **Iteracion**       | Sesion de consolidacion y cierre formal de Fase 1                       |
+| **Estado General**  | Fase 1 completada. Todos los 7 entregables en estado DONE.              |
+| **Progreso Global** | 40% — Fase 2 pendiente de inicio                                        |
 
 ---
 
-## 2. Logros de la Sesion (2026-04-19)
+## 2. Logros de la Sesion (2026-04-19 — Sesion de Consolidacion)
 
-| # | Entregable                        | Archivo                                              | Estado      | Responsable         |
-| :-- | :-------------------------------- | :--------------------------------------------------- | :---------- | :------------------ |
-| 1 | Visual Mockup (HTML + documento)  | `docs/governance/MOCKUP/index.html` + `docs/governance/MOCKUP.md` | Completado y aprobado por Stakeholder | ai-ux-designer |
-| 2 | Software Architecture Document    | `docs/governance/SAD.md`                             | Completado  | ai-solutions-architect |
-| 3 | SpecDD (Especificacion de Interfaces) | `docs/governance/SpecDD.md`                      | Completado  | ai-solutions-architect |
-| 4 | Data Contract                     | `docs/governance/DATA_CONTRACT.md`                   | Completado  | ai-solutions-architect |
+| # | Entregable / Accion                                          | Archivo Afectado                                          | Estado     |
+| :- | :----------------------------------------------------------- | :-------------------------------------------------------- | :--------- |
+| 1 | Skill `repository-governance` actualizado para generar `backlog.md` en `initialize_repo` | `.claude/skills/repository-governance/SKILL.md` | Completado |
+| 2 | Skill `project-config` actualizado para verificar y gestionar estado de `backlog.md` en el Bootstrap | `.claude/skills/project-config/SKILL.md` | Completado |
+| 3 | Creacion de `backlog.md` con roadmap completo (Fases 1-4) y estado real de Fase 1 (7 tareas DONE) | `docs/governance/backlog.md` | Completado |
+| 4 | Corrección del orden de tareas en Fase 1 en skill y backlog.md | `docs/governance/backlog.md` + skill | Completado |
+| 5 | Renombrado `DATA_FEASIBILITY_REPORT.md` a `feasibility.md` y actualizacion de todas las referencias | `docs/Fase_1/feasibility.md` | Completado |
+| 6 | Referencias actualizadas en `contract.md`, `sad.md`, `specdd.md`, `decisions.md` y `backlog.md` | Multiples archivos `docs/governance/` | Completado |
+| 7 | `config.md` actualizado: Fase 1 al 100%, progreso global 40%, BACKLOG marcado como Completado | `docs/references/config.md` | Completado |
 
 ### Detalle de Logros
 
-**Entregable 1 — Visual Mockup**
-Prototipo interactivo HTML de alta fidelidad que cubre 4 estados de pantalla: estado inicial (formulario con sliders), resultado exitoso (alta confianza, 97.3%), resultado de baja confianza (advertencia prominente, 52.4%) y error de validacion (campos invalidos con mensajes descriptivos). El Stakeholder reviso y aprobo el diseno en sesion. La UI de Streamlit debe seguir este mockup como especificacion visual vinculante.
+**Logros 1-2 — Actualizacion de Skills**
+Los skills `repository-governance` y `project-config` fueron ajustados para que futuros proyectos tengan el `backlog.md` como primer entregable automatico del proceso de inicializacion, y para que el skill de configuracion gestione el ciclo de vida del backlog (marcar IN_PROGRESS al iniciar, DONE al finalizar).
 
-**Entregable 2 — SAD**
-Arquitectura Monolito Modular con Medallion Architecture (Bronze / Silver / Gold). Define la estructura completa de `src/` en 5 modulos: `config.py`, `validators.py`, `predictor.py`, `feedback.py`, `app.py`, mas los sub-paquetes `src/data/` y `src/training/`. Cuatro ADRs registrados: Streamlit como UI, Joblib para serializacion, StandardScaler dentro de sklearn.Pipeline, y pathlib para gestion de rutas. El principio "Decoupling is King" garantiza que `app.py` solo invoca `predictor.predict()` sin importar nada de los pipelines de datos o entrenamiento.
+**Logro 3 — backlog.md**
+Creado el unico documento de gobernanza que faltaba para cerrar formalmente la Fase 1. El backlog refleja el estado real del proyecto: las 7 tareas de Fase 1 en DONE y el roadmap completo de Fases 2, 3 y 4 con sus iteraciones atomicas y Definition of Done (DoD) por tarea.
 
-**Entregable 3 — SpecDD**
-Define las firmas exactas (tipos de entrada, tipos de retorno, excepciones) de todos los modulos `.py` de `src/`. Ninguna implementacion en Fase 2 o Fase 3 puede desviarse de estas firmas sin un Control de Cambios aprobado. Incluye tipos Pydantic v2 compartidos (`IrisInput`, `PredictionResult`, `FeedbackRecord`) y el protocolo de Mock para desarrollo paralelo.
+**Logros 4-5 — Higiene Documental**
+El orden correcto de las tareas de Fase 1 fue corregido en el backlog y en el skill: config.md → brd.md → feasibility → mockup → sad.md → specdd.md → contract.md. El archivo de factibilidad fue renombrado a `feasibility.md` (nombre canonico segun convencion del proyecto) y todas las referencias cruzadas en los documentos de gobernanza fueron actualizadas.
 
-**Entregable 4 — DATA_CONTRACT**
-Invariantes rigidos para las tres capas Medallion. Prohibicion explícita de la columna `Id` como feature valida. Define esquemas de Bronze (CSV crudo con 6 columnas incluyendo `Id`), Silver (150 filas, 5 columnas sin `Id`, sin nulos, sin near-duplicates) y Gold (arrays NumPy normalizados con StandardScaler). Incluye reglas de validacion matematica, politica de nulos, deteccion de data drift y mensajes de error estandarizados.
-
----
-
-## 3. Pendientes y Proximos Pasos
-
-| Prioridad | Tarea                          | Documento Destino              | Responsable              | Fase   |
-| :-------- | :----------------------------- | :----------------------------- | :----------------------- | :----- |
-| 1 (CRITICA) | BACKLOG detallado (unico pendiente de Fase 1) | `docs/governance/BACKLOG.md` | ai-backlog-manager | Fase 1 |
-| 2         | Inicio de Fase 2: pipeline Bronze → Silver → Gold | `src/data/`, `data/bronze/`, `data/silver/`, `data/gold/` | ai-data-engineer | Fase 2 |
-| 3         | EDA (Ingesta, Limpieza, Analisis Estadistico) | `docs/Fase_2/`          | ai-data-analyst          | Fase 2 |
-
-**Nota critica sobre la Tarea 1:** El BACKLOG debe descomponer las Fases 2, 3 y 4 en iteraciones atomicas con Definition of Done (DoD) por tarea. No puede iniciarse Fase 2 sin BACKLOG aprobado.
+**Logro 7 — config.md**
+La cedula del proyecto refleja el estado real: Fase 1 al 100%, todos los documentos de gobernanza marcados como Completados con fecha, progreso global en 40%.
 
 ---
 
-## 4. Bloqueos Activos
+## 3. Estado Actual de Entregables de Gobernanza (Fase 1 — COMPLETA)
 
-**Ninguno.** Los seis entregables de arquitectura y diseno de Fase 1 estan completos. El unico paso restante de Fase 1 es la generacion del BACKLOG por el `ai-backlog-manager`.
-
----
-
-## 5. Decisiones Criticas Activas (Consultar DECISIONS_LOG.md para contexto completo)
-
-| ID    | Decision                                                              | Impacto                                                    |
-| :---- | :-------------------------------------------------------------------- | :--------------------------------------------------------- |
-| D-001 | Eliminar columna `Id` antes de cualquier entrenamiento                | Previene data leakage — mandatorio en pipeline Silver      |
-| D-002 | Metrica primaria: Accuracy Global + F1-Score Macro >= 0.95            | Define criterio de exito del modelo                        |
-| D-003 | Stack confirmado: Python 3.12+ y Streamlit                            | Condiciona SAD y SpecDD                                    |
-| D-004 | Veredicto GO con confianza Alta (9.2/10)                              | Habilita continuacion a Fase 2                             |
-| D-005 | Mockup aprobado por el Stakeholder                                    | La UI de Streamlit debe seguir el diseno del mockup        |
-| D-006 | Patron arquitectonico: Monolito Modular + Medallion Architecture      | Define la estructura completa de `src/`                    |
-| D-007 | Serializacion: Joblib (no Pickle)                                     | `models/iris_model.joblib` es el unico punto de acoplamiento offline/online |
-| D-008 | StandardScaler dentro de sklearn.Pipeline                             | Elimina completamente el riesgo de Data Leakage (RT3 BRD) |
-| D-009 | pathlib.Path en `src/config.py` como unico gestor de rutas            | Cero strings hardcodeados en el codigo                     |
-| D-010 | Pipeline offline y online completamente desacoplados                  | `app.py` nunca importa modulos de ingesta o entrenamiento  |
+| Documento     | Ruta                                  | Estado                                 |
+| :------------ | :------------------------------------ | :------------------------------------- |
+| config.md     | `docs/references/config.md`          | DONE — 2026-04-19                      |
+| brd.md        | `docs/governance/brd.md`             | DONE — 2026-04-19                      |
+| feasibility.md| `docs/Fase_1/feasibility.md`         | DONE — 2026-04-19                      |
+| mockup.md     | `docs/Fase_1/mockup.md`              | DONE — 2026-04-19 (aprobado Stakeholder) |
+| sad.md        | `docs/governance/sad.md`             | DONE — 2026-04-19 (v1.0.0)            |
+| specdd.md     | `docs/governance/specdd.md`          | DONE — 2026-04-19 (v1.0.0)            |
+| contract.md   | `docs/governance/contract.md`        | DONE — 2026-04-19 (v1.0.0)            |
 
 ---
 
-## 6. Contexto para el Siguiente Agente
+## 4. Proximos Pasos — Fase 2: Data & EDA
 
-La Fase 1 tiene seis de sus siete entregables listos. El unico documento faltante es el **BACKLOG** (`docs/governance/BACKLOG.md`), responsabilidad del `ai-backlog-manager`. Una vez entregado el BACKLOG, la Fase 1 queda formalmente cerrada y el proyecto puede iniciar la Fase 2 con plena trazabilidad.
+La proxima sesion debe iniciar directamente con la primera tarea de la Fase 2. No hay pendientes ni bloqueos de Fase 1.
 
-Los documentos de arquitectura (SAD, SpecDD, DATA_CONTRACT) estan interconectados y deben leerse en ese orden antes de implementar cualquier modulo en `src/`. La firma de `predictor.predict()` en el SpecDD es el contrato mas critico del sistema: todas las demas capas se adaptan a ella.
+| Prioridad | ID Tarea | Descripcion                                              | Responsable         | Entregable                                   |
+| :-------- | :------- | :------------------------------------------------------- | :------------------ | :------------------------------------------- |
+| 1 (CRITICA) | F2-T01 | Implementar pipeline Bronze: ingesta y validacion del CSV crudo | ai-data-engineer | `src/data/ingestion.py`, `data/bronze/`     |
+| 2         | F2-T02   | Implementar pipeline Silver: limpieza, eliminacion de `Id` y near-duplicates | ai-data-engineer | `src/data/cleaner.py`, `data/silver/`        |
+| 3         | F2-T03   | Implementar pipeline Gold: normalizacion y generacion de features | ai-data-engineer | `src/data/feature_builder.py`, `data/gold/` |
+| 4         | F2-T04   | EDA de Ingesta: Reporte estadistico de la capa Bronze    | ai-data-analyst     | `docs/Fase_2/eda_ingestion.md`               |
+| 5         | F2-T05   | EDA de Limpieza: Reporte de transformaciones Silver      | ai-data-analyst     | `docs/Fase_2/eda_cleaning.md`                |
+| 6         | F2-T06   | EDA Estadistico: Analisis de distribucion y correlacion Gold | ai-data-analyst  | `docs/Fase_2/eda_statistical.md`             |
 
-El prototipo en `docs/governance/MOCKUP/index.html` es la referencia visual oficial aprobada por el Stakeholder. Cualquier desviacion en la implementacion de `src/app.py` respecto al mockup requiere un Control de Cambios.
+**Prerequisito de implementacion:** Antes de escribir cualquier codigo en `src/`, el agente debe leer `docs/governance/specdd.md` (firmas de funciones mandatorias), `docs/governance/contract.md` (invariantes por capa) y `docs/governance/sad.md` (estructura de modulos). Las firmas de `src/data/ingestion.py`, `src/data/cleaner.py` y `src/data/feature_builder.py` estan definidas en el SpecDD y son contratos vinculantes.
+
+---
+
+## 5. Bloqueos Activos
+
+**Ninguno.** La Fase 1 esta formalmente cerrada. Todos los documentos de gobernanza estan entregados y aprobados. El proyecto puede iniciar la Fase 2 en la proxima sesion sin dependencias externas pendientes.
+
+---
+
+## 6. Decisiones Criticas Activas (Consultar decisions.md para contexto completo)
+
+| ID    | Decision                                                              | Impacto en Fase 2                                               |
+| :---- | :-------------------------------------------------------------------- | :-------------------------------------------------------------- |
+| D-001 | Eliminar columna `Id` antes de cualquier entrenamiento                | Accion M-01 obligatoria en pipeline Silver — no negociable      |
+| D-002 | Metrica primaria: Accuracy Global + F1-Score Macro >= 0.95            | Define el criterio de exito al que sirve el pipeline de datos   |
+| D-003 | Stack confirmado: Python 3.12+ y Streamlit                            | Todos los modulos de `src/data/` deben seguir este stack        |
+| D-006 | Monolito Modular + Medallion Architecture (Bronze/Silver/Gold)        | Las tres carpetas `data/` son el contrato fisico de las capas   |
+| D-008 | StandardScaler dentro de sklearn.Pipeline                             | El pipeline Gold NO normaliza; la normalizacion va en trainer.py |
+| D-009 | pathlib.Path en `src/config.py` como unico gestor de rutas            | Todos los paths en `src/data/` se importan desde `config.py`   |
+
+---
+
+## 7. Contexto para el Siguiente Agente
+
+La Fase 1 esta completamente cerrada. Los documentos de gobernanza son la especificacion vinculante para toda la implementacion:
+
+- **`docs/governance/specdd.md`** contiene las firmas exactas que debe tener cada funcion en `src/`. Ningun modulo puede desviarse sin un Control de Cambios aprobado.
+- **`docs/governance/contract.md`** define los invariantes de cada capa Medallion. La capa Bronze acepta el CSV crudo con 6 columnas (incluyendo `Id`). La capa Silver debe tener exactamente 147 filas (150 - 3 near-duplicates), 5 columnas, sin nulos y sin `Id`. La capa Gold son arrays NumPy listos para entrenamiento.
+- **`docs/governance/sad.md`** define la estructura de modulos en `src/`. No se pueden crear archivos `.py` fuera de la jerarquia alli definida.
+- **`docs/Fase_1/feasibility.md`** documenta los 3 near-duplicates que deben eliminarse en Silver y el riesgo de confusion Versicolor/Virginica.
+- **`docs/Fase_1/mockup/index.html`** es la referencia visual oficial aprobada por el Stakeholder.
+
+El primer paso de la sesion siguiente es ejecutar `ai-session-steward.start_session` para obtener el Briefing de Inicio actualizado.
