@@ -27,6 +27,11 @@ Esta habilidad permite al equipo validar la "cara" del proyecto antes de constru
 - Identifica qué elementos visuales aprobados requieren lógica compleja en las fases siguientes y notifica al **Backlog Manager**.
 
 ## Reglas Técnicas
+- **Design System First:** Antes de generar cualquier HTML, verificar si existe `docs/design-system/`:
+  - **Existe:** Leer `DESIGN.md` y extraer el bloque `tailwind.config` de `code.html`. Aplicar como restricciones absolutas.
+  - **No existe:** Preguntar al usuario — *"¿Deseas definir colores y fuente corporativa antes de prototipar? (color primario, fondo, texto, fuente). Si no, aplico estética premium por defecto."* Crear `docs/design-system/DESIGN.md` si el usuario responde, o continuar con defaults si omite.
+- **Tokens son Ley:** Los colores, tipografías y border-radius del `code.html` son restricciones absolutas. No sustituir por valores propios.
+- **Referencia Visual:** Si existe `docs/design-system/screen.png`, usarla como criterio de aceptación visual.
 - **Velocidad sobre Perfección:** Un mockup al 80% visualmente atractivo hoy es mejor que uno al 100% perfecto la próxima semana.
 - **Interactividad Simulada:** Usa animaciones CSS simples para dar sensación de vida sin escribir JavaScript pesado.
-- **Aislamiento:** El código del Mockup reside solo en `docs/governance/MOCKUP/`.
+- **Aislamiento:** El código del Mockup reside solo en `mockup/` (raíz del proyecto).

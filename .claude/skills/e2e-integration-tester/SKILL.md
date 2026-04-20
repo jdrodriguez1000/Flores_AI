@@ -11,7 +11,7 @@ El agente debe simular recorridos reales en la aplicación:
 1. **Flujo de Inferencia Exitoso:** Subir un archivo válido, esperar el procesamiento y verificar que el dashboard muestre la predicción y la explicabilidad correcta.
 2. **Manejo de Errores Críticos:** Intentar subir archivos corruptos o vacíos y certificar que la UI muestra el mensaje de error adecuado en lugar de colapsar.
 3. **Persistencia de Datos:** Validar que después de una sesión de usuario, los datos y logs de feedback se encuentren correctamente guardados en la BD.
-4. **Documentación Obligatoria:** El E2E Test Report debe guardarse en `docs/Fase_4/E2E_Test_Report.md`.
+4. **Documentación Obligatoria:** El E2E Test Report debe guardarse en `docs/Phase_delivery/E2E_Test_Report.md`.
 
 ## 📐 II. Automatización de Pruebas (E2E Frameworks)
 1. **Scripting Interactivo (Playwright/Cypress):** Crear scripts que interactúen con el DOM del Frontend, hagan clics y validen estados visuales.
@@ -27,4 +27,4 @@ El agente debe simular recorridos reales en la aplicación:
 > - [ ] ¿Se ha probado el flujo completo de carga -> proceso -> visualización?
 > - [ ] ¿Los scripts de test son capaces de detectar errores visuales en el dashboard?
 > - [ ] ¿Se han cubierto los escenarios de error más comunes del usuario?
-> - [ ] ¿El reporte está guardado en `docs/Fase_4/E2E_Test_Report.md`?
+> - [ ] ¿El reporte está guardado en `docs/Phase_delivery/E2E_Test_Report.md`?

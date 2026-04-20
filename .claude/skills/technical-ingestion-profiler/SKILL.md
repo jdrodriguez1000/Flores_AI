@@ -11,7 +11,7 @@ Inmediatamente tras la carga en Bronze, el agente debe validar:
 1. **Verificación de Orígenes:** Validar la conexión y el formato de los datos crudos (Bronze).
 2. **Perfilado de Integridad:** Identificar nulos, duplicados y tipos de datos inconsistentes.
 3. **Análisis de Volumetría:** Evaluar si el volumen de datos coincide con los registros esperados del negocio.
-4. **Documentación Obligatoria:** El reporte de EDA de Ingesta debe guardarse en `docs/Fase_2/EDA_Ingesta.md`.
+4. **Documentación Obligatoria:** El reporte de EDA de Ingesta debe guardarse en `docs/Phase_engineering/EDA_Ingesta.md`.
 
 ## 📐 II. Perfilado de Esquema y Codificación
 1. **Detección de Esquemas Rotos:** Identificar cambios inesperados en la estructura de la fuente (columnas nuevas, eliminadas o tipos cambiados).

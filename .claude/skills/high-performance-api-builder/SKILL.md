@@ -8,7 +8,7 @@ allowed-tools: [Read, Write, Edit, Bash, Python-Interpreter]
 
 ## 🏗️ I. Diseño de Endpoints de IA
 El agente debe construir los puntos de acceso al sistema:
-1. **Rutas de Inferencia:** Implementar endpoints que reciban el JSON de entrada, ejecuten el preprocesamiento (Fase 2) y devuelvan el resultado del modelo (Fase 3).
+1. **Rutas de Inferencia:** Implementar endpoints que reciban el JSON de entrada, ejecuten el preprocesamiento (Phase Engineering) y devuelvan el resultado del modelo (Phase Modeling).
 2. **Modularidad Funcional:** Asegurar que la API importe los módulos `.py` certificados por el ML Engineer y no duplique lógica.
 3. **Manejo de Estados de Salud (Healthchecks):** Implementar rutas `/health` y `/ready` que verifiquen la conexión a BD y la carga correcta del modelo.
 

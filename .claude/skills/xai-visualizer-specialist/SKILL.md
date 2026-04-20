@@ -6,6 +6,12 @@ agent: ai-frontend-engineer
 allowed-tools: [Read, Write, Edit, Python-Interpreter]
 ---
 
+## 🎨 0. Pre-Flight: Design System
+Antes de definir cualquier paleta de colores para gráficos o componentes visuales:
+1. **Verificar** si existe `docs/design-system/`.
+2. **Si existe:** Leer `docs/design-system/DESIGN.md` y extraer los tokens de `code.html`. Usar `primary`, `tertiary-container` y `error` como paleta semántica para positivo/neutro/negativo en SHAP. Nunca usar rojo/verde arbitrarios si el Design System define colores de estado.
+3. **Si no existe:** Preguntar — *"¿Tienes colores corporativos definidos para los gráficos? (color positivo, negativo, neutro). Si no, usaré la convención estándar verde/rojo."* Crear `docs/design-system/DESIGN.md` si el usuario responde, o continuar con defaults si omite.
+
 ## 🏗️ I. Representación Visual de SHAP/Importance
 El agente debe traducir los números del Data Scientist en gráficos comprensibles:
 1. **Barras de Contribución:** Mostrar qué variables empujaron la predicción hacia arriba o hacia abajo (ej: Rojo para negativo, Verde para positivo).

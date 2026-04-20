@@ -20,12 +20,12 @@ Implementar técnicas de teoría de juegos (SHAP) para entender cada predicción
 
 ## 🚀 III. Informe de Transparencia Predictiva
 Generar el artefacto de XAI:
-1. **Top N Variables:** Lista priorizada para la visualización en el Frontend (Fase 4).
+1. **Top N Variables:** Lista priorizada para la visualización en el Frontend (Phase Delivery).
 2. **Veredicto de Justificabilidad:** Confirmación de que el modelo no está tomando decisiones basadas en ruido o variables no éticas.
 
 ---
 
 > **Check de Certificación de Importancia:**
 > - [ ] ¿Se han identificado variables que dominan el modelo de forma sospechosa (posible Leakage)?
-> - [ ] ¿La importancia de las variables coincide con las hipótesis de negocio de la Fase 1?
+> - [ ] ¿La importancia de las variables coincide con las hipótesis de negocio de la Phase Discovery?
 > - [ ] ¿Se ha proporcionado la lógica necesaria para que el Frontend explique la predicción al usuario?

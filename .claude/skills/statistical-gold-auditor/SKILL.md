@@ -11,13 +11,13 @@ El agentes debe garantizar que ninguna variable en $X$ contenga información fut
 1. **Análisis de Correlación:** Evaluar la relación entre las nuevas variables (Features) y la variable objetivo ($y$).
 2. **Evaluación de Importancia:** Rankear las variables generadas según su poder predictivo preliminar.
 3. **Control de Estacionariedad:** Verificar que las variables no tengan derivas temporales drásticas que afecten el modelo.
-4. **Documentación Obligatoria:** El reporte de EDA Estadístico debe guardarse en `docs/Fase_2/EDA_Estadistico.md`.
+4. **Documentación Obligatoria:** El reporte de EDA Estadístico debe guardarse en `docs/Phase_engineering/EDA_Estadistico.md`.
 5. **Análisis de Correlación Temporal:** Verificar que los datos usados para predecir $y$ sean estrictamente anteriores al evento.
 6. **Identificación de Variables "Gemelas":** Detectar variables que tienen una correlación casi perfecta (>0.99) con el objetivo y que podrían ser proxies del resultado.
 
 ## 📐 II. Análisis de Multicolinealidad y Relevancia
 1. **VIF (Variance Inflation Factor):** Calcular el VIF para eliminar variables redundantes que aporten el mismo valor estadístico.
-2. **Análisis de Importancia Predictiva:** Uso de métodos como *Mutual Information* o *ANOVA* para validar que la relación entre $X$ e $y$ es estadísticamente significativa antes de pasar a la Fase 3.
+2. **Análisis de Importancia Predictiva:** Uso de métodos como *Mutual Information* o *ANOVA* para validar que la relación entre $X$ e $y$ es estadísticamente significativa antes de pasar a la Phase Modeling.
 
 ## 🚀 III. Informe de Salud de la Capa Gold
 Generar el diagnóstico final de datos para entrenamiento:

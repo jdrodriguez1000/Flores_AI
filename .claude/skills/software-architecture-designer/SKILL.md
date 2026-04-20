@@ -26,11 +26,11 @@ El documento final debe seguir el **C4 Model** o similar, incluyendo:
 1. **Selección del Stack Tecnológico:** Justificar la elección de lenguajes, frameworks y bases de datos según requisitos de latencia y volumen.
 2. **Diagramación C4 Model:** Crear diagramas de Contexto, Contenedor y Componentes para visualizar la solución.
 3. **Definición de Infraestructura:** Diseñar la topología (Cloud, On-premise, Híbrida) y servicios necesarios.
-4. **Documentación Obligatoria:** El Software Architecture Document (SAD) debe guardarse en `docs/Fase_1/SAD.md`.
+4. **Documentación Obligatoria:** El Software Architecture Document (SAD) debe guardarse en `docs/governance/sad.md`.
 
 ---
 
 > **Check de Certificación Arquitectónica:**
-> - [ ] ¿El diseño garantiza el desacoplamiento entre la lógica de ML (Fase 3) y la API (Fase 4)?
+> - [ ] ¿El diseño garantiza el desacoplamiento entre la lógica de ML (Phase Modeling) y la API (Phase Delivery)?
 > - [ ] ¿Se ha definido una estrategia de escalabilidad para picos de inferencia?
 > - [ ] ¿El SAD especifica claramente cómo se gestionarán los estados y la caché (Redis)?

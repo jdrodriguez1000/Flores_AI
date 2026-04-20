@@ -6,6 +6,36 @@ agent: ai-frontend-engineer
 allowed-tools: [Read, Write, Edit, Bash, Python-Interpreter]
 ---
 
+## 🎨 0. Pre-Flight: Design System
+Antes de escribir cualquier código de interfaz, ejecutar este protocolo agnóstico:
+
+1. **Verificar** si existe `docs/design-system/` en el proyecto.
+2. **Si existe:**
+   - Leer `docs/design-system/DESIGN.md` → identificar paleta, tipografía, reglas de componentes y restricciones (Do's/Don'ts).
+   - Leer `docs/design-system/code.html` → extraer el bloque `tailwind.config` con todos los tokens de color.
+   - **Para Streamlit:** Traducir tokens al archivo `.streamlit/config.toml`:
+     ```toml
+     [theme]
+     primaryColor             = "<primary>"
+     backgroundColor          = "<surface>"
+     secondaryBackgroundColor = "<surface-container-low>"
+     textColor                = "<on-surface>"
+     ```
+   - **CSS adicional:** Inyectar fuentes, border-radius y reglas de componentes vía `st.markdown("<style>...</style>", unsafe_allow_html=True)`.
+   - **Para React/Next.js:** Copiar el bloque `tailwind.config` directamente al `tailwind.config.js` del proyecto.
+3. **Si no existe:** Preguntar al usuario antes de continuar:
+   > "No encontré un Design System en `docs/design-system/`. ¿Deseas definir uno básico? Necesito:
+   > - Color primario (hex)
+   > - Color de fondo (hex)
+   > - Color de texto (hex)
+   > - Fuente principal
+   >
+   > Si prefieres omitirlo, usaré el tema estándar del framework."
+   - **Usuario responde:** Crear `docs/design-system/DESIGN.md` con los tokens y aplicarlos al dashboard.
+   - **Usuario omite:** Continuar con convenciones estándar del framework.
+
+> El Design System es **inmutable**. No alterar colores, fuentes ni reglas de componentes salvo CC aprobado.
+
 ## 🏗️ I. Diseño de la Arquitectura de UI
 El agente debe construir el punto de entrada para el usuario final:
 1. **Flujo de Carga de Datos:** Implementar componentes para subir archivos (CSV/Excel) o formularios de entrada manual con validación visual inmediata.
@@ -13,7 +43,7 @@ El agente debe construir el punto de entrada para el usuario final:
 3. **Responsive Design:** Asegurar que el dashboard sea utilizable en diferentes dispositivos (Desktop/Tablet) según el requisito del cliente.
 
 ## 📐 II. Integración con el Backend
-1. **Consumo de API:** Implementar la lógica para llamar a los endpoints de la Fase 4, manejando estados de carga (`loading`) y errores técnicos de forma elegante.
+1. **Consumo de API:** Implementar la lógica para llamar a los endpoints de la Phase Delivery, manejando estados de carga (`loading`) y errores técnicos de forma elegante.
 2. **Visualización de Logs de Proceso:** Mostrar al usuario el progreso de las tareas asíncronas (ej: "Limpiando datos...", "Calculando predicción...").
 
 ## 🚀 III. Prototipado Rápido vs. Producción

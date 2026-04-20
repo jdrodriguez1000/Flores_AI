@@ -2,9 +2,9 @@
 
 Este archivo define las convenciones y protocolos agnósticos para Claude Code en proyectos de **Ciencia de Datos, Machine Learning e Ingeniería de IA**, siguiendo las metodologías **SpecDD** (Specification-Driven Development) y **TDD** (Test-Driven Development).
 
-Para configuración específica del proyecto actual (nombre, stack, IDs), consulta siempre **[docs/references/PROJECT_config.md](docs/references/PROJECT_config.md)**.
+Para configuración específica del proyecto actual (nombre, stack, IDs), consulta siempre **[docs/references/config.md](docs/references/config.md)**.
 
-Seguir la metodologia de trabajo para proyectos de ciencia de datos y machine learning, qeu se encuentra en el archivo **[ai_metodology.md](docs/references/ai_metodology.md)**.
+Seguir la metodologia de trabajo para proyectos de ciencia de datos y machine learning, qeu se encuentra en el archivo **[ai_process.md](docs/methodology/ai_process.md)**.
 ---
 
 ## 🎯 1. Directivas Fundamentales
@@ -36,17 +36,18 @@ Para garantizar la organización y trazabilidad, se sigue esta jerarquía de car
 
 | Directorio   | Propósito                                   | Regla de Oro                                                 |
 | :----------- | :------------------------------------------ | :----------------------------------------------------------- |
-| `docs/`      | Documentación técnica y de negocio oficial. | Segmentado por fases (`Fase_1` a `Fase_4`).                  |
-| `src/`       | Código fuente productivo (.py).             | Modularizado según el SAD (Ingesta, Modelado, API).          |
-| `data/`      | Almacenamiento de datos.                    | Estructura Bronze (crudo), Silver (limpio), Gold (features). |
-| `models/`    | Artefactos de modelos serializados.         | Solo modelos certificados (ONNX, Pickle, Joblib).            |
-| `notebooks/` | Investigación y experimentación.            | Archivos `.ipynb` documentados y numerados.                  |
-| `tests/`     | Suite de pruebas técnicas.                  | Unit, Integration, E2E y Model QA.                           |
-| `infra/`     | Infraestructura como Código (IaC).          | Scripts de Docker, Terraform o K8s.                          |
+| `docs/`             | Documentación técnica y de negocio oficial. | Segmentado por fases (`Phase_discovery` a `Phase_delivery`).                  |
+| `docs/design-system/` | Sistema de diseño del cliente (Brand).    | **Fuente de verdad de UI.** Obligatorio leer antes de generar cualquier interfaz. Contiene tokens de color, tipografía, reglas de componentes y referencia visual. |
+| `src/`              | Código fuente productivo (.py).             | Modularizado según el SAD (Ingesta, Modelado, API).          |
+| `data/`             | Almacenamiento de datos.                    | Estructura Bronze (crudo), Silver (limpio), Gold (features). |
+| `models/`           | Artefactos de modelos serializados.         | Solo modelos certificados (ONNX, Pickle, Joblib).            |
+| `notebooks/`        | Investigación y experimentación.            | Archivos `.ipynb` documentados y numerados.                  |
+| `tests/`            | Suite de pruebas técnicas.                  | Unit, Integration, E2E y Model QA.                           |
+| `infra/`            | Infraestructura como Código (IaC).          | Scripts de Docker, Terraform o K8s.                          |
 
 ---
 
-## 📝 3. Documentos de Gobernanza (Alineados con ai_metodology.md)
+## 📝 3. Documentos de Gobernanza (Alineados con ai_process.md)
 
 | Documento       | Ubicación          | Propósito                                                 |
 | :-------------- | :----------------- | :-------------------------------------------------------- |
@@ -55,10 +56,10 @@ Para garantizar la organización y trazabilidad, se sigue esta jerarquía de car
 | **SAD**         | `docs/governance/` | Software Architecture Document: Stack y Diseño técnico.   |
 | **SpecDD**      | `docs/governance/` | Especificación de Interfaces: Contratos y firmas `.py`.   |
 | **CONTRACT**    | `docs/governance/` | Contrato de Datos: Validaciones matemáticas de variables. |
-| **FEASIBILITY** | `docs/Fase_1/`     | Reporte de Factibilidad: Diagnóstico de salud de datos.   |
-| **EDAs**        | `docs/Fase_2/`     | Reportes de Ingesta, Limpieza y Análisis Estadístico.     |
-| **MODEL QA**    | `docs/Fase_3/`     | Validación de Modelos: Benchmarking y Sesgo.              |
-| **QA SYSTEM**   | `docs/Fase_4/`     | Certificados E2E y Stress Testing.                        |
+| **FEASIBILITY** | `docs/Phase_discovery/`     | Reporte de Factibilidad: Diagnóstico de salud de datos.   |
+| **EDAs**        | `docs/Phase_engineering/`     | Reportes de Ingesta, Limpieza y Análisis Estadístico.     |
+| **MODEL QA**    | `docs/Phase_modeling/`     | Validación de Modelos: Benchmarking y Sesgo.              |
+| **QA SYSTEM**   | `docs/Phase_delivery/`     | Certificados E2E y Stress Testing.                        |
 | **HANDOFF**     | `docs/references/` | Estado Operativo diario (sobrescribible).                 |
 | **DECISIONS**   | `docs/references/` | Log histórico de decisiones y lecciones.                  |
 
@@ -115,11 +116,11 @@ Obligatorio cuando se detecta una desviación de los documentos de gobernanza.
 
 ### Ritual de Apertura (Session Kickoff)
 1.  **Sincronización:** Ejecutar `ai-session-steward.start_session`.
-2.  **Lectura Obligatoria:** `HANDOFF.md`, `DECISIONS_LOG.md`, `BACKLOG.md` y `PROJECT_config.md`.
+2.  **Lectura Obligatoria:** `handoff.md`, `decisions.md`, `backlog.md` y `config.md`.
 3.  **Priorización:** Seleccionar la siguiente tarea atómica del Backlog.
 
 ### Ritual de Cierre (Session Wrap-up)
 1.  **Commit:** Versionar el progreso con mensaje semántico.
 2.  **Validación:** Asegurar que los tests sean verdes.
-3.  **Handoff:** Actualizar `HANDOFF.md` (Logros, Pendientes, Bloqueos).
-4.  **Memoria:** Registrar en `DECISIONS_LOG.md` (Decisiones, Lecciones).
+3.  **Handoff:** Actualizar `handoff.md` (Logros, Pendientes, Bloqueos).
+4.  **Memoria:** Registrar en `decisions.md` (Decisiones, Lecciones).

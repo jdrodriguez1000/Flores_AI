@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flores AI – Iris Classifier | Mockup v2.0</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ===== DESIGN TOKENS — "The Clinical Sanctuary" ===== */
+    :root {
+      /* Surfaces */
+      --surface:                    #f8f9ff;
+      --surface-container-lowest:   #ffffff;
+      --surface-container-low:      #f1f3fc;
+      --surface-container:          #ebeef6;
+      --surface-container-high:     #e5e8f1;
+      --surface-container-highest:  #dfe2eb;
+
+      /* Brand */
+      --primary:                    #00478d;
+      --primary-container:          #005eb8;
+      --on-primary:                 #ffffff;
+
+      /* Text */
+      --on-surface:                 #181c22;
+      --on-surface-variant:         #424752;
+      --outline:                    #727783;
+      --outline-variant:            rgba(194,198,212,0.20);
+
+      /* Secondary */
+      --secondary-container:        #c0d5ff;
+      --on-secondary-container:     #475c80;
+
+      /* Caution */
+      --tertiary-container:         #9f4300;
+      --on-tertiary-container:      #ffcfb9;
+
+      /* Error */
+      --error:                      #ba1a1a;
+      --error-container:            #ffdad6;
+      --on-error-container:         #93000a;
+
+      /* Data colors — species differentiators (kept for chart legibility) */
+      --setosa-color:               #2d8a4e;
+      --versi-color:                #1a5fba;
+      --virgin-color:               #7c3aed;
+
+      /* Radius */
+      --radius-sm:  6px;
+      --radius-md:  10px;
+      --radius-lg:  16px;
+
+      /* Elevation */
+      --shadow-card:  0 4px 32px rgba(24,28,34,0.04);
+      --shadow-float: 0 8px 32px rgba(24,28,34,0.06);
+    }
+
+    /* ===== RESET ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 15px; }
+    body {
+      font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+      background: var(--surface);
+      color: var(--on-surface);
+      min-height: 100vh;
+    }
+
+    /* ===== PROTOTYPE NAVIGATION BAR ===== */
+    .screen-nav {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 12px 24px;
+      background: rgba(248,249,255,0.80);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .screen-nav .nav-label {
+      font-family: "Inter", sans-serif;
+      font-size: 0.68rem;
+      color: var(--outline);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-right: 8px;
+      font-weight: 500;
+    }
+    .screen-nav button {
+      padding: 5px 14px;
+      border-radius: 20px;
+      border: none;
+      background: var(--surface-container);
+      color: var(--on-surface-variant);
+      font-family: "Inter", sans-serif;
+      font-size: 0.78rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.18s;
+    }
+    .screen-nav button:hover {
+      background: var(--surface-container-high);
+      color: var(--on-surface);
+    }
+    .screen-nav button.active {
+      background: linear-gradient(135deg, var(--primary), var(--primary-container));
+      color: var(--on-primary);
+      font-weight: 600;
+    }
+
+    /* ===== SCREENS ===== */
+    .screen { display: none; }
+    .screen.active { display: flex; min-height: calc(100vh - 49px); }
+
+    /* ===== SIDEBAR ===== */
+    .sidebar {
+      width: 264px;
+      min-width: 264px;
+      background: var(--surface-container-low);
+      padding: 28px 20px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 32px;
+    }
+    .sidebar-logo .logo-icon {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-container));
+      border-radius: var(--radius-sm);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .sidebar-logo .logo-text {
+      font-family: "Manrope", sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--on-surface);
+    }
+    .sidebar-logo .logo-sub {
+      font-size: 0.68rem;
+      color: var(--outline);
+      font-weight: 400;
+    }
+
+    .sidebar-section-label {
+      font-family: "Inter", sans-serif;
+      font-size: 0.62rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--outline);
+      margin: 20px 0 6px;
+      font-weight: 600;
+    }
+    .sidebar-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 10px;
+      border-radius: var(--radius-sm);
+      color: var(--on-surface-variant);
+      font-family: "Inter", sans-serif;
+      font-size: 0.83rem;
+      cursor: pointer;
+      transition: background 0.15s;
+      margin-bottom: 2px;
+      font-weight: 500;
+    }
+    .sidebar-item:hover {
+      background: var(--surface-container);
+      color: var(--on-surface);
+    }
+    .sidebar-item.active {
+      background: var(--secondary-container);
+      color: var(--on-secondary-container);
+      font-weight: 600;
+    }
+    .sidebar-item .icon { width: 16px; text-align: center; font-size: 0.9rem; }
+
+    /* No-Line rule: sidebar areas separated by background shift only */
+    .sidebar-info {
+      font-size: 0.72rem;
+      color: var(--on-surface-variant);
+      line-height: 1.7;
+      padding: 12px;
+      background: var(--surface-container);
+      border-radius: var(--radius-sm);
+      margin-top: 8px;
+    }
+    .sidebar-info strong { color: var(--on-surface); font-weight: 600; }
+
+    /* ===== MAIN CONTENT ===== */
+    .main {
+      flex: 1;
+      padding: 36px 44px;
+      overflow-y: auto;
+      max-width: 880px;
+    }
+
+    /* ===== PAGE HEADER ===== */
+    .page-header { margin-bottom: 28px; }
+    .page-header h1 {
+      font-family: "Manrope", sans-serif;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--on-surface);
+      margin-bottom: 4px;
+      letter-spacing: -0.01em;
+    }
+    .page-header p {
+      font-size: 0.85rem;
+      color: var(--on-surface-variant);
+      line-height: 1.55;
+      font-weight: 400;
+    }
+
+    /* ===== STATUS CHIPS / BADGES ===== */
+    .badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 3px 12px;
+      border-radius: 999px;
+      font-family: "Inter", sans-serif;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+    .badge-success {
+      background: var(--secondary-container);
+      color: var(--on-secondary-container);
+    }
+    .badge-warn {
+      background: var(--tertiary-container);
+      color: var(--on-tertiary-container);
+    }
+    .badge-error {
+      background: var(--error-container);
+      color: var(--on-error-container);
+    }
+
+    /* ===== CARDS ===== */
+    .card {
+      background: var(--surface-container-lowest);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-card);
+    }
+    .card-title {
+      font-family: "Inter", sans-serif;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: 20px;
+    }
+
+    /* ===== SECTION SPACER (No-Line rule) ===== */
+    .section-spacer { height: 24px; }
+
+    /* ===== FORM INPUTS ===== */
+    .input-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .input-group { display: flex; flex-direction: column; gap: 6px; }
+    .input-group label {
+      font-family: "Inter", sans-serif;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--on-surface-variant);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .input-group label .range-hint {
+      font-weight: 400;
+      font-size: 0.68rem;
+      color: var(--outline);
+      text-transform: none;
+      letter-spacing: 0;
+    }
+    .slider-wrapper { position: relative; }
+    .slider-track {
+      width: 100%;
+      height: 4px;
+      background: var(--surface-container-highest);
+      border-radius: 4px;
+      position: relative;
+      margin: 12px 0 6px;
+    }
+    .slider-fill {
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--primary-container));
+      border-radius: 4px;
+    }
+    .slider-thumb {
+      width: 16px; height: 16px;
+      background: var(--primary);
+      border: 2px solid var(--surface-container-lowest);
+      border-radius: 50%;
+      position: absolute;
+      top: -6px;
+      transform: translateX(-50%);
+      box-shadow: 0 0 0 3px rgba(0,71,141,0.15);
+    }
+    .slider-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.67rem;
+      color: var(--outline);
+      font-family: "Inter", sans-serif;
+    }
+    .slider-value {
+      font-family: "Manrope", sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-top: 2px;
+    }
+
+    /* ===== PRIMARY BUTTON ===== */
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 11px 24px;
+      border-radius: var(--radius-sm);
+      border: none;
+      font-family: "Inter", sans-serif;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.18s;
+      letter-spacing: 0.02em;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-container));
+      color: var(--on-primary);
+      box-shadow: 0 2px 12px rgba(0,71,141,0.18);
+    }
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 20px rgba(0,71,141,0.28);
+    }
+    .btn-secondary {
+      background: var(--secondary-container);
+      color: var(--on-secondary-container);
+      font-weight: 600;
+    }
+    .btn-secondary:hover {
+      background: var(--surface-container-high);
+      color: var(--on-surface);
+    }
+    .btn-full { width: 100%; justify-content: center; }
+
+    /* ===== ALERT BOXES ===== */
+    .alert {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 14px 16px;
+      border-radius: var(--radius-md);
+      margin-bottom: 16px;
+      font-size: 0.84rem;
+      line-height: 1.55;
+      font-family: "Inter", sans-serif;
+    }
+    .alert-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+    .alert-warn {
+      background: rgba(159,67,0,0.08);
+      color: var(--tertiary-container);
+    }
+    .alert-warn .alert-icon,
+    .alert-warn strong,
+    .alert-warn { color: #7a3200; }
+    .alert-error {
+      background: var(--error-container);
+      color: var(--on-error-container);
+    }
+    .alert-success {
+      background: var(--secondary-container);
+      color: var(--on-secondary-container);
+    }
+    .alert strong {
+      font-weight: 700;
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    /* ===== RESULT SPECIES CARD ===== */
+    .result-species {
+      display: flex; align-items: center; gap: 20px;
+      padding: 20px 24px;
+      background: var(--surface-container-lowest);
+      border-radius: var(--radius-lg);
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-card);
+    }
+    .result-species.caution {
+      background: rgba(159,67,0,0.05);
+    }
+    .species-illustration {
+      width: 88px; height: 88px;
+      border-radius: var(--radius-md);
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--surface-container-low);
+      position: relative;
+      overflow: hidden;
+    }
+    .species-illustration.caution {
+      background: rgba(159,67,0,0.08);
+    }
+    .species-illustration svg { width: 68px; height: 68px; }
+    .species-info { flex: 1; }
+    .species-name {
+      font-family: "Manrope", sans-serif;
+      font-size: 1.55rem;
+      font-weight: 800;
+      color: var(--on-surface);
+      font-style: italic;
+      margin-bottom: 2px;
+      letter-spacing: -0.01em;
+    }
+    .species-name.caution { color: #7a3200; }
+    .species-full {
+      font-size: 0.76rem;
+      color: var(--outline);
+      margin-bottom: 12px;
+      font-weight: 400;
+    }
+    .confidence-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--on-surface-variant);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 6px;
+    }
+    .confidence-row {
+      display: flex; align-items: center; gap: 12px;
+    }
+    .confidence-bar-wrapper {
+      flex: 1;
+      height: 8px;
+      background: var(--surface-container-highest);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .confidence-bar {
+      height: 100%;
+      border-radius: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--primary-container));
+      transition: width 0.6s ease;
+    }
+    .confidence-bar.low {
+      background: linear-gradient(90deg, #7a3200, #c4520a);
+    }
+    .confidence-pct {
+      font-family: "Manrope", sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--primary);
+      min-width: 52px;
+      text-align: right;
+    }
+    .confidence-pct.low { color: #7a3200; }
+
+    /* ===== PROBABILITY CHART ===== */
+    .prob-chart { display: flex; flex-direction: column; gap: 16px; }
+    .prob-row { display: flex; align-items: center; gap: 12px; }
+    .prob-label {
+      width: 90px; min-width: 90px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--on-surface-variant);
+      font-style: italic;
+      font-family: "Inter", sans-serif;
+    }
+    .prob-bar-wrapper {
+      flex: 1;
+      height: 28px;
+      background: var(--surface-container-highest);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+    }
+    .prob-bar {
+      height: 100%;
+      display: flex; align-items: center;
+      padding-left: 10px;
+      font-family: "Inter", sans-serif;
+      font-size: 0.73rem;
+      font-weight: 700;
+      color: #fff;
+      border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+      transition: width 0.6s ease;
+    }
+    .prob-bar.setosa  { background: linear-gradient(90deg, #1a5c33, var(--setosa-color)); }
+    .prob-bar.versi   { background: linear-gradient(90deg, #0e3d80, var(--versi-color)); }
+    .prob-bar.virgin  { background: linear-gradient(90deg, #4c1d95, var(--virgin-color)); }
+    .prob-pct {
+      min-width: 42px;
+      text-align: right;
+      font-family: "Manrope", sans-serif;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--on-surface-variant);
+    }
+    .prob-winner .prob-pct { color: var(--primary); }
+    .prob-winner.caution .prob-pct { color: #7a3200; }
+
+    /* ===== MEASURE GUIDE (sidebar) ===== */
+    .measure-guide {
+      padding: 12px;
+      background: var(--surface-container);
+      border-radius: var(--radius-sm);
+      margin-top: 6px;
+    }
+    .measure-guide-title {
+      font-family: "Inter", sans-serif;
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: var(--primary);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .measure-guide svg { width: 100%; height: auto; }
+
+    /* ===== FEEDBACK ZONE ===== */
+    .feedback-zone {
+      display: flex; align-items: center; gap: 10px;
+      padding-top: 4px;
+    }
+    .feedback-zone span {
+      font-size: 0.76rem;
+      color: var(--outline);
+    }
+
+    /* ===== ERROR STATE ===== */
+    .input-error .slider-track { background: rgba(186,26,26,0.12); }
+    .input-error .slider-thumb {
+      background: var(--error);
+      box-shadow: 0 0 0 3px rgba(186,26,26,0.15);
+    }
+    .input-error label { color: var(--on-error-container); }
+    .input-error .slider-value { color: var(--error); }
+    .error-hint {
+      font-family: "Inter", sans-serif;
+      font-size: 0.7rem;
+      color: var(--error);
+      margin-top: 2px;
+      font-weight: 500;
+    }
+
+    /* ===== ANNOTATION LABELS (mockup meta only) ===== */
+    .annot {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 0.62rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--primary-container);
+      border: 1px dashed rgba(0,94,184,0.40);
+      border-radius: 4px;
+      padding: 1px 7px;
+      margin-left: 8px;
+      vertical-align: middle;
+      opacity: 0.80;
+    }
+
+    /* ===== FOOTER META ===== */
+    .meta-footer {
+      font-size: 0.73rem;
+      color: var(--outline);
+      text-align: center;
+      margin-top: 14px;
+    }
+
+    /* ===== RESPONSIVE (basic) ===== */
+    @media (max-width: 820px) {
+      .input-grid { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      .main { padding: 20px 18px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== PROTOTYPE NAVIGATION ===== -->
+<nav class="screen-nav">
+  <span class="nav-label">Pantalla:</span>
+  <button class="active" onclick="showScreen('s-initial')">1. Estado inicial</button>
+  <button onclick="showScreen('s-success')">2. Resultado exitoso</button>
+  <button onclick="showScreen('s-lowconf')">3. Baja confianza</button>
+  <button onclick="showScreen('s-error')">4. Error de validacion</button>
+</nav>
+
+
+<!-- ======================================================
+     SCREEN 1 — INITIAL STATE
+     ====================================================== -->
+<div id="s-initial" class="screen active">
+
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="22" height="22">
+          <path d="M12 2C8 2 5 7 5 12s3 10 7 10 7-5 7-10S16 2 12 2z" fill="#fff" opacity="0.9"/>
+          <path d="M12 4c-1.5 3-2 6-1 9 .5 1.5 1 3 1 3s.5-1.5 1-3c1-3 .5-6-1-9z" fill="rgba(0,0,0,0.2)"/>
+        </svg>
+      </div>
+      <div>
+        <div class="logo-text">Flores AI</div>
+        <div class="logo-sub">Iris Classifier v1.0</div>
+      </div>
+    </div>
+
+    <div class="sidebar-section-label">Navegacion</div>
+    <div class="sidebar-item active">
+      <span class="icon">🔬</span> Clasificador
+    </div>
+    <div class="sidebar-item">
+      <span class="icon">📊</span> Historial
+    </div>
+
+    <div style="height:20px;"></div>
+
+    <div class="sidebar-section-label">Referencia</div>
+    <div class="measure-guide">
+      <div class="measure-guide-title">Guia de medicion</div>
+      <svg viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
+        <!-- Petal outer -->
+        <ellipse cx="90" cy="55" rx="38" ry="22" fill="#00478d" opacity="0.12" stroke="#00478d" stroke-width="1" stroke-opacity="0.3"/>
+        <!-- Sepal -->
+        <ellipse cx="90" cy="85" rx="28" ry="16" fill="#005eb8" opacity="0.10" stroke="#005eb8" stroke-width="1" stroke-opacity="0.3"/>
+        <!-- Stem -->
+        <line x1="90" y1="100" x2="90" y2="115" stroke="#005eb8" stroke-width="2" opacity="0.3"/>
+        <!-- Petal label -->
+        <text x="136" y="44" fill="#00478d" font-size="9" font-family="Inter,sans-serif" font-weight="600">Petalo</text>
+        <line x1="128" y1="46" x2="118" y2="50" stroke="#00478d" stroke-width="0.8" opacity="0.5"/>
+        <!-- Sepal label -->
+        <text x="128" y="90" fill="#005eb8" font-size="9" font-family="Inter,sans-serif" font-weight="600">Sepalo</text>
+        <line x1="120" y1="88" x2="110" y2="85" stroke="#005eb8" stroke-width="0.8" opacity="0.5"/>
+        <!-- Width arrow petal -->
+        <line x1="55" y1="55" x2="125" y2="55" stroke="#00478d" stroke-width="0.8" stroke-dasharray="3,2" opacity="0.4"/>
+        <text x="58" y="52" fill="#00478d" font-size="7.5" font-family="Inter,sans-serif">← ancho →</text>
+        <!-- Length arrow -->
+        <line x1="90" y1="33" x2="90" y2="77" stroke="#00478d" stroke-width="0.8" stroke-dasharray="3,2" opacity="0.4"/>
+        <text x="94" y="44" fill="#00478d" font-size="7" font-family="Inter,sans-serif">largo</text>
+      </svg>
+    </div>
+
+    <div style="height:20px;"></div>
+    <div class="sidebar-info">
+      <strong>Rangos validos (cm)</strong><br/>
+      Sepal length: 3.0 – 9.0<br/>
+      Sepal width: 1.5 – 5.5<br/>
+      Petal length: 0.5 – 8.0<br/>
+      Petal width: 0.0 – 3.5
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="page-header">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+        <h1>Clasificador de Iris</h1>
+        <span class="badge badge-success">Modelo Activo</span>
+      </div>
+      <p>Ingrese las cuatro medidas fisicas de la flor en centimetros para obtener la especie predicha con su nivel de confianza.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Medidas de entrada <span class="annot">US-03</span></div>
+      <div class="input-grid">
+
+        <!-- Sepal Length -->
+        <div class="input-group">
+          <label>
+            Longitud del Sepalo
+            <span class="range-hint">(3.0 – 9.0 cm)</span>
+          </label>
+          <div class="slider-value">5.1 cm</div>
+          <div class="slider-wrapper">
+            <div class="slider-track">
+              <div class="slider-fill" style="width:35%;"></div>
+              <div class="slider-thumb" style="left:35%;"></div>
+            </div>
+            <div class="slider-labels"><span>3.0</span><span>9.0</span></div>
+          </div>
+        </div>
+
+        <!-- Sepal Width -->
+        <div class="input-group">
+          <label>
+            Ancho del Sepalo
+            <span class="range-hint">(1.5 – 5.5 cm)</span>
+          </label>
+          <div class="slider-value">3.5 cm</div>
+          <div class="slider-wrapper">
+            <div class="slider-track">
+              <div class="slider-fill" style="width:50%;"></div>
+              <div class="slider-thumb" style="left:50%;"></div>
+            </div>
+            <div class="slider-labels"><span>1.5</span><span>5.5</span></div>
+          </div>
+        </div>
+
+        <!-- Petal Length -->
+        <div class="input-group">
+          <label>
+            Longitud del Petalo
+            <span class="range-hint">(0.5 – 8.0 cm)</span>
+          </label>
+          <div class="slider-value">1.4 cm</div>
+          <div class="slider-wrapper">
+            <div class="slider-track">
+              <div class="slider-fill" style="width:12%;"></div>
+              <div class="slider-thumb" style="left:12%;"></div>
+            </div>
+            <div class="slider-labels"><span>0.5</span><span>8.0</span></div>
+          </div>
+        </div>
+
+        <!-- Petal Width -->
+        <div class="input-group">
+          <label>
+            Ancho del Petalo
+            <span class="range-hint">(0.0 – 3.5 cm)</span>
+          </label>
+          <div class="slider-value">0.2 cm</div>
+          <div class="slider-wrapper">
+            <div class="slider-track">
+              <div class="slider-fill" style="width:6%;"></div>
+              <div class="slider-thumb" style="left:6%;"></div>
+            </div>
+            <div class="slider-labels"><span>0.0</span><span>3.5</span></div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="section-spacer"></div>
+
+      <button class="btn btn-primary btn-full" onclick="showScreen('s-success')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        Predecir Especie
+      </button>
+    </div>
+
+    <div class="meta-footer">
+      Modelo: Random Forest · Dataset: Iris (Fisher, 1936) · 150 muestras · 3 clases
+    </div>
+  </div>
+</div>
+
+
+<!-- ======================================================
+     SCREEN 2 — SUCCESS STATE
+     ====================================================== -->
+<div id="s-success" class="screen">
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="22" height="22">
+          <path d="M12 2C8 2 5 7 5 12s3 10 7 10 7-5 7-10S16 2 12 2z" fill="#fff" opacity="0.9"/>
+          <path d="M12 4c-1.5 3-2 6-1 9 .5 1.5 1 3 1 3s.5-1.5 1-3c1-3 .5-6-1-9z" fill="rgba(0,0,0,0.2)"/>
+        </svg>
+      </div>
+      <div>
+        <div class="logo-text">Flores AI</div>
+        <div class="logo-sub">Iris Classifier v1.0</div>
+      </div>
+    </div>
+    <div class="sidebar-section-label">Navegacion</div>
+    <div class="sidebar-item active"><span class="icon">🔬</span> Clasificador</div>
+    <div class="sidebar-item"><span class="icon">📊</span> Historial</div>
+    <div style="height:20px;"></div>
+    <div class="sidebar-section-label">Ultima prediccion</div>
+    <div class="sidebar-info">
+      <strong>Entradas usadas</strong><br/>
+      Sepal length: 5.1 cm<br/>
+      Sepal width: &nbsp;3.5 cm<br/>
+      Petal length: 1.4 cm<br/>
+      Petal width: &nbsp;0.2 cm<br/><br/>
+      <strong>Resultado:</strong> Setosa<br/>
+      <strong>Confianza:</strong> 97.3%
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="page-header">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+        <h1>Resultado de la Clasificacion</h1>
+        <span class="badge badge-success">Alta confianza</span>
+      </div>
+      <p>El modelo ha clasificado la flor con alta precision. Revise los detalles a continuacion.</p>
+    </div>
+
+    <!-- Result card -->
+    <div class="result-species">
+      <div class="species-illustration">
+        <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+          <!-- Setosa: round petals, green tones -->
+          <ellipse cx="40" cy="22" rx="10" ry="18" fill="#2d8a4e" opacity="0.85" transform="rotate(0 40 40)"/>
+          <ellipse cx="40" cy="22" rx="10" ry="18" fill="#2d8a4e" opacity="0.65" transform="rotate(120 40 40)"/>
+          <ellipse cx="40" cy="22" rx="10" ry="18" fill="#2d8a4e" opacity="0.65" transform="rotate(240 40 40)"/>
+          <ellipse cx="40" cy="26" rx="6" ry="13" fill="#1a5c33" opacity="0.55" transform="rotate(60 40 40)"/>
+          <ellipse cx="40" cy="26" rx="6" ry="13" fill="#1a5c33" opacity="0.55" transform="rotate(180 40 40)"/>
+          <ellipse cx="40" cy="26" rx="6" ry="13" fill="#1a5c33" opacity="0.55" transform="rotate(300 40 40)"/>
+          <circle cx="40" cy="40" r="6" fill="#4ab068"/>
+          <circle cx="40" cy="40" r="3" fill="#fff" opacity="0.75"/>
+        </svg>
+      </div>
+      <div class="species-info">
+        <div class="species-name">Iris setosa</div>
+        <div class="species-full">Iris setosa · Pallas, 1771 · Familia: Iridaceae</div>
+        <div class="confidence-label">Confianza de prediccion</div>
+        <div class="confidence-row">
+          <div class="confidence-bar-wrapper">
+            <div class="confidence-bar" style="width:97.3%;"></div>
+          </div>
+          <div class="confidence-pct">97.3%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Probability chart -->
+    <div class="card">
+      <div class="card-title">Probabilidad por especie <span class="annot">US-02</span></div>
+      <div class="prob-chart">
+        <div class="prob-row prob-winner">
+          <div class="prob-label">Setosa</div>
+          <div class="prob-bar-wrapper">
+            <div class="prob-bar setosa" style="width:97.3%;">97.3%</div>
+          </div>
+          <div class="prob-pct">97.3%</div>
+        </div>
+        <div class="prob-row">
+          <div class="prob-label">Versicolor</div>
+          <div class="prob-bar-wrapper">
+            <div class="prob-bar versi" style="width:2.1%;">&nbsp;</div>
+          </div>
+          <div class="prob-pct">2.1%</div>
+        </div>
+        <div class="prob-row">
+          <div class="prob-label">Virginica</div>
+          <div class="prob-bar-wrapper">
+            <div class="prob-bar virgin" style="width:0.6%;">&nbsp;</div>
+          </div>
+          <div class="prob-pct">0.6%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feedback + new prediction -->
+    <div style="display:flex;gap:12px;flex-wrap:wrap;">
+      <button class="btn btn-primary" onclick="showScreen('s-initial')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 12h18M3 12l6-6M3 12l6 6"/></svg>
+        Nueva prediccion
+      </button>
+      <div class="feedback-zone">
+        <button class="btn btn-secondary">
+          Esta prediccion es incorrecta
+        </button>
+        <span>Tu feedback mejora el sistema <span class="annot">BRD 12.1</span></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ======================================================
+     SCREEN 3 — LOW CONFIDENCE STATE
+     ====================================================== -->
+<div id="s-lowconf" class="screen">
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="22" height="22">
+          <path d="M12 2C8 2 5 7 5 12s3 10 7 10 7-5 7-10S16 2 12 2z" fill="#fff" opacity="0.9"/>
+          <path d="M12 4c-1.5 3-2 6-1 9 .5 1.5 1 3 1 3s.5-1.5 1-3c1-3 .5-6-1-9z" fill="rgba(0,0,0,0.2)"/>
+        </svg>
+      </div>
+      <div>
+        <div class="logo-text">Flores AI</div>
+        <div class="logo-sub">Iris Classifier v1.0</div>
+      </div>
+    </div>
+    <div class="sidebar-section-label">Navegacion</div>
+    <div class="sidebar-item active"><span class="icon">🔬</span> Clasificador</div>
+    <div class="sidebar-item"><span class="icon">📊</span> Historial</div>
+    <div style="height:20px;"></div>
+    <div class="sidebar-info">
+      <strong>Entradas usadas</strong><br/>
+      Sepal length: 5.8 cm<br/>
+      Sepal width: &nbsp;2.7 cm<br/>
+      Petal length: 4.1 cm<br/>
+      Petal width: &nbsp;1.0 cm<br/><br/>
+      <strong>Resultado:</strong> Versicolor<br/>
+      <strong>Confianza:</strong> 52.4%
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="page-header">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+        <h1>Resultado de la Clasificacion</h1>
+        <span class="badge badge-warn">Baja confianza</span>
+      </div>
+      <p>El modelo emitio una prediccion con confianza inferior al umbral recomendado. Revise las medidas ingresadas.</p>
+    </div>
+
+    <!-- Low confidence alert — No-Line: background shift defines area -->
+    <div class="alert alert-warn">
+      <span class="alert-icon">⚠</span>
+      <div>
+        <strong>Resultado de baja confianza</strong>
+        Verifique las medidas ingresadas. La confianza del modelo (52.4%) esta por debajo del umbral minimo recomendado de 60%. El resultado puede no ser preciso.
+      </div>
+    </div>
+
+    <!-- Result card (low confidence) -->
+    <div class="result-species caution">
+      <div class="species-illustration caution">
+        <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+          <!-- Versicolor: medium petals, blue tones -->
+          <ellipse cx="40" cy="20" rx="9" ry="20" fill="#1a5fba" opacity="0.80" transform="rotate(0 40 40)"/>
+          <ellipse cx="40" cy="20" rx="9" ry="20" fill="#1a5fba" opacity="0.60" transform="rotate(120 40 40)"/>
+          <ellipse cx="40" cy="20" rx="9" ry="20" fill="#1a5fba" opacity="0.60" transform="rotate(240 40 40)"/>
+          <ellipse cx="40" cy="26" rx="5" ry="12" fill="#0e3d80" opacity="0.50" transform="rotate(60 40 40)"/>
+          <ellipse cx="40" cy="26" rx="5" ry="12" fill="#0e3d80" opacity="0.50" transform="rotate(180 40 40)"/>
+          <ellipse cx="40" cy="26" rx="5" ry="12" fill="#0e3d80" opacity="0.50" transform="rotate(300 40 40)"/>
+          <circle cx="40" cy="40" r="6" fill="#4d8fd4"/>
+          <circle cx="40" cy="40" r="3" fill="#fff" opacity="0.75"/>
+        </svg>
+      </div>
+      <div class="species-info">
+        <div class="species-name caution">Iris versicolor</div>
+        <div class="species-full">Iris versicolor · L., 1753 · Familia: Iridaceae</div>
+        <div class="confidence-label">Confianza de prediccion</div>
+        <div class="confidence-row">
+          <div class="confidence-bar-wrapper">
+            <div class="confidence-bar low" style="width:52.4%;"></div>
+          </div>
+          <div class="confidence-pct low">52.4%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Probability chart -->
+    <div class="card">
+      <div class="card-title">Probabilidad por especie <span class="annot">US-02</span></div>
+      <div class="prob-chart">
+        <div class="prob-row">
+          <div class="prob-label">Setosa</div>
+          <div class="prob-bar-wrapper">
+            <div class="prob-bar setosa" style="width:5%;">&nbsp;</div>
+          </div>
+          <div class="prob-pct">5.0%</div>
+        </div>
+        <div class="prob-row prob-winner caution">
+          <div class="prob-label">Versicolor</div>
+          <div class="prob-bar-wrapper">
+            <div class="prob-bar versi" style="width:52.4%;">52.4%</div>
+          </div>
+          <div class="prob-pct" style="color:#7a3200;">52.4%</div>
+        </div>
+        <div class="prob-row">
+          <div class="prob-label">Virginica</div>
+          <div class="prob-bar-wrapper">
+            <div class="prob-bar virgin" style="width:42.6%;">42.6%</div>
+          </div>
+          <div class="prob-pct">42.6%</div>
+        </div>
+      </div>
+      <div style="margin-top:16px;font-size:0.76rem;color:var(--outline);">
+        Nota: Versicolor y Virginica presentan superposicion en este rango de medidas. Por favor revise y reingrese los valores.
+      </div>
+    </div>
+
+    <div style="display:flex;gap:12px;flex-wrap:wrap;">
+      <button class="btn btn-primary" onclick="showScreen('s-initial')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 12h18M3 12l6-6M3 12l6 6"/></svg>
+        Reingresar medidas
+      </button>
+      <div class="feedback-zone">
+        <button class="btn btn-secondary">
+          Esta prediccion es incorrecta
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ======================================================
+     SCREEN 4 — VALIDATION ERROR STATE
+     ====================================================== -->
+<div id="s-error" class="screen">
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="22" height="22">
+          <path d="M12 2C8 2 5 7 5 12s3 10 7 10 7-5 7-10S16 2 12 2z" fill="#fff" opacity="0.9"/>
+          <path d="M12 4c-1.5 3-2 6-1 9 .5 1.5 1 3 1 3s.5-1.5 1-3c1-3 .5-6-1-9z" fill="rgba(0,0,0,0.2)"/>
+        </svg>
+      </div>
+      <div>
+        <div class="logo-text">Flores AI</div>
+        <div class="logo-sub">Iris Classifier v1.0</div>
+      </div>
+    </div>
+    <div class="sidebar-section-label">Navegacion</div>
+    <div class="sidebar-item active"><span class="icon">🔬</span> Clasificador</div>
+    <div class="sidebar-item"><span class="icon">📊</span> Historial</div>
+    <div style="height:20px;"></div>
+    <div class="sidebar-section-label">Referencia</div>
+    <div class="sidebar-info">
+      <strong>Rangos validos (cm)</strong><br/>
+      Sepal length: 3.0 – 9.0<br/>
+      Sepal width: 1.5 – 5.5<br/>
+      Petal length: 0.5 – 8.0<br/>
+      Petal width: 0.0 – 3.5
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="page-header">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+        <h1>Clasificador de Iris</h1>
+        <span class="badge badge-error">Entradas invalidas</span>
+      </div>
+      <p>Se detectaron valores fuera del rango permitido. Por favor corrijalos para continuar.</p>
+    </div>
+
+    <!-- Top error alert -->
+    <div class="alert alert-error">
+      <span class="alert-icon">✕</span>
+      <div>
+        <strong>2 campos con valores invalidos</strong>
+        Los valores ingresados estan fuera de los rangos biologicamente validos para flores Iris. Corrija los campos marcados en rojo y vuelva a intentarlo.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Medidas de entrada <span class="annot">US-03</span></div>
+      <div class="input-grid">
+
+        <!-- Sepal Length — VALID -->
+        <div class="input-group">
+          <label>
+            Longitud del Sepalo
+            <span class="range-hint">(3.0 – 9.0 cm)</span>
+          </label>
+          <div class="slider-value">6.2 cm</div>
+          <div class="slider-wrapper">
+            <div class="slider-track">
+              <div class="slider-fill" style="width:53%;"></div>
+              <div class="slider-thumb" style="left:53%;"></div>
+            </div>
+            <div class="slider-labels"><span>3.0</span><span>9.0</span></div>
+          </div>
+        </div>
+
+        <!-- Sepal Width — ERROR: 0.8 < 1.5 -->
+        <div class="input-group input-error">
+          <label>
+            Ancho del Sepalo
+            <span class="range-hint">(1.5 – 5.5 cm)</span>
+          </label>
+          <div class="slider-value">0.8 cm</div>
+          <div class="slider-wrapper">
+            <div class="slider-track" style="background:rgba(186,26,26,0.12);">
+              <div class="slider-fill" style="width:2%;background:var(--error);"></div>
+              <div class="slider-thumb" style="left:2%;background:var(--error);box-shadow:0 0 0 3px rgba(186,26,26,0.15);"></div>
+            </div>
+            <div class="slider-labels"><span>1.5</span><span>5.5</span></div>
+          </div>
+          <div class="error-hint">El valor 0.8 cm es menor al minimo permitido de 1.5 cm</div>
+        </div>
+
+        <!-- Petal Length — ERROR: 9.5 > 8.0 -->
+        <div class="input-group input-error">
+          <label>
+            Longitud del Petalo
+            <span class="range-hint">(0.5 – 8.0 cm)</span>
+          </label>
+          <div class="slider-value">9.5 cm</div>
+          <div class="slider-wrapper">
+            <div class="slider-track" style="background:rgba(186,26,26,0.12);">
+              <div class="slider-fill" style="width:100%;background:var(--error);"></div>
+              <div class="slider-thumb" style="left:100%;background:var(--error);box-shadow:0 0 0 3px rgba(186,26,26,0.15);"></div>
+            </div>
+            <div class="slider-labels"><span>0.5</span><span>8.0</span></div>
+          </div>
+          <div class="error-hint">El valor 9.5 cm excede el maximo permitido de 8.0 cm</div>
+        </div>
+
+        <!-- Petal Width — VALID -->
+        <div class="input-group">
+          <label>
+            Ancho del Petalo
+            <span class="range-hint">(0.0 – 3.5 cm)</span>
+          </label>
+          <div class="slider-value">1.8 cm</div>
+          <div class="slider-wrapper">
+            <div class="slider-track">
+              <div class="slider-fill" style="width:51%;"></div>
+              <div class="slider-thumb" style="left:51%;"></div>
+            </div>
+            <div class="slider-labels"><span>0.0</span><span>3.5</span></div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="section-spacer"></div>
+
+      <!-- Disabled predict button -->
+      <button class="btn btn-primary btn-full" style="opacity:0.38;cursor:not-allowed;" disabled>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        Predecir Especie (corrige los errores primero)
+      </button>
+    </div>
+
+    <div class="meta-footer">
+      La validacion ocurre en el frontend para proteger al usuario. No se expone ningun stack trace de Python.
+    </div>
+  </div>
+</div>
+
+
+<!-- ===== JAVASCRIPT (minimal navigation) ===== -->
+<script>
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.screen-nav button').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    const idx = ['s-initial','s-success','s-lowconf','s-error'].indexOf(id);
+    document.querySelectorAll('.screen-nav button')[idx].classList.add('active');
+  }
+
+  // Subtle fade-in animation for cards
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .card { animation: fadeIn 0.35s ease; }
+    .result-species { animation: fadeIn 0.35s ease; }
+  `;
+  document.head.appendChild(style);
+</script>
+
+</body>
+</html>

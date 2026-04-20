@@ -1,4 +1,4 @@
-# PROJECT_config.md: Cédula de Identidad del Proyecto
+# config.md: Cédula de Identidad del Proyecto
 
 > **Definición del Documento**
 > Este archivo es la instancia local del protocolo general definido en [CLAUDE.md](../../CLAUDE.md).
@@ -33,19 +33,19 @@ las cuatro dimensiones muestre el tipo de especie predicha.
 
 | Campo                  | Valor                          |
 | :--------------------- | :----------------------------- |
-| **Fase Actual**        | Fase 1 - Discovery             |
-| **Hito Activo**        | Fase 1 completada — Inicio SAD |
-| **Progreso Estimado**  | 25% (Fase 1 / 4 completada)    |
+| **Fase Actual**        | Phase Discovery - Discovery             |
+| **Hito Activo**        | Phase Discovery completada — todos los entregables de gobernanza entregados. Próximo: iniciar Phase Engineering |
+| **Progreso Estimado**  | 40% (Phase Discovery al 100%) |
 | **Estado**             | En curso                       |
 
 ### Mapa de Fases
 
 | Fase   | Nombre          | Estado      | Notas                          |
 | :----- | :-------------- | :---------- | :----------------------------- |
-| Fase 1 | Discovery       | En curso    | Punto de inicio del proyecto   |
-| Fase 2 | Data & EDA      | Pendiente   |                                |
-| Fase 3 | Modeling        | Pendiente   |                                |
-| Fase 4 | Deployment      | Pendiente   |                                |
+| Phase Discovery | Discovery       | Completada (100%) | Todos los entregables completados — 2026-04-19 |
+| Phase Engineering | Data & EDA      | Pendiente   |                                |
+| Phase Modeling | Modeling        | Pendiente   |                                |
+| Phase Delivery | Deployment      | Pendiente   |                                |
 
 ---
 
@@ -55,10 +55,11 @@ las cuatro dimensiones muestre el tipo de especie predicha.
 | :---------------------- | :---------------------------- | :-------------- | :---------------------------------- |
 | **Lenguaje**            | Python 3.12+                  | Confirmado      | Segun protocolo CLAUDE.md           |
 | **Aplicacion Web**      | Streamlit                     | Confirmado      | Interfaz de prediccion de especies  |
-| **Librerias ML**        | Por definir                   | Pendiente       | Se definira en Fase 2               |
-| **Librerias de Datos**  | Por definir                   | Pendiente       | Se definira en Fase 2               |
+| **Librerias ML**        | scikit-learn (Pipeline, StandardScaler, clasificadores) | Confirmado (SAD ADR-001) | Se implementara en Phase Engineering |
+| **Librerias de Datos**  | pandas, NumPy                 | Confirmado (SAD)| Se implementara en Phase Engineering           |
+| **Validacion**          | Pydantic v2                   | Confirmado (SpecDD) | Contratos de frontera entre modulos |
 | **Testing**             | Por definir                   | Pendiente       | Se definira segun necesidades       |
-| **Serializacion**       | Por definir (ONNX/Pickle/Joblib)| Pendiente     | Se definira en Fase 3               |
+| **Serializacion**       | Joblib                        | Confirmado (SAD ADR-002) | `models/iris_model.joblib` |
 
 > **Nota:** El archivo `requirements.txt` es la unica fuente de verdad para librerias instaladas.
 > Se actualizara cada vez que se incorpore una nueva dependencia.
@@ -78,12 +79,21 @@ las cuatro dimensiones muestre el tipo de especie predicha.
 
 ### 4.2 Fuentes Externas Adicionales
 
-| Tipo                 | ID / URL       | Descripcion                     | Estado    |
-| :------------------- | :------------- | :------------------------------ | :-------- |
-| NotebookLM           | No definido    | Sin fuente externa por definir  | Pendiente |
-| Documentacion externa| No definida    | Sin fuente externa por definir  | Pendiente |
+| Tipo                 | ID / URL                                     | Descripcion                                               | Estado       |
+| :------------------- | :------------------------------------------- | :-------------------------------------------------------- | :----------- |
+| NotebookLM           | `35c8760b-4797-4df2-8c91-cbf5b2df0240`       | "Flores AI — Cerebro del Proyecto" — 7 fuentes de gobernanza cargadas | Activo |
+| Documentacion externa| No definida                                  | Sin fuente externa por definir                            | Pendiente    |
 
-> **Nota:** Esta tabla se actualizara cuando se incorporen nuevas fuentes externas al proyecto.
+**Fuentes cargadas en NotebookLM (2026-04-20):**
+- `ai_process.md` — Marco metodologico
+- `brd.md` — Objetivos y KPIs
+- `sad.md` — Arquitectura tecnica
+- `specdd.md` — Contratos de interfaces
+- `contract.md` — Invariantes de datos por capa
+- `feasibility.md` — Diagnostico del dataset
+- `decisions.md` — Historial de decisiones (re-sincronizar al cierre de cada fase)
+
+> **Nota:** `decisions.md` debe re-sincronizarse en NotebookLM al cierre de cada fase cuando acumule decisiones nuevas.
 
 ---
 
@@ -95,12 +105,13 @@ Estructura de carpetas mandatoria segun CLAUDE.md:
 Flores_AI/
 ├── CLAUDE.md                      # Constitución del proyecto
 ├── docs/
-│   ├── Fase_1/                    # Reporte de Factibilidad (FEASIBILITY)
-│   ├── Fase_2/                    # EDAs: Ingesta, Limpieza, Analisis
-│   ├── Fase_3/                    # Validacion de Modelos (MODEL QA)
-│   ├── Fase_4/                    # Certificados E2E y Stress Testing
+│   ├── Phase_discovery/                    # Reporte de Factibilidad (FEASIBILITY)
+│   ├── Phase_engineering/                    # EDAs: Ingesta, Limpieza, Analisis
+│   ├── Phase_modeling/                    # Validacion de Modelos (MODEL QA)
+│   ├── Phase_delivery/                    # Certificados E2E y Stress Testing
 │   ├── governance/                # BACKLOG, BRD, SAD, SpecDD, CONTRACT
-│   └── references/                # HANDOFF, DECISIONS, PROJECT_config
+│   ├── design-system/             # Brand del cliente: DESIGN.md, code.html, screen.png
+│   └── references/                # handoff, decisions, config
 ├── src/                           # Codigo fuente productivo (.py)
 ├── data/
 │   ├── bronze/                    # Datos crudos (raw)
@@ -118,14 +129,16 @@ Flores_AI/
 
 | Documento       | Ruta de Destino              | Estado      |
 | :-------------- | :--------------------------- | :---------- |
-| BACKLOG         | docs/governance/             | Pendiente   |
+| BACKLOG         | docs/governance/             | Completado - 2026-04-19 |
 | BRD             | docs/governance/             | Completado - 2026-04-19 |
-| SAD             | docs/governance/             | Pendiente   |
-| SpecDD          | docs/governance/             | Pendiente   |
-| CONTRACT        | docs/governance/             | Pendiente   |
-| FEASIBILITY     | docs/Fase_1/                 | Completado - 2026-04-19 |
-| HANDOFF         | docs/references/             | Completado - 2026-04-19 |
-| DECISIONS_LOG   | docs/references/             | Completado - 2026-04-19 |
+| SAD             | docs/governance/             | Completado - 2026-04-19 (v1.0.0) |
+| SpecDD          | docs/governance/             | Completado - 2026-04-19 (v1.0.0) |
+| contract        | docs/governance/             | Completado - 2026-04-19 (v1.0.0) |
+| mockup          | mockup/ (raíz del proyecto)           | Completado — re-alineado con design system 2026-04-20. Listo para UAT visual. |
+| design-system   | docs/design-system/                   | Completado - 2026-04-20 (DESIGN.md + code.html + screen.png) |
+| FEASIBILITY     | docs/Phase_discovery/                 | Completado - 2026-04-19 |
+| handoff         | docs/references/             | Completado - 2026-04-19 |
+| decisions       | docs/references/             | Completado - 2026-04-19 |
 
 ---
 
@@ -136,4 +149,9 @@ Flores_AI/
 | 2026-04-19  | Creacion inicial del archivo        | project-config     |
 | 2026-04-19  | BRD completado y estado actualizado | ai-business-strategist |
 | 2026-04-19  | FEASIBILITY completado y estado actualizado | ai-data-auditor |
-| 2026-04-19  | HANDOFF y DECISIONS_LOG creados; progreso actualizado a 25% | ai-session-steward |
+| 2026-04-19  | handoff y decisions creados; progreso actualizado a 25% | ai-session-steward |
+| 2026-04-19  | sad, specdd y contract completados; progreso actualizado a 30% | ai-solutions-architect |
+| 2026-04-19  | mockup aprobado por Stakeholder; progreso actualizado a 35%; stack tecnologico ampliado con Joblib y Pydantic v2 | ai-session-steward |
+| 2026-04-19  | backlog.md creado (F1-T08 DONE); Phase Discovery completada al 100%; progreso global actualizado a 40% | ai-backlog-manager |
+| 2026-04-20  | NotebookLM integrado: notebook "Flores AI — Cerebro del Proyecto" creado con 7 fuentes de gobernanza | ai-session-steward |
+| 2026-04-20  | Mockup re-alineado con design system (tema oscuro descartado, paleta "The Clinical Sanctuary" aplicada); design system corregido (3 desviaciones resueltas); estado mockup actualizado en tabla de gobernanza | ai-session-steward |

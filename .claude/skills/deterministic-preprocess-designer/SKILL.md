@@ -26,4 +26,4 @@ El agente debe seleccionar el método óptimo para convertir texto en números:
 > **Check de Certificación de Preproceso:**
 > - [ ] ¿Se ha evitado el Data Leakage al calcular los parámetros de escalado fuera del set de entrenamiento?
 > - [ ] ¿El método de encoding seleccionado es eficiente para la cardinalidad de la variable?
-> - [ ] ¿El pipeline de preproceso es reproducible en el entorno de inferencia (Fase 4)?
+> - [ ] ¿El pipeline de preproceso es reproducible en el entorno de inferencia (Phase Delivery)?

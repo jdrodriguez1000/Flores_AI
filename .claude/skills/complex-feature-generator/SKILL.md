@@ -24,6 +24,6 @@ El agente debe diseñar el set de variables independiente ($X$) basándose en el
 ---
 
 > **Check de Certificación de Features:**
-> - [ ] ¿Se han cubierto todas las hipótesis de negocio planteadas en la Fase 1?
+> - [ ] ¿Se han cubierto todas las hipótesis de negocio planteadas en la Phase Discovery?
 > - [ ] ¿La lógica de cálculo es consistente para el entrenamiento y la producción?
 > - [ ] ¿Se han evitado variables con baja varianza o excesivos ceros?

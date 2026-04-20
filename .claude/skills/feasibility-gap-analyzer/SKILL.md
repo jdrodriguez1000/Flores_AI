@@ -8,7 +8,7 @@ allowed-tools: [Read, Write, Edit]
 
 ## 🏗️ I. Mapeo Requerimiento vs. Realidad
 
-Este protocolo cruza la Fase 1 de negocio con los hallazgos del Auditor:
+Este protocolo cruza la Phase Discovery de negocio con los hallazgos del Auditor:
 1. **Cruze de Variables:** Por cada User Story definida por el Estratega, listar las variables necesarias para cumplirla.
 2. **Identificación de Brechas (Gaps):** Clasificar las faltantes en:
    - **Brecha de Disponibilidad:** El dato no existe.
@@ -25,9 +25,9 @@ Para cada brecha detectada, el agente debe proponer una solución técnica:
 
 ## 🚀 III. Data Feasibility Report (DFR)
 
-Documento final de la Fase 1 que contiene:
+Documento final de la Phase Discovery que contiene:
 1. **Veredicto de Viabilidad:** (Go / No-Go / Go with Risks).
-2. **Plan de Adquisición:** Pasos necesarios para obtener los datos faltantes antes de la Fase 2.
+2. **Plan de Adquisición:** Pasos necesarios para obtener los datos faltantes antes de la Phase Engineering.
 3. **Costo de Limpieza:** Estimación del esfuerzo que requerirá el **AI Analytics Engineer** para normalizar los datos.
 
 ---

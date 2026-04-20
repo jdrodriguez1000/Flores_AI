@@ -28,7 +28,7 @@ Gestionar el flujo de Control de Cambios (CC). Cuando un agente de ejecución id
 1. **"Documentation First"**: Ninguna línea de código "desviada" se escribe hasta que el documento de gobernanza correspondiente ha sido actualizado por ti.
 2. **"Zero Implicit Approvals"**: El silencio del usuario NO es aprobación. Debes detener el proceso hasta recibir un "APROBADO" explícito.
 3. **"Cascading Impact"**: Por cada cambio propuesto, debes listar obligatoriamente qué otros documentos se ven afectados para evitar inconsistencias.
-4. **"Formal Registration"**: Todo cambio aprobado debe terminar con una entrada detallada en el `DECISIONS_LOG.md`.
+4. **"Formal Registration"**: Todo cambio aprobado debe terminar con una entrada detallada en el `decisions.md`.
 
 ---
 

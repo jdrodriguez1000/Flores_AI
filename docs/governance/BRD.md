@@ -3,7 +3,7 @@
 
 > **Documento:** Business Requirements Document (BRD)
 > **Version:** 1.0.0
-> **Estado:** Aprobado - Fase 1 Discovery
+> **Estado:** Aprobado - Phase Discovery Discovery
 > **Fecha de creacion:** 2026-04-19
 > **Ultima actualizacion:** 2026-04-19
 > **Autor:** ai-business-strategist
@@ -58,7 +58,7 @@ Este proyecto opera como un **proyecto de portafolio academico-profesional**. Su
 
 ### 2.1 Meta Principal
 
-> **"Construir y desplegar un clasificador de especies Iris de alta precision accesible via aplicacion web, que demuestre el ciclo completo de ingenieria de ML desde los datos crudos hasta la interfaz de usuario, completado en tiempo y forma dentro de la Fase 4."**
+> **"Construir y desplegar un clasificador de especies Iris de alta precision accesible via aplicacion web, que demuestre el ciclo completo de ingenieria de ML desde los datos crudos hasta la interfaz de usuario, completado en tiempo y forma dentro de la Phase Delivery."**
 
 ### 2.2 Objetivos Secundarios
 
@@ -66,7 +66,7 @@ Este proyecto opera como un **proyecto de portafolio academico-profesional**. Su
 | :-- | :--------------------------------------------------------------------------------------------- | :---------------------------------------------- |
 | OS1 | Demostrar dominio de la metodologia SpecDD y TDD aplicada a proyectos de ML.                  | 100% de los modulos `.py` trazables al SpecDD.  |
 | OS2 | Construir una aplicacion web funcional que no requiera conocimiento tecnico para ser utilizada.| UAT aprobada por el Stakeholder Principal.      |
-| OS3 | Mantener trazabilidad completa de datos (Bronze -> Silver -> Gold -> Modelo -> UI).            | Linaje documentado sin gaps en el DECISIONS_LOG.|
+| OS3 | Mantener trazabilidad completa de datos (Bronze -> Silver -> Gold -> Modelo -> UI).            | Linaje documentado sin gaps en el decisions.|
 | OS4 | Generar un repositorio Git limpio, versionado y publico que pueda ser presentado en entrevistas.| Repo publico en GitHub con historial semantico. |
 
 ---
@@ -110,7 +110,7 @@ Este es el componente critico que define la penalizacion durante el entrenamient
 
 ## 4. KPIs y Thresholds de Exito
 
-### 4.1 Metricas del Modelo (Fase 3)
+### 4.1 Metricas del Modelo (Phase Modeling)
 
 | KPI                        | Descripcion                                                         | Umbral Minimo (RED)  | Umbral Objetivo (GREEN) | Umbral Excelencia   |
 | :------------------------- | :------------------------------------------------------------------ | :------------------- | :---------------------- | :------------------ |
@@ -122,7 +122,7 @@ Este es el componente critico que define la penalizacion durante el entrenamient
 
 **Justificacion de Umbrales:** El dataset Iris es un benchmark maduro y bien estructurado. La literatura establece que modelos simples (Logistic Regression, KNN, SVM) alcanzan entre 95-98% de accuracy. Un umbral minimo de 92% indica que el modelo esta funcionando, pero no ha sido optimizado. El umbral objetivo de 95% es el estandar de la industria para este dataset.
 
-### 4.2 Metricas de la Aplicacion Web (Fase 4)
+### 4.2 Metricas de la Aplicacion Web (Phase Delivery)
 
 | KPI                        | Descripcion                                                                  | Umbral Minimo        | Umbral Objetivo         |
 | :------------------------- | :--------------------------------------------------------------------------- | :------------------- | :---------------------- |
@@ -217,7 +217,7 @@ El usuario final interactua con el sistema de la siguiente forma:
 
 | ID  | Supuesto                                                                                             | Consecuencia si es Falso                           |
 | :-- | :--------------------------------------------------------------------------------------------------- | :-------------------------------------------------- |
-| SA1 | El dataset Iris original (Fisher, 1936) esta libre de errores criticos de medicion.                 | Se requerira limpieza de outliers en Fase 2.        |
+| SA1 | El dataset Iris original (Fisher, 1936) esta libre de errores criticos de medicion.                 | Se requerira limpieza de outliers en Phase Engineering.        |
 | SA2 | El dataset es suficientemente representativo de las tres especies para generalizar bien.             | El modelo fallaria en datos del mundo real (fuera de distribucion). |
 | SA3 | El usuario final entiende como medir las dimensiones fisicas de una flor en centimetros.            | La UI debe incluir instrucciones o ilustraciones de referencia. |
 | SA4 | El entorno de ejecucion local del Stakeholder es compatible con Python 3.12+ y Streamlit.           | Se requeriria soporte de despliegue en contenedor Docker. |
@@ -269,23 +269,23 @@ Aplicando el protocolo `value-driven-product-mapper` con estructura de IA-UX:
 
 ## 9. Criterios de Aceptacion (DoD)
 
-La Fase 4 se considera exitosa y el proyecto es aprobado por el ai-business-strategist cuando se cumplan TODOS los siguientes criterios de forma binaria (SI/NO):
+La Phase Delivery se considera exitosa y el proyecto es aprobado por el ai-business-strategist cuando se cumplan TODOS los siguientes criterios de forma binaria (SI/NO):
 
-### 9.1 Criterios del Modelo (Fase 3)
+### 9.1 Criterios del Modelo (Phase Modeling)
 
 | ID   | Criterio                                                                                               | Verificacion                              |
 | :--- | :----------------------------------------------------------------------------------------------------- | :---------------------------------------- |
-| CA01 | El modelo alcanza Accuracy >= 95% en el conjunto de test (hold-out set no visto durante entrenamiento).| Reporte de MODEL QA en `docs/Fase_3/`.   |
-| CA02 | El F1-Score Macro es >= 0.95 sobre el conjunto de test.                                               | Reporte de MODEL QA en `docs/Fase_3/`.   |
-| CA03 | Ninguna clase individual tiene F1-Score < 0.90.                                                       | Reporte de MODEL QA en `docs/Fase_3/`.   |
+| CA01 | El modelo alcanza Accuracy >= 95% en el conjunto de test (hold-out set no visto durante entrenamiento).| Reporte de MODEL QA en `docs/Phase_modeling/`.   |
+| CA02 | El F1-Score Macro es >= 0.95 sobre el conjunto de test.                                               | Reporte de MODEL QA en `docs/Phase_modeling/`.   |
+| CA03 | Ninguna clase individual tiene F1-Score < 0.90.                                                       | Reporte de MODEL QA en `docs/Phase_modeling/`.   |
 | CA04 | El modelo esta serializado en formato Pickle o Joblib y almacenado en `models/`.                      | Existencia del archivo serializado.       |
-| CA05 | El modelo fue evaluado con validacion cruzada (k-fold, k >= 5) ademas del hold-out set.               | Reporte de MODEL QA en `docs/Fase_3/`.   |
+| CA05 | El modelo fue evaluado con validacion cruzada (k-fold, k >= 5) ademas del hold-out set.               | Reporte de MODEL QA en `docs/Phase_modeling/`.   |
 
-### 9.2 Criterios de la Aplicacion Web (Fase 4)
+### 9.2 Criterios de la Aplicacion Web (Phase Delivery)
 
 | ID   | Criterio                                                                                               | Verificacion                              |
 | :--- | :----------------------------------------------------------------------------------------------------- | :---------------------------------------- |
-| CA06 | La aplicacion Streamlit responde una prediccion en <= 3,000 ms en hardware local estandar.            | Test de latencia en `docs/Fase_4/`.       |
+| CA06 | La aplicacion Streamlit responde una prediccion en <= 3,000 ms en hardware local estandar.            | Test de latencia en `docs/Phase_delivery/`.       |
 | CA07 | La UI valida los rangos de entrada y muestra mensajes de error sin exponer trazas de Python.          | Test E2E en `tests/` y revision manual.  |
 | CA08 | La UI muestra la especie predicha y las probabilidades de las tres clases.                            | Validacion visual UAT por Stakeholder.    |
 | CA09 | La aplicacion arranca correctamente con `streamlit run src/app.py` sin errores.                      | Prueba de arranque documentada.           |
@@ -294,7 +294,7 @@ La Fase 4 se considera exitosa y el proyecto es aprobado por el ai-business-stra
 
 | ID   | Criterio                                                                                               | Verificacion                              |
 | :--- | :----------------------------------------------------------------------------------------------------- | :---------------------------------------- |
-| CA10 | El linaje Bronze->Silver->Gold->Modelo esta documentado sin gaps.                                     | Revision del DECISIONS_LOG.               |
+| CA10 | El linaje Bronze->Silver->Gold->Modelo esta documentado sin gaps.                                     | Revision del decisions.               |
 | CA11 | Todos los modulos en `src/` tienen su contrato en el SpecDD.                                          | Revision cruzada SpecDD vs. `src/`.       |
 | CA12 | La cobertura de tests unitarios en `src/` es >= 80%.                                                  | Reporte de Pytest coverage.               |
 | CA13 | El `requirements.txt` refleja exactamente las dependencias instaladas en el venv.                     | Comparacion `pip freeze` vs. `requirements.txt`. |
@@ -401,7 +401,7 @@ Aplicando el check de certificacion del protocolo `business-to-ml-translator`:
 | Rol                          | Responsable                          | Firma           | Fecha       |
 | :--------------------------- | :----------------------------------- | :-------------- | :---------- |
 | **Autor del BRD**            | ai-business-strategist               | Emitido         | 2026-04-19  |
-| **Validacion de Negocio (UAT)** | Stakeholder Principal (jdrodriguez1000@gmail.com) | Pendiente Fase 4 | Por definir |
+| **Validacion de Negocio (UAT)** | Stakeholder Principal (jdrodriguez1000@gmail.com) | Pendiente Phase Delivery | Por definir |
 
 ---
 
