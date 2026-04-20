@@ -2,7 +2,7 @@
 
 > **Fuente de verdad:** [CLAUDE.md](../../CLAUDE.md) | **Metodología:** [ai_process.md](../methodology/ai_process.md)
 > **Proyecto:** Flores AI — Clasificación de especies Iris
-> **Última actualización:** 2026-04-19
+> **Última actualización:** 2026-04-20
 > **Responsable del backlog:** @ai-backlog-manager
 
 ---
@@ -83,9 +83,9 @@
 ## FASE 2: Data & EDA — Feature Set Certificado
 
 **Entregable Principal:** Dataset Gold certificado con features validadas estadísticamente.
-**Estado de Fase:** TODO — pendiente inicio tras Phase Discovery completada.
+**Estado de Fase:** IN PROGRESS — inicio 2026-04-20.
 
-> Tareas pendientes de atomización desde SpecDD y Contract. Se poblará al iniciar Phase Engineering.
+> Ciclo completo IA-TDD por capa: RED → GREEN → REFACTOR por iteración. CERTIFICACIÓN y VALIDACIÓN consolidan la fase antes de avanzar a Modeling.
 
 ### Iteración 2.1: Ingesta y Capa Bronze
 
@@ -94,7 +94,7 @@
 - **Iteración:** 2.1
 - **Entregable:** `tests/test_bronze_ingestion.py`
 - **Acción:** Testing
-- **DoD:** Suite falla de forma controlada (sin código productivo). Cubre: schema, tipos, rangos del Contract.
+- **DoD:** Suite falla de forma controlada (sin código productivo). Cubre: schema, tipos, rangos y cardinalidad del Contract.
 - **Estado:** TODO
 
 #### [F2-T02] [GREEN] Implementar pipeline de ingesta Bronze
@@ -105,27 +105,43 @@
 - **DoD:** Pasa la suite F2-T01. Carga el dataset Iris crudo a `data/bronze/`. Trazable al SpecDD §2.1.
 - **Estado:** TODO
 
+#### [F2-T03] [REFACTOR] Refactorizar Bronze + EDA técnico post-ingesta
+- **Responsable:** @ai-data-engineer + @ai-data-auditor
+- **Iteración:** 2.1
+- **Entregables:** `src/ingestion/bronze_loader.py` (refactored), `docs/Phase_engineering/eda_bronze.md`
+- **Acción:** Refactoring + Documentation
+- **DoD:** Código con tipado estricto, sin rutas absolutas, módulo importable. Reporte EDA Bronze documenta completitud, distribución y outliers del dato crudo. Todos los tests F2-T01 siguen en verde.
+- **Estado:** TODO
+
 ### Iteración 2.2: Limpieza y Capa Silver
 
-#### [F2-T03] [RED] Desarrollar suite de pruebas para transformación Silver
+#### [F2-T04] [RED] Desarrollar suite de pruebas para transformación Silver
 - **Responsable:** @ai-data-qa-engineer
 - **Iteración:** 2.2
 - **Entregable:** `tests/test_silver_transform.py`
 - **Acción:** Testing
-- **DoD:** Suite falla de forma controlada. Cubre: imputación, outliers, tipos del Contract.
+- **DoD:** Suite falla de forma controlada. Cubre: imputación, detección de outliers y tipos del Contract.
 - **Estado:** TODO
 
-#### [F2-T04] [GREEN] Implementar pipeline de transformación Silver
+#### [F2-T05] [GREEN] Implementar pipeline de transformación Silver
 - **Responsable:** @ai-analytics-engineer
 - **Iteración:** 2.2
 - **Entregable:** `src/processing/silver_transformer.py`
 - **Acción:** Coding
-- **DoD:** Pasa la suite F2-T03. Genera dataset limpio en `data/silver/`. Trazable al SpecDD §2.2.
+- **DoD:** Pasa la suite F2-T04. Genera dataset limpio en `data/silver/`. Trazable al SpecDD §2.2.
+- **Estado:** TODO
+
+#### [F2-T06] [REFACTOR] Refactorizar Silver + reporte de limpieza y sesgo
+- **Responsable:** @ai-analytics-engineer + @ai-data-auditor
+- **Iteración:** 2.2
+- **Entregables:** `src/processing/silver_transformer.py` (refactored), `docs/Phase_engineering/eda_silver.md`
+- **Acción:** Refactoring + Documentation
+- **DoD:** Código modular con estrategia de imputación documentada. Reporte Silver certifica ausencia de sesgo de limpieza y cambios de distribución vs Bronze. Todos los tests F2-T04 siguen en verde.
 - **Estado:** TODO
 
 ### Iteración 2.3: Feature Engineering y Capa Gold
 
-#### [F2-T05] [RED] Desarrollar suite de pruebas para capa Gold
+#### [F2-T07] [RED] Desarrollar suite de pruebas para capa Gold
 - **Responsable:** @ai-data-qa-engineer
 - **Iteración:** 2.3
 - **Entregable:** `tests/test_gold_features.py`
@@ -133,12 +149,38 @@
 - **DoD:** Suite falla de forma controlada. Valida ausencia de target leakage y distribución de features.
 - **Estado:** TODO
 
-#### [F2-T06] [GREEN] Implementar Feature Store (Gold Layer)
+#### [F2-T08] [GREEN] Implementar Feature Store (Gold Layer)
 - **Responsable:** @ai-feature-store-architect
 - **Iteración:** 2.3
 - **Entregable:** `src/features/gold_builder.py`
 - **Acción:** Coding
-- **DoD:** Pasa la suite F2-T05. Genera dataset en `data/gold/`. Trazable al SpecDD §2.3.
+- **DoD:** Pasa la suite F2-T07. Genera dataset en `data/gold/`. Trazable al SpecDD §2.3.
+- **Estado:** TODO
+
+#### [F2-T09] [REFACTOR] Refactorizar Gold + auditoría estadística Gold
+- **Responsable:** @ai-feature-store-architect + @ai-data-auditor
+- **Iteración:** 2.3
+- **Entregables:** `src/features/gold_builder.py` (refactored), `docs/Phase_engineering/eda_gold.md`
+- **Acción:** Refactoring + Documentation
+- **DoD:** Código con transformaciones deterministas y sin target leakage confirmado. Reporte Gold valida correlaciones, varianza y separabilidad de features por clase. Todos los tests F2-T07 siguen en verde.
+- **Estado:** TODO
+
+### Iteración 2.4: Certificación y Validación de Fase
+
+#### [F2-T10] [CERTIFICACIÓN] Certificar linaje completo Bronze → Silver → Gold
+- **Responsable:** @ai-data-qa-engineer
+- **Iteración:** 2.4
+- **Entregable:** `docs/Phase_engineering/certification_f2.md`
+- **Acción:** Documentation
+- **DoD:** Reporte certifica trazabilidad total de datos (Bronze → Silver → Gold), cumplimiento del SAD §2 y del SpecDD §2.1–2.3. Todos los tests de la fase (F2-T01, F2-T04, F2-T07) pasan en conjunto. Sin rutas absolutas ni dependencias no declaradas en `requirements.txt`.
+- **Estado:** TODO
+
+#### [F2-T11] [VALIDACIÓN] Validar dataset Gold contra KPIs del BRD
+- **Responsable:** @ai-data-scientist
+- **Iteración:** 2.4
+- **Entregable:** `docs/Phase_engineering/validation_f2.md`
+- **Acción:** Documentation
+- **DoD:** Reporte verifica que el Feature Set Gold cumple los thresholds de calidad definidos en el BRD. Incluye veredicto GO/NO-GO explícito para avanzar a Fase 3 (Modeling).
 - **Estado:** TODO
 
 ---
