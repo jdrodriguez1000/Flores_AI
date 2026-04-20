@@ -607,3 +607,117 @@ Cada entrada debe contener: Fecha, Fase, ID de Decision, Contexto, Decision, Jus
 ---
 
 *Fin de entrada #6.*
+
+---
+
+---
+
+## Entrada #7 — Sesion 2026-04-20 | Phase Discovery (Correccion Design System y Reconstruccion de Mockup)
+
+**Agente de Cierre:** ai-session-steward
+**Hora de Cierre:** Fin de jornada 2026-04-20
+
+---
+
+### D-019: "No-Line Rule" como principio absoluto de separacion visual en la UI
+
+| Campo     | Valor |
+| :-------- | :---- |
+| **Fecha** | 2026-04-20 |
+| **Fase**  | Phase Discovery (aplica a Phase Delivery) |
+| **Origen** | Auditoria de `docs/design-system/code.html` contra `docs/design-system/DESIGN.md` |
+| **Tipo**  | Decision de diseno de interfaz de usuario |
+
+**Contexto:** Al auditar `code.html` contra las reglas de `DESIGN.md`, se detecto que el footer usaba `border-t border-slate-100` (una linea superior explicita con color hardcodeado). Esta construccion viola la "No-Line Rule" documentada en el Design System del cliente, que prohibe el uso de bordes explicitos para separar secciones y exige que la separacion visual se logre exclusivamente mediante diferencias de fondo (surface tokens).
+
+**Decision:** Se elimina `border-t border-slate-100` del footer y se reemplaza por `background: var(--surface-container-low)`. La "No-Line Rule" queda registrada como principio activo: ningun contenedor de la UI (ni en HTML, ni en Streamlit, ni en el mockup) puede usar `border` como mecanismo de separacion visual. La separacion se logra siempre con fondos diferenciados usando tokens del sistema.
+
+**Justificacion:** Los bordes explicitos son un patron de diseno de la decada de 2010 que produce interfaces visualmente "ruidosas". El Design System del cliente (paleta "The Clinical Sanctuary") usa la elevacion y los fondos diferenciados para crear jerarquia visual sin lineas. Respetar esta regla es esencial para que la app Streamlit sea percibida como una extension coherente de la identidad del cliente, no como una herramienta tecnica genérica.
+
+**Impacto Transversal:**
+- `docs/design-system/code.html`: Correccion aplicada al footer.
+- `mockup/index.html`: CSS reconstruido sin ningun `border` en contenedores.
+- `src/app.py` (Phase Delivery): El CSS custom inyectado via `st.markdown` no debe incluir `border` en elementos de layout. Usar `background-color` con tokens de superficie en su lugar.
+- `ai-ux-designer.md`, `ai-frontend-engineer.md`: Pre-Flight debe verificar ausencia de bordes en contenedores.
+
+---
+
+### D-020: Tokens semanticos obligatorios — prohibicion de colores hardcodeados en la UI
+
+| Campo     | Valor |
+| :-------- | :---- |
+| **Fecha** | 2026-04-20 |
+| **Fase**  | Phase Discovery (aplica a Phase Delivery) |
+| **Origen** | Auditoria de `docs/design-system/code.html` — footer usaba `slate-400` y `slate-50` |
+| **Tipo**  | Decision de sistema de tokens de UI |
+
+**Contexto:** El footer de `code.html` usaba `text-slate-400` y `bg-slate-50` (colores Tailwind hardcodeados). Estos colores no pertenecen al vocabulario semantico del Design System del cliente y no tienen correspondencia con los tokens definidos en `DESIGN.md`. Si el cliente modifica su paleta, estos colores permanecerian inalterados, rompiendo la coherencia de la identidad visual.
+
+**Decision:** Todos los elementos de la UI deben usar exclusivamente los tokens semanticos definidos en `DESIGN.md` (`on-surface-variant`, `surface-container-low`, `primary`, `error-container`, `tertiary-container`, etc.). El uso de colores del framework CSS directamente (clases Tailwind de la escala de grises, valores hex literales fuera del sistema de tokens) queda prohibido en cualquier componente de la interfaz.
+
+**Justificacion:** Los tokens semanticos desacoplan el color concreto del proposito del elemento. `on-surface-variant` siempre sera el color correcto para texto secundario, independientemente de si el cliente decide cambiar su palette de azul a verde en el futuro. Los hardcodes crean deuda tecnica de UI que solo se detecta visualmente, no en pruebas automatizadas.
+
+**Impacto Transversal:**
+- `docs/design-system/code.html`: Correcciones aplicadas al footer.
+- `mockup/index.html`: CSS reconstruido usando exclusivamente tokens del sistema.
+- `src/app.py` (Phase Delivery): El CSS inyectado debe referenciar las variables CSS definidas en el bloque de tokens, no valores hex literales externos al sistema.
+- `.streamlit/config.toml` (Phase Delivery): Los 4 valores deben mapear directamente desde los tokens `primary`, `surface`, `surface-container-low`, `on-surface` del Design System.
+
+---
+
+### D-021: Gradiente lineal en el boton CTA como expresion del token `primary`
+
+| Campo     | Valor |
+| :-------- | :---- |
+| **Fecha** | 2026-04-20 |
+| **Fase**  | Phase Discovery (aplica a Phase Delivery) |
+| **Origen** | Auditoria de `docs/design-system/code.html` — CTA era azul plano sin gradiente |
+| **Tipo**  | Decision de diseno de componente |
+
+**Contexto:** El boton CTA "Analizar Parametros" en `code.html` usaba `background-color: #00478d` (color plano). La regla de gradiente documentada en `DESIGN.md` establece que el boton primario debe usar `linear-gradient(135deg, primary, primary-container)` para comunicar interactividad y profundidad. El color plano reducia el contraste visual del boton respecto a los fondos claros del sistema.
+
+**Decision:** El boton CTA usa `linear-gradient(135deg, #00478d, #005eb8)` donde `#00478d` es `primary` y `#005eb8` es `primary-container` segun la paleta del cliente. Esta es la expresion correcta del token de boton primario en el Design System actual. El patron se aplica al boton principal en `code.html` y en `mockup/index.html`.
+
+**Justificacion:** El gradiente diagonal (135 grados) es un patron visual que distingue elementos interactivos de elementos estaticos en el mismo espacio visual. En una interfaz con fondos monocromaticos y sin bordes, el gradiente del CTA es el unico elemento que comunica "accion principal". Un boton plano del mismo color que otros elementos de la paleta reduce la affordance de la interfaz y puede causar confusion en el usuario sobre donde hacer clic.
+
+**Impacto Transversal:**
+- `docs/design-system/code.html`: Gradiente aplicado al boton CTA.
+- `mockup/index.html`: Boton principal con gradiente.
+- `src/app.py` (Phase Delivery): El boton de submit de Streamlit debe tener el gradiente inyectado via `st.markdown` con el selector `.stButton > button`.
+
+---
+
+### D-022: Mockup reconstruido desde cero con paleta del cliente — tema oscuro verde descartado
+
+| Campo     | Valor |
+| :-------- | :---- |
+| **Fecha** | 2026-04-20 |
+| **Fase**  | Phase Discovery |
+| **Origen** | Auditoria del mockup original contra `docs/design-system/DESIGN.md` |
+| **Tipo**  | Decision de rediseno de prototipo |
+
+**Contexto:** El mockup original (`mockup/index.html`) fue creado antes de que el Design System del cliente estuviera integrado en el repositorio. Usaba un tema oscuro con paleta verde (`#22c55e`, `#16a34a`) y fondo `#0f172a` — una estetica de "terminal hacker" completamente desalineada con la identidad visual del cliente (paleta "The Clinical Sanctuary": entorno clinico, fondos claros, azul corporativo).
+
+**Decision:** El bloque CSS completo de `mockup/index.html` fue reescrito por el agente `ai-ux-designer` aplicando el Design System del cliente desde cero. El tema oscuro verde queda descartado permanentemente. El mockup ahora implementa: paleta "The Clinical Sanctuary", fuentes Manrope (headlines) + Inter (body), No-Line Rule, sidebar `surface-container-low`, tarjetas `surface-container-lowest`, CTA con gradiente, tokens semanticos para los 4 estados de pantalla. Los 4 estados del BRD (formulario, exito, baja confianza, error) fueron verificados y estan correctamente implementados.
+
+**Justificacion:** Un mockup aprobado por el Stakeholder que no refleja la identidad visual del cliente crea una expectativa incorrecta sobre el producto final. El equipo de desarrollo implementaria la app Streamlit tomando el mockup como referencia, produciendo una UI que el cliente rechazaria. Corregir el mockup en Phase Discovery (antes de escribir codigo de UI) elimina ese riesgo sin costo de retrabajo en codigo productivo.
+
+**Impacto Transversal:**
+- `mockup/index.html`: Unico prototipo visual valido. El mockup anterior con tema oscuro verde no debe usarse como referencia.
+- `src/app.py` (Phase Delivery): El CSS custom debe replicar los estilos del mockup actualizado, no del original.
+- `docs/Phase_discovery/mockup.md`: Debe actualizarse en la proxima revision para indicar que el mockup fue re-alineado con el design system en sesion 2026-04-20.
+
+---
+
+### Lecciones Aprendidas — Sesion 2026-04-20 (Correccion Design System y Reconstruccion de Mockup)
+
+| # | Leccion | Categoria |
+| :- | :------- | :-------- |
+| 1 | Un design system integrado en el repositorio (D-016) tiene valor real solo si los prototipos existentes son auditados contra el al momento de la integracion. La auditoria inmediata de `code.html` y `mockup/index.html` detecto 4 desviaciones que, de no corregirse, habrian propagado errores de marca al codigo de produccion. | Proceso de Auditoria |
+| 2 | Los mockups creados antes de que el design system del cliente este disponible deben marcarse como "provisionales" y auditarse al momento de recibir los materiales de marca. Un mockup aprobado visualmente por el Stakeholder pero sin el design system aplicado no es un artefacto de Phase Discovery cerrado — es un riesgo latente. | Gestion de Artefactos |
+| 3 | Las violaciones de design system mas comunes en HTML son: colores hardcodeados fuera del vocabulario de tokens, bordes explicitos donde deberia haber diferencias de fondo, y botones sin gradiente cuando el sistema de diseno lo exige. Estos tres patrones deben ser los primeros en la checklist de auditoria de cualquier agente de UI. | Calidad de UI |
+| 4 | Usar playwright para generar screenshots de verificacion (`screen.png`, `preview.png`) despues de cada correccion de UI es una practica de bajo costo que elimina la ambiguedad sobre si el cambio en el HTML produce el resultado visual esperado. La verificacion visual automatizada es un sustituto valido del QA humano para cambios de CSS. | Proceso de Verificacion |
+
+---
+
+*Fin de entrada #7.*

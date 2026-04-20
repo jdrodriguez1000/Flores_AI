@@ -134,7 +134,7 @@ Flores_AI/
 | SAD             | docs/governance/             | Completado - 2026-04-19 (v1.0.0) |
 | SpecDD          | docs/governance/             | Completado - 2026-04-19 (v1.0.0) |
 | contract        | docs/governance/             | Completado - 2026-04-19 (v1.0.0) |
-| mockup          | mockup/ (raíz del proyecto)           | Completado y aprobado por Stakeholder - 2026-04-19 (v1.0.0) |
+| mockup          | mockup/ (raíz del proyecto)           | Completado — re-alineado con design system 2026-04-20. Listo para UAT visual. |
 | design-system   | docs/design-system/                   | Completado - 2026-04-20 (DESIGN.md + code.html + screen.png) |
 | FEASIBILITY     | docs/Phase_discovery/                 | Completado - 2026-04-19 |
 | handoff         | docs/references/             | Completado - 2026-04-19 |
@@ -154,3 +154,4 @@ Flores_AI/
 | 2026-04-19  | mockup aprobado por Stakeholder; progreso actualizado a 35%; stack tecnologico ampliado con Joblib y Pydantic v2 | ai-session-steward |
 | 2026-04-19  | backlog.md creado (F1-T08 DONE); Phase Discovery completada al 100%; progreso global actualizado a 40% | ai-backlog-manager |
 | 2026-04-20  | NotebookLM integrado: notebook "Flores AI — Cerebro del Proyecto" creado con 7 fuentes de gobernanza | ai-session-steward |
+| 2026-04-20  | Mockup re-alineado con design system (tema oscuro descartado, paleta "The Clinical Sanctuary" aplicada); design system corregido (3 desviaciones resueltas); estado mockup actualizado en tabla de gobernanza | ai-session-steward |
