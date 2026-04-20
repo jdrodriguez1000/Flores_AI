@@ -16,10 +16,10 @@ Esta habilidad permite transformar el plan maestro en acciones ejecutables, aseg
 **Acción:** `initialize_roadmap`
 - Crea el archivo `docs/governance/backlog.md`.
 - Registra las 4 Fases con su **Entregable Principal**:
-    - **Fase 1 (Discovery):** Linea Base Documental (SAD/SpecDD).
-    - **Fase 2 (Engineering):** Feature Set Certificado (Gold Layer).
-    - **Fase 3 (Modeling):** Modelo Predictivo Certificado.
-    - **Fase 4 (Delivery):** Sistema en Producción con Monitoreo.
+    - **Phase Discovery (Discovery):** Linea Base Documental (SAD/SpecDD).
+    - **Phase Engineering (Engineering):** Feature Set Certificado (Gold Layer).
+    - **Phase Modeling (Modeling):** Modelo Predictivo Certificado.
+    - **Phase Delivery (Delivery):** Sistema en Producción con Monitoreo.
 - Divide las fases grandes en **Iteraciones** lógicas.
 
 ### 2. Atomización de SpecDD (TDD Mapping)

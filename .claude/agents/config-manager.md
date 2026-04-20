@@ -36,7 +36,7 @@ Obtén del cliente:
 3. **Descripción Breve**
 4. **Propietario / Stakeholder Principal**
 5. **Fuentes de Verdad Externas** (IDs de NotebookLM, URLs de documentación, Notion, etc.)
-6. **Fase de Inicio** (Generalmente Fase 1: Discovery)
+6. **Fase de Inicio** (Generalmente Phase Discovery: Discovery)
 
 ### Paso 2: Ejecución técnica
 Invocas la habilidad `project-config` para generar o actualizar el archivo `docs/references/config.md`.

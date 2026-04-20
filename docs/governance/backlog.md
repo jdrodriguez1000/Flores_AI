@@ -37,15 +37,15 @@
 #### [F1-T03] Ejecutar Análisis de Factibilidad
 - **Responsable:** @ai-data-auditor
 - **Iteración:** 1.3
-- **Entregable:** `docs/Fase_1/feasibility.md`
+- **Entregable:** `docs/Phase_discovery/feasibility.md`
 - **Acción:** Documentation
-- **DoD:** Reporte incluye diagnóstico de calidad de datos (completitud, distribución, outliers) y veredicto GO/NO-GO para continuar a Fase 2.
+- **DoD:** Reporte incluye diagnóstico de calidad de datos (completitud, distribución, outliers) y veredicto GO/NO-GO para continuar a Phase Engineering.
 - **Estado:** DONE ✅ — 2026-04-19
 
 #### [F1-T04] Crear Mockup de Interfaz
 - **Responsable:** @ai-ux-designer
 - **Iteración:** 1.3
-- **Entregable:** `docs/Fase_1/mockup.md`
+- **Entregable:** `docs/Phase_discovery/mockup.md`
 - **Acción:** Documentation
 - **DoD:** Mockup aprobado por el Stakeholder principal. Cubre flujos principales de la aplicación.
 - **Estado:** DONE ✅ — 2026-04-19 (aprobado por Stakeholder)
@@ -83,9 +83,9 @@
 ## FASE 2: Data & EDA — Feature Set Certificado
 
 **Entregable Principal:** Dataset Gold certificado con features validadas estadísticamente.
-**Estado de Fase:** TODO — pendiente inicio tras Fase 1 completada.
+**Estado de Fase:** TODO — pendiente inicio tras Phase Discovery completada.
 
-> Tareas pendientes de atomización desde SpecDD y Contract. Se poblará al iniciar Fase 2.
+> Tareas pendientes de atomización desde SpecDD y Contract. Se poblará al iniciar Phase Engineering.
 
 ### Iteración 2.1: Ingesta y Capa Bronze
 
@@ -146,9 +146,9 @@
 ## FASE 3: Modeling — Modelo Predictivo Certificado
 
 **Entregable Principal:** Modelo de clasificación Iris serializado, certificado y registrado.
-**Estado de Fase:** TODO — pendiente Fase 2.
+**Estado de Fase:** TODO — pendiente Phase Engineering.
 
-> Tareas pendientes de atomización desde SpecDD §3.x. Se poblará al completar Fase 2.
+> Tareas pendientes de atomización desde SpecDD §3.x. Se poblará al completar Phase Engineering.
 
 ### Iteración 3.1: Entrenamiento y Selección de Modelo
 
@@ -173,7 +173,7 @@
 #### [F3-T03] Ejecutar Model QA (Benchmarking + Sesgo)
 - **Responsable:** @ai-model-qa-validator
 - **Iteración:** 3.2
-- **Entregable:** `docs/Fase_3/model_qa_report.md`
+- **Entregable:** `docs/Phase_modeling/model_qa_report.md`
 - **Acción:** Testing
 - **DoD:** Reporte incluye métricas por clase, matriz de confusión, análisis de sesgo y veredicto GO/NO-GO.
 - **Estado:** TODO
@@ -183,9 +183,9 @@
 ## FASE 4: Delivery — Sistema en Producción con Monitoreo
 
 **Entregable Principal:** API + Aplicación Streamlit desplegada y monitoreada.
-**Estado de Fase:** TODO — pendiente Fase 3.
+**Estado de Fase:** TODO — pendiente Phase Modeling.
 
-> Tareas pendientes de atomización desde SpecDD §4.x. Se poblará al completar Fase 3.
+> Tareas pendientes de atomización desde SpecDD §4.x. Se poblará al completar Phase Modeling.
 
 ### Iteración 4.1: API de Inferencia
 
@@ -218,7 +218,7 @@
 #### [F4-T04] Ejecutar pruebas E2E y certificar sistema
 - **Responsable:** @ai-full-stack-sdet
 - **Iteración:** 4.2
-- **Entregable:** `docs/Fase_4/e2e_certification.md`
+- **Entregable:** `docs/Phase_delivery/e2e_certification.md`
 - **Acción:** Testing
 - **DoD:** Reporte E2E con resultado PASS en todos los flujos críticos. Sistema certificado para producción.
 - **Estado:** TODO

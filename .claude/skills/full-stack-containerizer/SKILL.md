@@ -10,7 +10,7 @@ allowed-tools: [Read, Write, Bash, Edit]
 El agente debe construir imágenes eficientes para cada componente:
 1. **Separación de Capas:** Utilizar *Multi-stage builds* para separar el entorno de compilación (ej: npm install o pip install) del entorno de ejecución final.
 2. **Minimización de Superficie:** Usar imágenes base ligeras (ej: `python:3.9-slim` o `alpine`) para reducir el tamaño y mejorar la seguridad.
-3. **Optimización de Modelos:** Empaquetar los artefactos de modelos (serializados en la Fase 3) de modo que se carguen eficientemente en la memoria compartida del contenedor.
+3. **Optimización de Modelos:** Empaquetar los artefactos de modelos (serializados en la Phase Modeling) de modo que se carguen eficientemente en la memoria compartida del contenedor.
 
 ## 📐 II. Orquestación Local (Docker Compose)
 1. **Definición de Redes:** Configurar redes internas para que el Frontend, Backend y Redis se comuniquen de forma aislada.

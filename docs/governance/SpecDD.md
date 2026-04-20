@@ -3,7 +3,7 @@
 
 > **Documento:** SpecDD - Especificacion de Interfaces de Software
 > **Version:** 1.0.0
-> **Estado:** Certificado - Fase 1 Discovery
+> **Estado:** Certificado - Phase Discovery Discovery
 > **Fecha de creacion:** 2026-04-19
 > **Ultima actualizacion:** 2026-04-19
 > **Autor:** ai-solutions-architect
@@ -970,6 +970,6 @@ def validate_input(sepal_length, sepal_width, petal_length, petal_width) -> Iris
 
 ---
 
-> **Nota de Gobernanza:** Este documento es la fuente de verdad para la implementacion de todos los modulos en `src/`. El agente `ai-developer` (Fase 4) y el agente `ai-ml-engineer` (Fase 3) deben verificar que cada funcion implementada cumple exactamente con la firma, pre-condiciones, post-condiciones y excepciones documentadas aqui. El `ai-solutions-architect` es el unico agente con autoridad para modificar este documento.
+> **Nota de Gobernanza:** Este documento es la fuente de verdad para la implementacion de todos los modulos en `src/`. El agente `ai-developer` (Phase Delivery) y el agente `ai-ml-engineer` (Phase Modeling) deben verificar que cada funcion implementada cumple exactamente con la firma, pre-condiciones, post-condiciones y excepciones documentadas aqui. El `ai-solutions-architect` es el unico agente con autoridad para modificar este documento.
 >
 > **Trazabilidad:** SpecDD v1.0.0 <- SAD v1.0.0 <- BRD v1.0.0 <- feasibility v1.0.0

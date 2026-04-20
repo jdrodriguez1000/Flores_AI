@@ -14,12 +14,12 @@ Esta habilidad instrumenta las reglas de **CLAUDE.md** y la metodología de 4 fa
 
 ### 1. Bootstrap de Estructura Industrial
 **Acción:** `initialize_repo`
-- Crea las carpetas raíz: `docs/Fase_1..4`, `docs/governance/`, `docs/references/`, `docs/methodology/`, `src/`, `data/Bronze..Gold`, `models/`, `notebooks/`, `tests/`, `infra/`.
+- Crea las carpetas raíz: `docs/Phase_discovery..4`, `docs/governance/`, `docs/references/`, `docs/methodology/`, `src/`, `data/Bronze..Gold`, `models/`, `notebooks/`, `tests/`, `infra/`.
 - Crea el `.gitignore` estándar para DS (excluyendo `.csv`, `.parquet`, `.pkl`, `.h5`, `.env`, `__pycache__`, etc.).
 - Crea un `README.md` base con la ficha técnica del proyecto.
-- **Entregable Obligatorio:** Al finalizar la creación de carpetas, genera automáticamente `docs/governance/backlog.md` con el roadmap inicial de **Fase 1 completo** (ver sección *Backlog Inicial de Fase 1* más abajo). Este es el primer artefacto del proyecto y hoja de ruta para el equipo.
+- **Entregable Obligatorio:** Al finalizar la creación de carpetas, genera automáticamente `docs/governance/backlog.md` con el roadmap inicial de **Phase Discovery completo** (ver sección *Backlog Inicial de Phase Discovery* más abajo). Este es el primer artefacto del proyecto y hoja de ruta para el equipo.
 
-### Backlog Inicial de Fase 1 (Generado en Bootstrap)
+### Backlog Inicial de Phase Discovery (Generado en Bootstrap)
 
 El archivo `docs/governance/backlog.md` debe ser creado con la siguiente estructura al ejecutar `initialize_repo`:
 
@@ -60,15 +60,15 @@ El archivo `docs/governance/backlog.md` debe ser creado con la siguiente estruct
 #### [F1-T03] Ejecutar Análisis de Factibilidad
 - **Responsable:** @ai-data-auditor
 - **Iteración:** 1.3
-- **Entregable:** `docs/Fase_1/feasibility.md`
+- **Entregable:** `docs/Phase_discovery/feasibility.md`
 - **Acción:** Documentation
-- **DoD:** Reporte incluye diagnóstico de calidad de datos (completitud, distribución, outliers) y veredicto GO/NO-GO para continuar a Fase 2.
+- **DoD:** Reporte incluye diagnóstico de calidad de datos (completitud, distribución, outliers) y veredicto GO/NO-GO para continuar a Phase Engineering.
 - **Estado:** TODO
 
 #### [F1-T04] Crear Mockup de Interfaz
 - **Responsable:** @ai-ux-designer
 - **Iteración:** 1.3
-- **Entregable:** `docs/Fase_1/mockup.md`
+- **Entregable:** `docs/Phase_discovery/mockup.md`
 - **Acción:** Documentation
 - **DoD:** Mockup aprobado por el Stakeholder principal. Cubre flujos principales de la aplicación.
 - **Estado:** TODO
@@ -104,13 +104,13 @@ El archivo `docs/governance/backlog.md` debe ser creado con la siguiente estruct
 ---
 
 ## FASE 2: Engineering — Feature Set Certificado
-> Tareas pendientes de atomización. Se poblará al completar Fase 1.
+> Tareas pendientes de atomización. Se poblará al completar Phase Discovery.
 
 ## FASE 3: Modeling — Modelo Predictivo Certificado
-> Tareas pendientes de atomización. Se poblará al completar Fase 2.
+> Tareas pendientes de atomización. Se poblará al completar Phase Engineering.
 
 ## FASE 4: Delivery — Sistema en Producción
-> Tareas pendientes de atomización. Se poblará al completar Fase 3.
+> Tareas pendientes de atomización. Se poblará al completar Phase Modeling.
 ```
 
 ### 2. Auditoría de Higiene Git
@@ -124,7 +124,7 @@ El archivo `docs/governance/backlog.md` debe ser creado con la siguiente estruct
 - Valida que el mensaje de commit empiece con: `feat(data):`, `feat(model):`, `feat(api):`, `test(qa):`, `docs(f-X):`.
 - Genera el borrador del Pull Request vinculándolo a los documentos de la Fase activa (ej: "Resolves tasks defined in sad.md").
 
-### 4. Cumplimiento de Linaje (Fase 3)
+### 4. Cumplimiento de Linaje (Phase Modeling)
 **Acción:** `verify_lineage_link`
 - Asegura que al commitear un cambio en `src/`, se reporte si hay un impacto en la versión del modelo certificada en `models/`.
 

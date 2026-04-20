@@ -3,13 +3,13 @@
 
 > **Documento:** Data Contract - Contrato de Datos
 > **Version:** 1.0.0
-> **Estado:** Certificado - Fase 1 Discovery
+> **Estado:** Certificado - Phase Discovery Discovery
 > **Fecha de creacion:** 2026-04-19
 > **Ultima actualizacion:** 2026-04-19
 > **Autor:** ai-solutions-architect
 > **Trazabilidad:** SpecDD v1.0.0 -> DATA_CONTRACT v1.0.0 -> BRD v1.0.0 -> feasibility v1.0.0
 > **Version del Contrato:** v1.0.0
-> **Aceptado por:** ai-data-engineer (Fase 2), ai-ml-engineer (Fase 3)
+> **Aceptado por:** ai-data-engineer (Phase Engineering), ai-ml-engineer (Phase Modeling)
 
 ---
 
@@ -37,9 +37,9 @@
 
 Este documento define los esquemas rigidos, las reglas de validacion y los invariantes matematicos para cada frontera de datos del sistema Flores AI - Iris. Es el contrato entre:
 
-- El **agente Data Engineer** (Fase 2): debe producir capas Silver y Gold que cumplan este esquema.
-- El **agente ML Engineer** (Fase 3): debe consumir la capa Gold y producir un artefacto de modelo que acepte el `IrisInput` definido en la seccion 5.
-- El **agente Developer** (Fase 4): debe construir el formulario de Streamlit cuyos valores satisfacen el contrato de la seccion 5.
+- El **agente Data Engineer** (Phase Engineering): debe producir capas Silver y Gold que cumplan este esquema.
+- El **agente ML Engineer** (Phase Modeling): debe consumir la capa Gold y producir un artefacto de modelo que acepte el `IrisInput` definido en la seccion 5.
+- El **agente Developer** (Phase Delivery): debe construir el formulario de Streamlit cuyos valores satisfacen el contrato de la seccion 5.
 
 **Principio Fail-Fast:** Todo dato que viole este contrato en la frontera del sistema (entrada de usuario, lectura de archivo, carga de modelo) debe ser rechazado antes de llegar al nucleo de procesamiento. Ningun modulo interno debe recibir datos no validados.
 
@@ -271,7 +271,7 @@ Estas estadisticas son los parametros base para la deteccion de data drift en pr
 | petal_length | 3.758 | 1.764 | 1.0 | 1.6 | 4.3 | 5.1 | 6.9 |
 | petal_width | 1.197 | 0.763 | 0.1 | 0.3 | 1.3 | 1.8 | 2.5 |
 
-*Nota: Estadisticas derivadas del feasibility. Deben ser recalculadas sobre el dataset Silver definitivo en Fase 2 y almacenadas en `data/gold/reference_stats.json` para uso en el modulo de drift detection.*
+*Nota: Estadisticas derivadas del feasibility. Deben ser recalculadas sobre el dataset Silver definitivo en Phase Engineering y almacenadas en `data/gold/reference_stats.json` para uso en el modulo de drift detection.*
 
 ### 8.3 Matriz de Correlacion de Referencia
 
@@ -294,7 +294,7 @@ Estas estadisticas son los parametros base para la deteccion de data drift en pr
 | `sepal_width` (inferencia) | No | No aplica | `ValidationError` inmediato. Fail-Fast. |
 | `petal_length` (inferencia) | No | No aplica | `ValidationError` inmediato. Fail-Fast. |
 | `petal_width` (inferencia) | No | No aplica | `ValidationError` inmediato. Fail-Fast. |
-| `sepal_length` (training) | No | No aplica | El FEASIBILITY confirma 0 nulos. Si aparece nulo en Bronze, lanzar `ValueError` y detener el pipeline. No imputar en Fase 2. |
+| `sepal_length` (training) | No | No aplica | El FEASIBILITY confirma 0 nulos. Si aparece nulo en Bronze, lanzar `ValueError` y detener el pipeline. No imputar en Phase Engineering. |
 | `species` (training) | No | No aplica | Lanzar `ValueError`. Una etiqueta nula corrompe el entrenamiento. |
 | `confidence` (feedback) | No | No aplica | `ValidationError`. El registro de feedback debe ser completo. |
 
@@ -364,7 +364,7 @@ Estas estadisticas son los parametros base para la deteccion de data drift en pr
 
 ### 11.1 Parametros Base (Training Distribution)
 
-Los siguientes parametros se almacenan en `data/gold/reference_stats.json` al finalizar la Fase 2. Son la distribucion de referencia contra la cual se detecta drift en produccion.
+Los siguientes parametros se almacenan en `data/gold/reference_stats.json` al finalizar la Phase Engineering. Son la distribucion de referencia contra la cual se detecta drift en produccion.
 
 ```json
 {
@@ -379,7 +379,7 @@ Los siguientes parametros se almacenan en `data/gold/reference_stats.json` al fi
 }
 ```
 
-*Estos valores son aproximaciones del FEASIBILITY REPORT. Los valores exactos deben calcularse sobre el dataset Silver definitivo en Fase 2.*
+*Estos valores son aproximaciones del FEASIBILITY REPORT. Los valores exactos deben calcularse sobre el dataset Silver definitivo en Phase Engineering.*
 
 ### 11.2 Criterios de Alerta de Drift
 
@@ -445,7 +445,7 @@ Todos los mensajes de error visibles al usuario en la UI de Streamlit deben segu
 | :--- | :--- | :--- |
 | El esquema de entrada de inferencia (IrisInput) coincide exactamente con el SpecDD | Aprobado | Seccion 5 de este documento vs. Seccion 1.1 y Seccion 3 del SpecDD. Tipos y rangos identicos. |
 | Se han definido mensajes de error claros cuando la validacion del esquema falla | Aprobado | Seccion 12 define el catalogo completo de mensajes de error con codigos. |
-| El contrato de datos es compartido y aceptado por el Data Engineer y el ML Engineer | Pendiente | Debe ser firmado digitalmente al inicio de Fase 2 y Fase 3 respectivamente. |
+| El contrato de datos es compartido y aceptado por el Data Engineer y el ML Engineer | Pendiente | Debe ser firmado digitalmente al inicio de Phase Engineering y Phase Modeling respectivamente. |
 | Se han definido los invariantes matematicos para cada capa de datos | Aprobado | Secciones 2.2, 3.2, 4.3, 10.1-10.5 definen las condiciones exactas. |
 | Se ha definido la politica de nulos por campo | Aprobado | Seccion 9 cubre todos los campos en todas las capas. |
 | Se han definido los parametros base de referencia para deteccion de drift | Aprobado | Seccion 11.1 define los estadisticos de referencia del training set. |
@@ -454,6 +454,6 @@ Todos los mensajes de error visibles al usuario en la UI de Streamlit deben segu
 
 ---
 
-> **Nota de Gobernanza:** Este documento es vinculante para los agentes `ai-data-engineer` (Fase 2) y `ai-ml-engineer` (Fase 3). Ninguna transformacion de datos o proceso de entrenamiento puede producir esquemas que violen los invariantes aqui definidos. Cualquier desviacion debe pasar por el Protocolo de Control de Cambios antes de ser implementada. El `ai-solutions-architect` es el unico agente con autoridad para modificar este documento.
+> **Nota de Gobernanza:** Este documento es vinculante para los agentes `ai-data-engineer` (Phase Engineering) y `ai-ml-engineer` (Phase Modeling). Ninguna transformacion de datos o proceso de entrenamiento puede producir esquemas que violen los invariantes aqui definidos. Cualquier desviacion debe pasar por el Protocolo de Control de Cambios antes de ser implementada. El `ai-solutions-architect` es el unico agente con autoridad para modificar este documento.
 >
 > **Trazabilidad:** DATA_CONTRACT v1.0.0 <- SpecDD v1.0.0 <- SAD v1.0.0 <- BRD v1.0.0 <- feasibility v1.0.0

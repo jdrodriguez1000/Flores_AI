@@ -11,7 +11,7 @@ El agente debe definir la estructura de los datos que fluyen entre fases (Bronze
 1. **Definición de Esquemas:** Especificar tipos de datos, nulidad y llaves primarias/foráneas.
 2. **Validaciones de Rango:** Establecer límites lógicos para variables numéricas (ej: edad entre 0 y 120).
 3. **Control de Formato:** Asegurar estandarización de fechas (ISO-8601), strings y codificaciones.
-4. **Documentación Obligatoria:** El Contrato de Datos debe guardarse en `docs/Fase_1/Data_Contract.md`.
+4. **Documentación Obligatoria:** El Contrato de Datos debe guardarse en `docs/Phase_discovery/Data_Contract.md`.
 
 ## 📐 II. Protocolos de Validación Técnica
 1. **Implementación de Pydantic/Marshmallow:** Creación de modelos de validación en código para el rechazo automático de peticiones mal formadas.

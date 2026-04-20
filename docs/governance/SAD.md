@@ -3,7 +3,7 @@
 
 > **Documento:** Software Architecture Document (SAD)
 > **Version:** 1.0.0
-> **Estado:** Aprobado - Fase 1 Discovery
+> **Estado:** Aprobado - Phase Discovery Discovery
 > **Fecha de creacion:** 2026-04-19
 > **Ultima actualizacion:** 2026-04-19
 > **Autor:** ai-solutions-architect
@@ -102,7 +102,7 @@ Ningun cambio en `src/app.py`, `src/data/`, ni en `tests/` es necesario si la fi
 |   |   - Pipeline scikit-learn (Scaler + Clasificador) |   |
 |   +---------------------------------------------------+   |
 |                                                           |
-|   [Pipeline de Datos - Offline, ejecutado en Fase 2/3]   |
+|   [Pipeline de Datos - Offline, ejecutado en Phase Engineering/3]   |
 |   +---------------------------------------------------+   |
 |   | Bronze Loader -> Silver Cleaner -> Gold Builder   |   |
 |   | -> Model Trainer -> Model Serializer              |   |
@@ -489,22 +489,22 @@ Regla arquitectonica: Ningun modulo del pipeline online (`app`, `validators`, `p
 | **Fecha** | 2026-04-19 |
 | **Autor** | ai-solutions-architect |
 
-**Contexto:** La M-06 del feasibility indica que los algoritmos basados en distancia (SVM, KNN) requieren Feature Scaling, mientras que los basados en arboles (Random Forest, Decision Tree) no lo requieren. La Fase 3 explorara multiples algoritmos. El riesgo RT3 del BRD alerta sobre Data Leakage si el scaler se ajusta con datos de test.
+**Contexto:** La M-06 del feasibility indica que los algoritmos basados en distancia (SVM, KNN) requieren Feature Scaling, mientras que los basados en arboles (Random Forest, Decision Tree) no lo requieren. La Phase Modeling explorara multiples algoritmos. El riesgo RT3 del BRD alerta sobre Data Leakage si el scaler se ajusta con datos de test.
 
-**Decision:** El StandardScaler se incluye **siempre** en el `sklearn.Pipeline`, independientemente del algoritmo elegido en Fase 3. El Pipeline garantiza que el `scaler.fit()` solo ocurre sobre `X_train`. La llamada `pipeline.predict()` aplica automaticamente la transformacion sobre datos nuevos.
+**Decision:** El StandardScaler se incluye **siempre** en el `sklearn.Pipeline`, independientemente del algoritmo elegido en Phase Modeling. El Pipeline garantiza que el `scaler.fit()` solo ocurre sobre `X_train`. La llamada `pipeline.predict()` aplica automaticamente la transformacion sobre datos nuevos.
 
 **Justificacion:**
 - Elimina completamente el riesgo de Data Leakage (RT3 del BRD) porque el Pipeline aplica `transform` en `predict` usando los parametros ajustados solo en `fit`.
 - Unifica el contrato de serializacion: un solo objeto `Pipeline` contiene tanto el preprocesamiento como el modelo. `predictor.py` no necesita conocer si el scaler fue aplicado o no.
 - StandardScaler es robusto ante las distribuciones del dataset Iris (segun el FEASIBILITY REPORT, ninguna feature tiene distribucion extremadamente asimetrica que justifique MinMaxScaler).
-- Si en Fase 3 se selecciona un modelo basado en arboles, el StandardScaler no perjudica el rendimiento (los arboles son invariantes a escalado monotono); si se selecciona SVM o KNN, el escalado es critico para alcanzar el KPI de Accuracy >= 95%.
+- Si en Phase Modeling se selecciona un modelo basado en arboles, el StandardScaler no perjudica el rendimiento (los arboles son invariantes a escalado monotono); si se selecciona SVM o KNN, el escalado es critico para alcanzar el KPI de Accuracy >= 95%.
 
 **Consecuencias:** El scaler esta encapsulado en el artefacto `models/iris_model.joblib`. El `predictor.py` recibe un `IrisInput` con valores en cm (no escalados) y el pipeline aplica el escalado internamente. La UI nunca conoce que existe un scaler.
 
 **Alternativas rechazadas:**
 - Aplicar scaling fuera del Pipeline en `silver_cleaner.py` o `gold_builder.py`: Rechazado por riesgo de Data Leakage si los datos de test son transformados usando estadisticas del dataset completo.
 - MinMaxScaler: Rechazado porque es mas sensible a outliers. El FEASIBILITY detecta outliers en SepalWidthCm. StandardScaler es mas robusto en este contexto.
-- No aplicar scaling: Rechazado porque la Fase 3 debe evaluar SVM y KNN como candidatos, y estos requieren datos escalados para alcanzar el KPI de Accuracy >= 95%.
+- No aplicar scaling: Rechazado porque la Phase Modeling debe evaluar SVM y KNN como candidatos, y estos requieren datos escalados para alcanzar el KPI de Accuracy >= 95%.
 
 ---
 
@@ -567,7 +567,7 @@ FEEDBACK_LOG = PROJECT_ROOT / "logs" / "feedback.log"
 
 | Requisito | Implementacion |
 | :--- | :--- |
-| Cobertura de tests >= 80% | Medida con `pytest-cov`. Reportada en Fase 4. |
+| Cobertura de tests >= 80% | Medida con `pytest-cov`. Reportada en Phase Delivery. |
 | Trazabilidad SpecDD | 100% de las funciones en `src/` tienen su firma definida en `specdd.md` antes de ser implementadas. |
 | Linaje de datos | Cada capa de datos (Bronze, Silver, Gold) tiene su archivo persistido en `data/`. El pipeline es reproducible ejecutando los modulos en orden. |
 
@@ -633,7 +633,7 @@ Este comando ejecuta toda la suite y falla si la cobertura de `src/` cae por deb
 
 | Criterio | Estado | Evidencia |
 | :--- | :--- | :--- |
-| El diseno garantiza desacoplamiento entre logica de ML (Fase 3) y la UI (Fase 4) | Aprobado | `app.py` solo invoca `predictor.predict()`. El pipeline de datos offline no es importado por ningun modulo online. |
+| El diseno garantiza desacoplamiento entre logica de ML (Phase Modeling) y la UI (Phase Delivery) | Aprobado | `app.py` solo invoca `predictor.predict()`. El pipeline de datos offline no es importado por ningun modulo online. |
 | El modelo puede ser reemplazado sin modificar la UI | Aprobado | Solo se reemplaza `models/iris_model.joblib` y eventualmente la ruta en `config.py`. La firma de `predict()` es invariante. |
 | Se ha definido una estrategia contra Data Leakage | Aprobado | ADR-003: StandardScaler encapsulado en `sklearn.Pipeline`. El `fit` ocurre exclusivamente sobre `X_train`. |
 | Todas las rutas son relativas y portables | Aprobado | ADR-004: `src/config.py` centraliza rutas via `pathlib.Path(__file__).resolve().parent.parent`. |

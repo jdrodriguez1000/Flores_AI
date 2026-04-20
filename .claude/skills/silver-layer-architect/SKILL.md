@@ -27,4 +27,4 @@ Cada tarea de limpieza debe vivir en un módulo `.py` independiente:
 > **Check de Certificación Silver:**
 > - [ ] ¿Los datos están normalizados según el estándar de la industria definido?
 > - [ ] ¿El código sigue estrictamente la interfaz del SpecDD?
-> - [ ] ¿Se han eliminado los ruidos técnicos detectados en la Fase 1?
+> - [ ] ¿Se han eliminado los ruidos técnicos detectados en la Phase Discovery?

@@ -13,7 +13,7 @@ El agente debe construir el punto de entrada para el usuario final:
 3. **Responsive Design:** Asegurar que el dashboard sea utilizable en diferentes dispositivos (Desktop/Tablet) según el requisito del cliente.
 
 ## 📐 II. Integración con el Backend
-1. **Consumo de API:** Implementar la lógica para llamar a los endpoints de la Fase 4, manejando estados de carga (`loading`) y errores técnicos de forma elegante.
+1. **Consumo de API:** Implementar la lógica para llamar a los endpoints de la Phase Delivery, manejando estados de carga (`loading`) y errores técnicos de forma elegante.
 2. **Visualización de Logs de Proceso:** Mostrar al usuario el progreso de las tareas asíncronas (ej: "Limpiando datos...", "Calculando predicción...").
 
 ## 🚀 III. Prototipado Rápido vs. Producción

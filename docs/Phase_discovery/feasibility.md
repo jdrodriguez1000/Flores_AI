@@ -1,6 +1,6 @@
 # DATA FEASIBILITY REPORT
 ## Proyecto: Flores AI - Iris
-### Fase 1 - Discovery | Auditor: ai-data-auditor
+### Phase Discovery - Discovery | Auditor: ai-data-auditor
 
 | Campo                  | Valor                                      |
 | :--------------------- | :----------------------------------------- |
@@ -62,7 +62,7 @@ Se detectaron **3 registros con valores identicos en todas las features y target
 | 102 | 5.8           | 2.7          | 5.1           | 1.9          | Iris-virginica |
 | 143 | 5.8           | 2.7          | 5.1           | 1.9          | Iris-virginica |
 
-**Accion requerida en Fase 2 (Silver):** Eliminar los duplicados conservando la primera ocurrencia. Impacto: el dataset quedaria en 147 registros (reduccion del 2.0%). El balance de clases no se altera materialmente.
+**Accion requerida en Phase Engineering (Silver):** Eliminar los duplicados conservando la primera ocurrencia. Impacto: el dataset quedaria en 147 registros (reduccion del 2.0%). El balance de clases no se altera materialmente.
 
 ### 2.3 Distribucion de Clases
 
@@ -136,7 +136,7 @@ El dataset esta **perfectamente balanceado**. No se requiere oversampling (SMOTE
 | PetalLengthCm | 0          |
 | PetalWidthCm  | 0          |
 
-**Evaluacion:** Los 4 outliers de SepalWidthCm por IQR (y 1 por Z-score) corresponden a valores biologicamente plausibles para Iris. No son errores de medicion. El valor 2.0 es la minima observada en Versicolor, y 4.1-4.4 son maximos en Setosa. Se recomienda analizar su impacto en la Fase 2 antes de decidir tratamiento, pero **no se anticipan como bloqueo**.
+**Evaluacion:** Los 4 outliers de SepalWidthCm por IQR (y 1 por Z-score) corresponden a valores biologicamente plausibles para Iris. No son errores de medicion. El valor 2.0 es la minima observada en Versicolor, y 4.1-4.4 son maximos en Setosa. Se recomienda analizar su impacto en la Phase Engineering antes de decidir tratamiento, pero **no se anticipan como bloqueo**.
 
 ---
 
@@ -239,9 +239,9 @@ Setosa es **perfectamente separable** de Virginica en las features de petalo (ov
 
 ---
 
-## 5. Plan de Mitigacion para Fase 2 (Silver Layer)
+## 5. Plan de Mitigacion para Phase Engineering (Silver Layer)
 
-Las siguientes acciones son el insumo directo para el `silver-layer-architect` en la Fase 2:
+Las siguientes acciones son el insumo directo para el `silver-layer-architect` en la Phase Engineering:
 
 | ID   | Accion                          | Prioridad | Justificacion                                                 |
 | :--- | :------------------------------ | :-------- | :------------------------------------------------------------ |
@@ -249,7 +249,7 @@ Las siguientes acciones son el insumo directo para el `silver-layer-architect` e
 | M-02 | Eliminar near-duplicates        | ALTA      | 3 filas duplicadas (solo en features + target). Conservar primera ocurrencia. Dataset resultante: 147 registros. |
 | M-03 | Renombrar columnas a convencion BRD | MEDIA | Normalizar de PascalCase+Cm a snake_case (SepalLengthCm -> sepal_length) para cumplir con el contrato de datos del SpecDD. |
 | M-04 | Normalizar etiquetas de Species | MEDIA     | Decidir si usar `Iris-setosa` o `setosa`. Documentar en CONTRACT.md. |
-| M-05 | Tratamiento de outliers SepalWidthCm | BAJA | Evaluar impacto real en Fase 2. Se recomienda conservar (son biologicamente validos) y documentar en EDA. |
+| M-05 | Tratamiento de outliers SepalWidthCm | BAJA | Evaluar impacto real en Phase Engineering. Se recomienda conservar (son biologicamente validos) y documentar en EDA. |
 | M-06 | Feature Scaling                 | MEDIA     | Las features tienen rangos distintos (PetalLengthCm: 1.0-6.9 vs PetalWidthCm: 0.1-2.5). Los algoritmos basados en distancia (SVM, KNN) requieren StandardScaler o MinMaxScaler. Los basados en arboles (RF, XGBoost) no lo requieren. |
 
 ---
@@ -301,7 +301,7 @@ Las siguientes acciones son el insumo directo para el `silver-layer-architect` e
 
 **Justificacion:** El dataset `Iris.csv` es una fuente de datos de calidad excepcional (9.2/10). Tiene cero valores nulos, balance perfecto de clases y separabilidad estadistica robusta en sus features de petalo (F-statistic hasta 1179, Cohen's d hasta -9.99). Las brechas detectadas (G-01 a G-05) son todas menores y prevenibles con el plan de mitigacion documentado (M-01 a M-06). La unica complejidad real — la confusion Versicolor/Virginica — es conocida desde el BRD, esta cuantificada y es manejable con algoritmos no lineales. No existen bloqueos criticos.
 
-El equipo de ingenieria de datos puede proceder a la Fase 2 (Silver Layer + EDA) con confianza plena.
+El equipo de ingenieria de datos puede proceder a la Phase Engineering (Silver Layer + EDA) con confianza plena.
 
 ---
 

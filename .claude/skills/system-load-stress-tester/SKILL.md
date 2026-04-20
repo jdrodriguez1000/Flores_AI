@@ -11,7 +11,7 @@ El agente debe simular diferentes niveles de tráfico:
 1. **Load Test:** Verificar el comportamiento con el número de usuarios concurrentes esperado por el negocio.
 2. **Stress Test:** Aumentar gradualmente la carga hasta encontrar el punto donde la API empieza a devolver errores 500 o tiempos de respuesta inaceptables.
 3. **Soak Test:** Mantener una carga constante durante horas para detectar fugas de memoria (Memory Leaks) en el servidor de modelos.
-4. **Documentación Obligatoria:** El Load Test Report debe guardarse en `docs/Fase_4/Load_Test_Report.md`.
+4. **Documentación Obligatoria:** El Load Test Report debe guardarse en `docs/Phase_delivery/Load_Test_Report.md`.
 
 ## 📐 II. Ejecución con Herramientas de Carga (Locust/JMeter)
 1. **Escenarios Concurrentes:** Simular usuarios haciendo peticiones de inferencia pesadas al mismo tiempo.
@@ -27,4 +27,4 @@ El agente debe simular diferentes niveles de tráfico:
 > - [ ] ¿Se ha identificado el número máximo de predicciones por segundo que soporta el sistema?
 > - [ ] ¿Se ha verificado la estabilidad del sistema tras 1 hora de carga constante?
 > - [ ] ¿El reporte incluye recomendaciones de escalado basadas en los fallos detectados?
-> - [ ] ¿El reporte está guardado en `docs/Fase_4/Load_Test_Report.md`?
+> - [ ] ¿El reporte está guardado en `docs/Phase_delivery/Load_Test_Report.md`?

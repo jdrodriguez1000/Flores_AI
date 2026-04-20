@@ -12,7 +12,7 @@ El agente debe mapear el ecosistema de datos siguiendo estos pasos:
 1. **Catalogación Técnica:** Identificar tipos de fuentes (Tablas SQL, colecciones NoSQL, endpoints de APIs, archivos planos).
 2. **Perfilado de Esquema:** Documentar tipos de datos detectados vs. tipos de datos esperados (formatos de fecha, precisión de decimales, codificación de texto).
 3. **Volumetría Histórica:** Evaluar si la cantidad de registros es suficiente para la tarea de ML (ej: ¿Hay suficientes casos de fraude para entrenar una clasificación?).
-4. **Documentación Obligatoria:** El Data Feasibility Report debe guardarse en `docs/Fase_1/Feasibility_Report.md`.
+4. **Documentación Obligatoria:** El Data Feasibility Report debe guardarse en `docs/Phase_discovery/Feasibility_Report.md`.
 
 ## 📐 II. Análisis Exploratorio de Calidad (EDQ)
 

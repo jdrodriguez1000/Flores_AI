@@ -18,7 +18,7 @@ Cada entrada debe contener: Fecha, Fase, ID de Decision, Contexto, Decision, Jus
 
 ---
 
-## Entrada #1 — Sesion 2026-04-19 | Fase 1 - Discovery
+## Entrada #1 — Sesion 2026-04-19 | Phase Discovery - Discovery
 
 **Agente de Cierre:** ai-session-steward
 **Hora de Cierre:** Fin de jornada 2026-04-19
@@ -30,7 +30,7 @@ Cada entrada debe contener: Fecha, Fase, ID de Decision, Contexto, Decision, Jus
 | Campo                   | Valor                                                                                     |
 | :---------------------- | :---------------------------------------------------------------------------------------- |
 | **Fecha**               | 2026-04-19                                                                                |
-| **Fase**                | Fase 1 - Discovery                                                                        |
+| **Fase**                | Phase Discovery - Discovery                                                                        |
 | **Origen**              | feasibility — Analisis de data leakage                                        |
 | **Tipo**                | Decision de preprocesamiento de datos                                                     |
 
@@ -53,7 +53,7 @@ Cada entrada debe contener: Fecha, Fase, ID de Decision, Contexto, Decision, Jus
 | Campo                   | Valor                                                                                     |
 | :---------------------- | :---------------------------------------------------------------------------------------- |
 | **Fecha**               | 2026-04-19                                                                                |
-| **Fase**                | Fase 1 - Discovery                                                                        |
+| **Fase**                | Phase Discovery - Discovery                                                                        |
 | **Origen**              | BRD — Definicion de KPIs                                                                  |
 | **Tipo**                | Decision de criterio de exito del modelo                                                  |
 
@@ -65,7 +65,7 @@ Cada entrada debe contener: Fecha, Fase, ID de Decision, Contexto, Decision, Jus
 
 **Impacto Transversal:**
 - `docs/governance/sad.md`: Los experimentos de benchmarking deben reportar ambas metricas.
-- `docs/Fase_3/MODEL_QA.md`: El modelo candidato no puede ser certificado si no supera ambos thresholds.
+- `docs/Phase_modeling/MODEL_QA.md`: El modelo candidato no puede ser certificado si no supera ambos thresholds.
 - `tests/`: Los tests de Model QA deben incluir assertions sobre ambas metricas.
 
 ---
@@ -75,13 +75,13 @@ Cada entrada debe contener: Fecha, Fase, ID de Decision, Contexto, Decision, Jus
 | Campo                   | Valor                                                                                     |
 | :---------------------- | :---------------------------------------------------------------------------------------- |
 | **Fecha**               | 2026-04-19                                                                                |
-| **Fase**                | Fase 1 - Discovery                                                                        |
+| **Fase**                | Phase Discovery - Discovery                                                                        |
 | **Origen**              | config.md — Definicion de stack                                                           |
 | **Tipo**                | Decision de arquitectura tecnologica                                                      |
 
 **Contexto:** El proyecto requiere un lenguaje de ML y una interfaz web para la demostracion de predicciones. Se evaluaron las opciones disponibles segun el protocolo CLAUDE.md (Python 3.12+ obligatorio) y los requisitos del stakeholder.
 
-**Decision:** El stack tecnologico queda confirmado con Python 3.12+ como lenguaje base y Streamlit como framework de la aplicacion web de prediccion. Las librerias especificas de ML (scikit-learn, pandas, etc.) y serializacion (ONNX/Pickle/Joblib) quedaran definidas en la Fase 2 una vez que el SAD este completo.
+**Decision:** El stack tecnologico queda confirmado con Python 3.12+ como lenguaje base y Streamlit como framework de la aplicacion web de prediccion. Las librerias especificas de ML (scikit-learn, pandas, etc.) y serializacion (ONNX/Pickle/Joblib) quedaran definidas en la Phase Engineering una vez que el SAD este completo.
 
 **Justificacion:** Python 3.12+ es mandatorio segun CLAUDE.md. Streamlit fue elegido sobre Flask/FastAPI por su velocidad de desarrollo para prototipos de ML con interfaces de prediccion simples, su integracion nativa con pandas y su capacidad de despliegue rapido. Para un problema de clasificacion multi-clase con cuatro inputs numericos, Streamlit provee la interfaz optima sin overhead de desarrollo de frontend.
 
@@ -97,19 +97,19 @@ Cada entrada debe contener: Fecha, Fase, ID de Decision, Contexto, Decision, Jus
 | Campo                   | Valor                                                                                     |
 | :---------------------- | :---------------------------------------------------------------------------------------- |
 | **Fecha**               | 2026-04-19                                                                                |
-| **Fase**                | Fase 1 - Discovery                                                                        |
+| **Fase**                | Phase Discovery - Discovery                                                                        |
 | **Origen**              | feasibility — Veredicto final                                                 |
 | **Tipo**                | Decision de habilitacion de fase                                                          |
 
 **Contexto:** El analisis de factibilidad del dataset Iris evaluo: completitud de datos, calidad estadistica, alcanzabilidad de KPIs, riesgos de data leakage y near-duplicates.
 
-**Decision:** Se emite veredicto GO con confianza Alta (9.2/10). El proyecto esta habilitado para continuar hacia la Fase 2 (Data & EDA) una vez que los documentos de arquitectura (SAD, SpecDD, CONTRACT) esten completos. Las acciones M-01 (eliminar `Id`) y la eliminacion de 3 near-duplicates son obligatorias antes del primer entrenamiento.
+**Decision:** Se emite veredicto GO con confianza Alta (9.2/10). El proyecto esta habilitado para continuar hacia la Phase Engineering (Data & EDA) una vez que los documentos de arquitectura (SAD, SpecDD, CONTRACT) esten completos. Las acciones M-01 (eliminar `Id`) y la eliminacion de 3 near-duplicates son obligatorias antes del primer entrenamiento.
 
 **Justificacion:** El dataset Iris es uno de los datasets mas estudiados en ML. Su calidad es conocida y sus caracteristicas estadisticas son estables. El unico riesgo real es el data leakage por columna `Id`, que es completamente mitigable. La separabilidad de Setosa es perfecta; la confusion Versicolor/Virginica es el desafio tecnico central del problema y justifica la exigencia del F1-Score Macro como metrica primaria.
 
 **Impacto Transversal:**
 - Habilita formalmente el inicio de trabajos en SAD, SpecDD y CONTRACT.
-- La eliminacion de `Id` y near-duplicates queda registrada como prerequisito no negociable para Fase 2.
+- La eliminacion de `Id` y near-duplicates queda registrada como prerequisito no negociable para Phase Engineering.
 
 ---
 
@@ -130,7 +130,7 @@ Cada entrada debe contener: Fecha, Fase, ID de Decision, Contexto, Decision, Jus
 
 ---
 
-## Entrada #2 — Sesion 2026-04-19 | Fase 1 - Discovery (Cierre de Arquitectura y Diseno)
+## Entrada #2 — Sesion 2026-04-19 | Phase Discovery - Discovery (Cierre de Arquitectura y Diseno)
 
 **Agente de Cierre:** ai-session-steward
 **Hora de Cierre:** Fin de jornada 2026-04-19 (segunda sesion)
@@ -142,15 +142,15 @@ Cada entrada debe contener: Fecha, Fase, ID de Decision, Contexto, Decision, Jus
 | Campo                   | Valor                                                                                     |
 | :---------------------- | :---------------------------------------------------------------------------------------- |
 | **Fecha**               | 2026-04-19                                                                                |
-| **Fase**                | Fase 1 - Discovery                                                                        |
+| **Fase**                | Phase Discovery - Discovery                                                                        |
 | **Origen**              | mockup.md — Revision de prototipo con Stakeholder                                         |
 | **Tipo**                | Decision de diseno de interfaz de usuario                                                 |
 
 **Contexto:** El agente `ai-ux-designer` produjo un prototipo HTML interactivo de alta fidelidad con cuatro estados de pantalla: estado inicial (formulario con 4 sliders), resultado exitoso (alta confianza), resultado de baja confianza (advertencia prominente) y error de validacion (campos invalidos con mensajes descriptivos). El prototipo fue presentado al Stakeholder en sesion.
 
-**Decision:** El mockup fue aprobado por el Stakeholder sin modificaciones. La UI de Streamlit implementada en `src/app.py` durante la Fase 4 debe seguir fielmente este diseno. Cualquier desviacion requiere un Control de Cambios aprobado por el Stakeholder.
+**Decision:** El mockup fue aprobado por el Stakeholder sin modificaciones. La UI de Streamlit implementada en `src/app.py` durante la Phase Delivery debe seguir fielmente este diseno. Cualquier desviacion requiere un Control de Cambios aprobado por el Stakeholder.
 
-**Justificacion:** Aprobar el mockup antes de comenzar el desarrollo del pipeline de datos y el modelo garantiza que la experiencia de usuario esta definida y congelada desde la Fase 1. Esto evita el retrabajo tipico de proyectos donde la UI se disena al final y obliga a modificar la logica de negocio para adaptarse. El patron "UI First" reduce el riesgo de desalineacion entre expectativa del usuario y producto final.
+**Justificacion:** Aprobar el mockup antes de comenzar el desarrollo del pipeline de datos y el modelo garantiza que la experiencia de usuario esta definida y congelada desde la Phase Discovery. Esto evita el retrabajo tipico de proyectos donde la UI se disena al final y obliga a modificar la logica de negocio para adaptarse. El patron "UI First" reduce el riesgo de desalineacion entre expectativa del usuario y producto final.
 
 **Impacto Transversal:**
 - `src/app.py`: Debe replicar los cuatro estados del mockup (inicial, exito, baja confianza, error) usando los mismos colores, jerarquia visual y mensajes de texto.
@@ -164,7 +164,7 @@ Cada entrada debe contener: Fecha, Fase, ID de Decision, Contexto, Decision, Jus
 | Campo                   | Valor                                                                                     |
 | :---------------------- | :---------------------------------------------------------------------------------------- |
 | **Fecha**               | 2026-04-19                                                                                |
-| **Fase**                | Fase 1 - Discovery                                                                        |
+| **Fase**                | Phase Discovery - Discovery                                                                        |
 | **Origen**              | SAD v1.0.0 — Seccion 1: Vision General de la Arquitectura                                 |
 | **Tipo**                | Decision de arquitectura de sistema                                                       |
 
@@ -187,7 +187,7 @@ Cada entrada debe contener: Fecha, Fase, ID de Decision, Contexto, Decision, Jus
 | Campo                   | Valor                                                                                     |
 | :---------------------- | :---------------------------------------------------------------------------------------- |
 | **Fecha**               | 2026-04-19                                                                                |
-| **Fase**                | Fase 1 - Discovery                                                                        |
+| **Fase**                | Phase Discovery - Discovery                                                                        |
 | **Origen**              | SAD v1.0.0 — ADR-002: Joblib como mecanismo de serializacion                              |
 | **Tipo**                | Decision de tecnologia de serializacion                                                   |
 
@@ -211,7 +211,7 @@ Cada entrada debe contener: Fecha, Fase, ID de Decision, Contexto, Decision, Jus
 | Campo                   | Valor                                                                                     |
 | :---------------------- | :---------------------------------------------------------------------------------------- |
 | **Fecha**               | 2026-04-19                                                                                |
-| **Fase**                | Fase 1 - Discovery                                                                        |
+| **Fase**                | Phase Discovery - Discovery                                                                        |
 | **Origen**              | SAD v1.0.0 — ADR-003: StandardScaler encapsulado en Pipeline                              |
 | **Tipo**                | Decision de prevencion de Data Leakage en el pipeline de ML                               |
 
@@ -226,7 +226,7 @@ Cada entrada debe contener: Fecha, Fase, ID de Decision, Contexto, Decision, Jus
 - `src/training/serializer.py`: Serializa el objeto `Pipeline` completo, no el clasificador aislado.
 - `src/predictor.py`: Llama a `pipeline.predict()` directamente; el scaler se aplica automaticamente en cada prediccion.
 - `tests/model_qa/`: Debe incluir un test que verifique que el scaler fue ajustado solo sobre datos de entrenamiento.
-- `docs/Fase_3/MODEL_QA.md`: Debe documentar que RT3 (Data Leakage) fue mitigado mediante esta decision arquitectonica.
+- `docs/Phase_modeling/MODEL_QA.md`: Debe documentar que RT3 (Data Leakage) fue mitigado mediante esta decision arquitectonica.
 
 ---
 
@@ -235,7 +235,7 @@ Cada entrada debe contener: Fecha, Fase, ID de Decision, Contexto, Decision, Jus
 | Campo                   | Valor                                                                                     |
 | :---------------------- | :---------------------------------------------------------------------------------------- |
 | **Fecha**               | 2026-04-19                                                                                |
-| **Fase**                | Fase 1 - Discovery                                                                        |
+| **Fase**                | Phase Discovery - Discovery                                                                        |
 | **Origen**              | SAD v1.0.0 — ADR-004: pathlib para gestion de rutas                                       |
 | **Tipo**                | Decision de ingenieria de software (portabilidad y mantenibilidad)                        |
 
@@ -258,7 +258,7 @@ Cada entrada debe contener: Fecha, Fase, ID de Decision, Contexto, Decision, Jus
 | Campo                   | Valor                                                                                     |
 | :---------------------- | :---------------------------------------------------------------------------------------- |
 | **Fecha**               | 2026-04-19                                                                                |
-| **Fase**                | Fase 1 - Discovery                                                                        |
+| **Fase**                | Phase Discovery - Discovery                                                                        |
 | **Origen**              | SAD v1.0.0 — Seccion 1.1: Principio "Decoupling is King"                                  |
 | **Tipo**                | Decision de arquitectura de sistema (separacion de responsabilidades)                     |
 
@@ -294,10 +294,10 @@ Cada entrada debe contener: Fecha, Fase, ID de Decision, Contexto, Decision, Jus
 
 ---
 
-## Entrada #3 — Sesion 2026-04-19 | Fase 1 - Discovery (Cierre Formal y Consolidacion)
+## Entrada #3 — Sesion 2026-04-19 | Phase Discovery - Discovery (Cierre Formal y Consolidacion)
 
 **Agente de Cierre:** ai-session-steward
-**Hora de Cierre:** Fin de jornada 2026-04-19 (tercera sesion — cierre formal de Fase 1)
+**Hora de Cierre:** Fin de jornada 2026-04-19 (tercera sesion — cierre formal de Phase Discovery)
 
 ---
 
@@ -306,18 +306,18 @@ Cada entrada debe contener: Fecha, Fase, ID de Decision, Contexto, Decision, Jus
 | Campo                   | Valor                                                                                     |
 | :---------------------- | :---------------------------------------------------------------------------------------- |
 | **Fecha**               | 2026-04-19                                                                                |
-| **Fase**                | Fase 1 - Discovery                                                                        |
+| **Fase**                | Phase Discovery - Discovery                                                                        |
 | **Origen**              | Ajuste #7 a skills `repository-governance` y `project-config`                             |
 | **Tipo**                | Decision de proceso / metodologia de inicializacion de proyectos                         |
 
-**Contexto:** Durante la sesion se detecto que el skill `repository-governance` no generaba el `backlog.md` como parte del proceso `initialize_repo`, y que el skill `project-config` no gestionaba el ciclo de vida de ese archivo (marcarlo IN_PROGRESS al iniciar, DONE al finalizar). El `backlog.md` fue el ultimo entregable de Fase 1 en completarse, lo que significo que durante la mayor parte de la fase no existia el documento de orquestacion de tareas.
+**Contexto:** Durante la sesion se detecto que el skill `repository-governance` no generaba el `backlog.md` como parte del proceso `initialize_repo`, y que el skill `project-config` no gestionaba el ciclo de vida de ese archivo (marcarlo IN_PROGRESS al iniciar, DONE al finalizar). El `backlog.md` fue el ultimo entregable de Phase Discovery en completarse, lo que significo que durante la mayor parte de la fase no existia el documento de orquestacion de tareas.
 
-**Decision:** Se actualizaron ambos skills para que en cualquier proyecto futuro que use esta metodologia, el `backlog.md` sea generado automaticamente por `initialize_repo` como parte de la estructura inicial del repositorio, con las tareas de Fase 1 pre-cargadas. El skill `project-config` ahora verifica la existencia del backlog y gestiona su estado durante el Bootstrap.
+**Decision:** Se actualizaron ambos skills para que en cualquier proyecto futuro que use esta metodologia, el `backlog.md` sea generado automaticamente por `initialize_repo` como parte de la estructura inicial del repositorio, con las tareas de Phase Discovery pre-cargadas. El skill `project-config` ahora verifica la existencia del backlog y gestiona su estado durante el Bootstrap.
 
-**Justificacion:** El backlog es el documento de orquestacion central. Iniciar cualquier fase sin un backlog aprobado significa trabajar sin trazabilidad de tareas, sin Definition of Done verificable y sin capacidad de medir progreso. La decision de crear el backlog al final de Fase 1 (en lugar de al inicio) fue una deuda de proceso que se corrigio retroactivamente. En proyectos futuros, el backlog debe existir desde el dia cero para que todos los agentes operen con visibilidad completa de lo que falta.
+**Justificacion:** El backlog es el documento de orquestacion central. Iniciar cualquier fase sin un backlog aprobado significa trabajar sin trazabilidad de tareas, sin Definition of Done verificable y sin capacidad de medir progreso. La decision de crear el backlog al final de Phase Discovery (en lugar de al inicio) fue una deuda de proceso que se corrigio retroactivamente. En proyectos futuros, el backlog debe existir desde el dia cero para que todos los agentes operen con visibilidad completa de lo que falta.
 
 **Impacto Transversal:**
-- `.claude/skills/repository-governance/SKILL.md`: `initialize_repo` ahora incluye la generacion de `backlog.md` con estructura de Fase 1.
+- `.claude/skills/repository-governance/SKILL.md`: `initialize_repo` ahora incluye la generacion de `backlog.md` con estructura de Phase Discovery.
 - `.claude/skills/project-config/SKILL.md`: El Bootstrap verifica existencia de `backlog.md` y gestiona el estado de `[F1-T01]`.
 - Proyectos futuros: El `backlog.md` sera el primer archivo de gobernanza en existir, antes que el BRD.
 
@@ -328,7 +328,7 @@ Cada entrada debe contener: Fecha, Fase, ID de Decision, Contexto, Decision, Jus
 | Campo                   | Valor                                                                                     |
 | :---------------------- | :---------------------------------------------------------------------------------------- |
 | **Fecha**               | 2026-04-19                                                                                |
-| **Fase**                | Fase 1 - Discovery                                                                        |
+| **Fase**                | Phase Discovery - Discovery                                                                        |
 | **Origen**              | Renombrado de `DATA_FEASIBILITY_REPORT.md` a `feasibility.md`                             |
 | **Tipo**                | Decision de convencion de nombres / higiene documental                                    |
 
@@ -339,7 +339,7 @@ Cada entrada debe contener: Fecha, Fase, ID de Decision, Contexto, Decision, Jus
 **Justificacion:** La consistencia en los nombres de archivo reduce la carga cognitiva del agente que lee el repositorio y elimina la posibilidad de referencias rotas por divergencia de nombres. El patron minusculas-sin-prefijos es mas robusto en sistemas de archivos case-sensitive (Linux, CI/CD) y es la convencion dominante en la industria para documentacion tecnica en repositorios de software.
 
 **Impacto Transversal:**
-- `docs/Fase_1/feasibility.md`: Nombre canonico definitivo. El nombre antiguo no debe usarse en ningun documento nuevo.
+- `docs/Phase_discovery/feasibility.md`: Nombre canonico definitivo. El nombre antiguo no debe usarse en ningun documento nuevo.
 - `docs/governance/contract.md`, `sad.md`, `specdd.md`, `backlog.md`: Referencias actualizadas.
 - `docs/references/decisions.md`: Referencias anteriores al nombre antiguo ya fueron corregidas en las entradas previas.
 - Proyectos futuros: El skill `project-config` debe generar el archivo con el nombre `feasibility.md` desde el inicio.
@@ -350,11 +350,78 @@ Cada entrada debe contener: Fecha, Fase, ID de Decision, Contexto, Decision, Jus
 
 | # | Leccion                                                                                                                                                                                           | Categoria              |
 | :- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | :--------------------- |
-| 1 | El backlog debe crearse al inicio del proyecto, no al final de la primera fase. Sin backlog, los agentes no tienen visibilidad de las tareas pendientes ni pueden verificar el DoD de cada entregable. Esto genero que la Fase 1 se completara sin un registro formal de progreso hasta el ultimo momento. | Proceso / Metodologia  |
+| 1 | El backlog debe crearse al inicio del proyecto, no al final de la primera fase. Sin backlog, los agentes no tienen visibilidad de las tareas pendientes ni pueden verificar el DoD de cada entregable. Esto genero que la Phase Discovery se completara sin un registro formal de progreso hasta el ultimo momento. | Proceso / Metodologia  |
 | 2 | La convencion de nombres de archivos debe definirse en el primer documento de gobernanza (config.md) y no debe modificarse posteriormente. Un nombre inconsistente como `DATA_FEASIBILITY_REPORT.md` obligo a actualizar referencias en cinco archivos distintos, lo que es trabajo de retrabajo evitable. | Higiene Documental     |
 | 3 | Al actualizar el nombre de un archivo referenciado en multiples documentos, la busqueda de referencias cruzadas debe hacerse sistematicamente antes de renombrar. El orden correcto es: (1) identificar todas las referencias, (2) renombrar el archivo, (3) actualizar todas las referencias en una sola pasada. | Proceso de Refactoring |
 | 4 | Los skills de los agentes especializados son documentos vivos que deben evolucionar con las lecciones del proyecto. Un skill que no refleja las decisiones tomadas en el proyecto genera inconsistencias en sesiones futuras. Actualizar los skills es tan importante como actualizar el codigo. | Gestion de Agentes     |
 
 ---
 
-*Fin de entrada #3. La proxima entrada se agregara al cierre de la primera sesion de Fase 2.*
+*Fin de entrada #3.*
+
+---
+
+---
+
+## Entrada #4 — Sesion de Ajustes de Gobernanza (2026-04-20)
+
+**Fase:** Phase Discovery (Cierre y Normalizacion)
+**Responsable:** ai-session-steward + ai-repository-governor
+
+### Decisiones de esta Sesion
+
+#### D-010: Nomenclatura de fases en ingles con prefijo `Phase_`
+
+| Campo     | Valor |
+| :-------- | :---- |
+| **Fecha** | 2026-04-20 |
+| **Fase**  | Transversal (afecta todas las fases) |
+| **Tipo**  | Decision de convencion de nomenclatura |
+
+**Decision:** Las carpetas de fases pasan de `Fase_N` (nomenclatura en espanol con numero) a `Phase_<nombre>` (ingles descriptivo): `Phase_discovery`, `Phase_engineering`, `Phase_modeling`, `Phase_delivery`.
+
+**Justificacion:** La nomenclatura descriptiva en ingles es mas autoexplicativa para cualquier colaborador nuevo y alinea la estructura de carpetas con el lenguaje tecnico usado en el resto de la documentacion (ai_process.md, agentes, skills). El nombre de la fase ya no requiere un numero de referencia externa para entenderse.
+
+**Impacto Transversal:** 52 archivos actualizados (agentes, skills, governance, metodologia, CLAUDE.md). El cambio es retroactivo y completo — no quedan referencias a `Fase_N` en ningun archivo del proyecto.
+
+---
+
+#### D-011: Carpeta `mockup/` en la raiz del proyecto
+
+| Campo     | Valor |
+| :-------- | :---- |
+| **Fecha** | 2026-04-20 |
+| **Fase**  | Phase Discovery |
+| **Tipo**  | Decision de organizacion de artefactos |
+
+**Decision:** El directorio `mockup/` (que contiene `index.html`) reside en la raiz del proyecto, no dentro de `docs/Phase_discovery/`. El documento de descripcion `mockup.md` permanece en `docs/Phase_discovery/`.
+
+**Justificacion:** El mockup es un artefacto de presentacion directa al Stakeholder. Ubicarlo en la raiz facilita el acceso sin navegar la estructura de docs, y lo separa semanticamente de la documentacion tecnica. La carpeta `docs/` es para documentos Markdown; `mockup/` es un mini-sitio HTML independiente.
+
+**Impacto Transversal:** `ui-ux-prototyping/SKILL.md` actualizado para reflejar la nueva ubicacion. `ai_process.md` actualizado con la ruta correcta. Regla de Oro de Organizacion en `CLAUDE.md` y `ai_process.md` actualizada para incluir `mockup/`.
+
+---
+
+#### D-012: AGENTS.md como catalogo maestro agnostico en la raiz
+
+| Campo     | Valor |
+| :-------- | :---- |
+| **Fecha** | 2026-04-20 |
+| **Fase**  | Transversal |
+| **Tipo**  | Decision de documentacion de gobernanza |
+
+**Decision:** Se crea `AGENTS.md` en la raiz del proyecto como catalogo centralizado de los 21 agentes especializados. El archivo es agnostico (no contiene nombres de proyectos especificos) y sirve como punto de entrada para cualquier colaborador que necesite saber que agente invocar para una tarea determinada.
+
+**Justificacion:** Con 21 agentes especializados, la friccion cognitiva de recordar que agente hace que cosa es alta. Un catalogo con triggers, descripcion de rol y skills asociados reduce el tiempo de decision y estandariza el onboarding en futuros proyectos.
+
+**Estructura:** Organizado en 5 secciones (Gobernanza, Phase Discovery, Phase Engineering, Phase Modeling, Phase Delivery) mas un mapa visual ASCII de agentes por fase.
+
+---
+
+### Learnings de esta Sesion
+
+| # | Learning | Categoria |
+| :- | :-------- | :-------- |
+| 1 | Un cambio de nomenclatura masivo (52 archivos) es manejable con `sed` en bash sobre el arbol de archivos. El patron es: hacer mv de carpetas primero, luego sed en todos los .md. El orden importa. | Gestion de Repositorio |
+| 2 | La separacion entre "carpeta de artefacto de presentacion" (`mockup/`) y "carpeta de documentacion tecnica" (`docs/`) reduce ambiguedad para los agentes que generan HTML vs. los que generan Markdown. | Arquitectura de Artefactos |
+| 3 | Un archivo `AGENTS.md` agnostico en la raiz es mas util que el directorio `.claude/agents/` para onboarding rapido, porque incluye el "cuando usarlo" ademas del "que hace". | Documentacion de Gobernanza |

@@ -5,10 +5,10 @@
 Para garantizar que el proyecto sea auditable, reproducible y escalable, se establece una estructura de archivos rígida para todos los agentes. Los entregables que **no representen código ejecutable** (BRDs, reportes de calidad, diagramas de arquitectura, manuales) deben almacenarse obligatoriamente en la ruta `docs/` segmentada por fases:
 
 *   📂 **Gobernanza Base:** `docs/governance/` (BRD, SAD, SpecDD, Contrato de Datos, Backlog).
-*   📂 **Fase 1 (Discovery):** `docs/Fase_1/` (Reportes de factibilidad, análisis de gaps).
-*   📂 **Fase 2 (Engineering):** `docs/Fase_2/` (Reportes de EDA, calidad técnica).
-*   📂 **Fase 3 (Modeling):** `docs/Fase_3/` (Reportes de entrenamiento y validación).
-*   📂 **Fase 4 (Delivery):** `docs/Fase_4/` (Reportes E2E, carga y seguridad).
+*   📂 **Phase Discovery (Discovery):** `docs/Phase_discovery/` (Reportes de factibilidad, análisis de gaps).
+*   📂 **Phase Engineering (Engineering):** `docs/Phase_engineering/` (Reportes de EDA, calidad técnica).
+*   📂 **Phase Modeling (Modeling):** `docs/Phase_modeling/` (Reportes de entrenamiento y validación).
+*   📂 **Phase Delivery (Delivery):** `docs/Phase_delivery/` (Reportes E2E, carga y seguridad).
 
 **📌 Regla de Oro de Organización:**
 *   `src/`: Código fuente productivo (.py).
@@ -17,10 +17,11 @@ Para garantizar que el proyecto sea auditable, reproducible y escalable, se esta
 *   `data/`: Almacenamiento de datos (Bronze, Silver, Gold).
 *   `notebooks/`: Experimentación y R&D no productivo.
 *   `docs/`: Documentación técnica y de negocio oficial.
+*   `mockup/`: Prototipo visual interactivo (HTML/CSS). Generado por `ai-ux-designer` en la Phase Discovery. Reside en la raíz del proyecto para acceso directo del Stakeholder.
 
 ---
 
-# Fase 1: Discovery & Business Understanding (Detalle Integral)
+# Phase Discovery: Discovery & Business Understanding (Detalle Integral)
 
 Esta fase constituye el cimiento estratégico y técnico del proyecto. Su objetivo es transformar una necesidad de negocio ambigua en una especificación técnica ejecutable, garantizando que el desarrollo posterior sea viable, medible y alineado con el retorno de inversión ($ROI$).
 
@@ -59,6 +60,17 @@ Esta fase constituye el cimiento estratégico y técnico del proyecto. Su objeti
     * **Definición del SpecDD (Specification-Driven Development):** Establecer las interfaces exactas de cada archivo `.py`.
     * **Diseño del Contrato de Datos:** Crear el esquema rígido de entrada y salida para evitar errores de integración en el `main.py` o la API.
 
+### D. AI UX Designer (El Arquitecto de Experiencia)
+**Nombre:** ai-ux-designer
+**Misión:** Transformar las necesidades de negocio en prototipos visuales de alta fidelidad que el cliente pueda aprobar antes de que se escriba cualquier código de backend. Su trabajo ocurre en la Phase Discovery, justo después de la aprobación del reporte de factibilidad.
+* **Funciones Detalladas:**
+    * **Construcción del Prototipo Visual (Mockup):** Crea archivos HTML/CSS estáticos ultra-ligeros usando la técnica "Smoke and Mirrors": todo debe parecer real, pero los datos son hardcoded. Técnicas de diseño premium (Glassmorphism, Dark Mode) para asegurar el "Visual WOW".
+    * **Validación de Navegación y Flujos:** Define cómo se mueve el usuario por la aplicación, cómo se ingresan los datos y cómo se presentan las predicciones del modelo.
+    * **Gestión del Ciclo UAT:** Entrega el prototipo al Stakeholder para aprobación y registra el resultado en `docs/Phase_discovery/mockup.md`. Un mockup aprobado es el contrato visual vinculante para el `ai-frontend-engineer` en la Phase Delivery.
+* **Skill:** `ui-ux-prototyping`
+* **Trigger:** Aprobación del reporte de factibilidad (`docs/Phase_discovery/feasibility.md`).
+* **Entregable:** `mockup/index.html` (prototipo) + `docs/Phase_discovery/mockup.md` (documento de aprobación).
+
 ---
 
 ## 3. Artefactos y Entregables Técnicos
@@ -66,8 +78,8 @@ Esta fase constituye el cimiento estratégico y técnico del proyecto. Su objeti
 | Artefacto                                | Responsable                  | Ruta de Almacenamiento | Contenido Detallado                                                                                        |
 | :--------------------------------------- | :--------------------------- | :--------------------- | :--------------------------------------------------------------------------------------------------------- |
 | **Business Requirements Document (BRD)** | AI Business Analyst          | `docs/governance/`     | Objetivos, KPIs, restricciones de negocio y criterios de aceptación.                                       |
-| **Data Feasibility Report**              | AI Data Analytics Consultant | `docs/Fase_1/`         | Catálogo de variables, diagnóstico de calidad y plan de mitigación de datos faltantes.                     |
-| **Visual Mockup (Prototype)**            | AI UI/UX Designer            | `docs/governance/`     | Prototipo no funcional de alta fidelidad para validación de flujos y estética.                             |
+| **Data Feasibility Report**              | AI Data Analytics Consultant | `docs/Phase_discovery/`         | Catálogo de variables, diagnóstico de calidad y plan de mitigación de datos faltantes.                     |
+| **Visual Mockup (Prototype)**            | AI UX Designer (ai-ux-designer) | `mockup/` (raíz del proyecto) + `docs/Phase_discovery/mockup.md` | Prototipo HTML/CSS no funcional de alta fidelidad para validación de flujos y estética. Requiere aprobación del Stakeholder (UAT) antes de avanzar a Phase Engineering. |
 | **Software Architecture Document (SAD)** | AI Solutions Architect       | `docs/governance/`     | Diagramas de componentes (C4 Model), diagramas de secuencia, stack tecnológico e infraestructura.          |
 | **Interface Specification (SpecDD)**     | AI Solutions Architect       | `docs/governance/`     | Definición de funciones, parámetros de entrada/salida y manejo de excepciones.                             |
 | **Contrato de Datos (Data Schema)**      | AI Solutions Architect       | `docs/governance/`     | Diccionario de datos técnico: tipo de dato, rango permitido y obligatoriedad.                              |
@@ -92,7 +104,7 @@ Al finalizar esta fase, el **SAD** y el **SpecDD** permiten que la creación de 
 
 ---
 
-> **Resultado Final de la Fase 1:** Un repositorio con la documentación necesaria para que el equipo de ingeniería pueda empezar a trabajar de forma autónoma, sabiendo exactamente qué construir y cómo será evaluado.
+> **Resultado Final de la Phase Discovery:** Un repositorio con la documentación necesaria para que el equipo de ingeniería pueda empezar a trabajar de forma autónoma, sabiendo exactamente qué construir y cómo será evaluado.
 
 
 
@@ -101,9 +113,9 @@ Al finalizar esta fase, el **SAD** y el **SpecDD** permiten que la creación de 
 # ------------------------------------------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------------------------------------------
 
-# Fase 2: Data Ingestion, Engineering & Quality Assurance (DI&E)
+# Phase Engineering: Data Ingestion, Engineering & Quality Assurance (DI&E)
 
-Esta fase constituye la columna vertebral técnica del proyecto. Es el proceso de transformación de la "materia prima" (datos en crudo) en un **Feature Set** de alta fidelidad, aplicando principios de ingeniería de software de misión crítica. En esta etapa, el **SAD** y el **SpecDD** de la Fase 1 se materializan en código modular, testeado y certificado, integrando el **Análisis Exploratorio de Datos (EDA)** como el sensor principal de calidad en cada etapa.
+Esta fase constituye la columna vertebral técnica del proyecto. Es el proceso de transformación de la "materia prima" (datos en crudo) en un **Feature Set** de alta fidelidad, aplicando principios de ingeniería de software de misión crítica. En esta etapa, el **SAD** y el **SpecDD** de la Phase Discovery se materializan en código modular, testeado y certificado, integrando el **Análisis Exploratorio de Datos (EDA)** como el sensor principal de calidad en cada etapa.
 
 ---
 
@@ -129,7 +141,7 @@ En la industria, el pipeline no es una caja negra; es un flujo transparente basa
 * **Funciones Detalladas:**
     * **Capa Silver (Cleansed Data):** Desarrolla los módulos `.py` de limpieza y normalización bajo **SpecDD**.
     * **EDA de Transformación y Limpieza:** Analiza las distribuciones estadísticas antes y después de aplicar reglas de limpieza. Su objetivo es detectar si el tratamiento de nulos o la eliminación de duplicados está sesgando artificialmente la realidad del negocio.
-    * **Imputación de Datos:** Aplica la lógica técnica para el tratamiento de valores faltantes basada en hallazgos del Auditor de Datos de la Fase 1.
+    * **Imputación de Datos:** Aplica la lógica técnica para el tratamiento de valores faltantes basada en hallazgos del Auditor de Datos de la Phase Discovery.
 
 ### C. AI Feature Store Architect (El Escultor de Variables y Estadística)
 **Nombre:** ai-feature-store-architect
@@ -149,7 +161,7 @@ En la industria, el pipeline no es una caja negra; es un flujo transparente basa
 ---
 
 
-## 3. Los Tres Momentos Críticos del EDA en la Fase 2
+## 3. Los Tres Momentos Críticos del EDA en la Phase Engineering
 
 El EDA no es un evento; es una capacidad de diagnóstico que se aplica en tres puntos de control:
 
@@ -191,14 +203,14 @@ En esta fase, la creación de cada módulo `.py` (ej. `imputacion.py`, `limpieza
 | :----------------------------- | :---------------------- | :--------------------- | :--------------------------------------------------------------------------- |
 | **Data Pipeline Orchestrator** | AI Data Engineer        | `src/`                 | Código del `main.py` y configuración del orquestador (Airflow/Prefect).      |
 | **Library of Modules (.py)**   | Analytics Engineer      | `src/`                 | Scripts testeados de limpieza, transformación e ingeniería de variables.     |
-| **EDA & Profiling Reports**    | Todos los agentes       | `docs/Fase_2/`         | Tres informes de diagnóstico (Ingesta, Transformación y Estadístico).        |
+| **EDA & Profiling Reports**    | Todos los agentes       | `docs/Phase_engineering/`         | Tres informes de diagnóstico (Ingesta, Transformación y Estadístico).        |
 | **Automated Test Suite**       | AI Data SDET            | `tests/`               | Repositorio de tests unitarios e integrales (Pytest / Great Expectations).   |
 | **Feature Store / Gold Layer** | Feature Store Architect | `data/gold/`           | Tablas finales certificadas, optimizadas y versionadas.                      |
-| **Updated SAD (Data View)**    | AI Solutions Architect  | `docs/Fase_2/`         | Mapa de linaje de datos y diagrama de componentes de ingeniería actualizado. |
+| **Updated SAD (Data View)**    | AI Solutions Architect  | `docs/Phase_engineering/`         | Mapa de linaje de datos y diagrama de componentes de ingeniería actualizado. |
 
 ---
 
-> **Resultado Final de la Fase 2:** Una factoría de datos automatizada, auditable y estadísticamente validada. Se entregan módulos de código robustos que garantizan que el Científico de Datos en la Fase 3 trabaje sobre una base sólida de datos "Gold", habiendo superado el rigor del ciclo **Red, Green, Refactor, EDA, Certificación y Validación**.
+> **Resultado Final de la Phase Engineering:** Una factoría de datos automatizada, auditable y estadísticamente validada. Se entregan módulos de código robustos que garantizan que el Científico de Datos en la Phase Modeling trabaje sobre una base sólida de datos "Gold", habiendo superado el rigor del ciclo **Red, Green, Refactor, EDA, Certificación y Validación**.
 
 
 
@@ -207,9 +219,9 @@ En esta fase, la creación de cada módulo `.py` (ej. `imputacion.py`, `limpieza
 # ------------------------------------------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------------------------------------------
 
-# Fase 3: Model Development, Experimentation & ML Engineering
+# Phase Modeling: Model Development, Experimentation & ML Engineering
 
-Esta fase representa el motor analítico del proyecto. Aquí es donde la "Capa Gold" generada en la Fase 2 se utiliza para entrenar, optimizar y validar los modelos de Machine Learning. Siguiendo tu flujo de trabajo, la experimentación ocurre en entornos flexibles (Notebooks), pero la implementación final se traduce en **módulos `.py` altamente estructurados**, orquestados por el `main.py` y bajo el rigor absoluto de la metodología **TDD**.
+Esta fase representa el motor analítico del proyecto. Aquí es donde la "Capa Gold" generada en la Phase Engineering se utiliza para entrenar, optimizar y validar los modelos de Machine Learning. Siguiendo tu flujo de trabajo, la experimentación ocurre en entornos flexibles (Notebooks), pero la implementación final se traduce en **módulos `.py` altamente estructurados**, orquestados por el `main.py` y bajo el rigor absoluto de la metodología **TDD**.
 
 ---
 
@@ -222,7 +234,7 @@ En la industria actual, el modelado no es un proceso aislado de "ensayo y error"
 
 ### A. AI Data Scientist (El Investigador de Hipótesis)
 **Nombre:** ai-data-scientist
-**Misión:** Encontrar el algoritmo y la configuración óptima para resolver el problema planteado por el Estratega en la Fase 1.
+**Misión:** Encontrar el algoritmo y la configuración óptima para resolver el problema planteado por el Estratega en la Phase Discovery.
 * **Funciones Detalladas:**
     * **Selección de Algoritmos:** Evalúa arquitecturas (Gradient Boosting, Deep Learning, Transformers) basándose en la naturaleza de los datos.
     * **Optimización de Hiperparámetros:** Utiliza técnicas avanzadas (Bayesian Optimization u Optuna) para maximizar las métricas de rendimiento.
@@ -251,7 +263,7 @@ En la industria actual, el modelado no es un proceso aislado de "ensayo y error"
 **Nombre:** ai-model-qa-validator
 **Misión:** Ejecutar el ciclo **TDD** aplicado a modelos. Validar no solo el código, sino la "inteligencia" del modelo.
 * **Funciones Detalladas:**
-    * **Benchmarking:** Verifica que el nuevo modelo supere los criterios de aceptación mínimos definidos en la Fase 1.
+    * **Benchmarking:** Verifica que el nuevo modelo supere los criterios de aceptación mínimos definidos en la Phase Discovery.
     * **Bias & Fairness Testing:** Audita el modelo para asegurar que no existan sesgos discriminatorios hacia subgrupos de datos.
     * **Stress Testing (Robustness):** Evalúa cómo se comporta el modelo ante datos ruidosos o fuera de distribución (*Out-of-distribution*).
 
@@ -264,7 +276,7 @@ El entrenamiento del modelo y la creación de su módulo de predicción (`modelo
 1.  **RED (Definición del Target):** El **AI Model QA** escribe un test de rendimiento basado en el **SpecDD**. Ejemplo: *"El test falla si el modelo no alcanza un F1-Score > 0.85"*. Como no hay modelo aún, el sistema está en rojo.
 2.  **GREEN (Entrenamiento Exitoso):** El **AI Data Scientist** entrena una arquitectura que logra superar el umbral del test. El **AI ML Engineer** escribe el código mínimo para que la función `.predict()` devuelva resultados válidos. El test pasa a verde.
 3.  **REFACTOR (Optimización de Código y Modelo):** El **AI ML Engineer** mejora la estructura del código y el **AI Data Scientist** realiza *Pruning* o destilación para que el modelo sea más ligero sin perder precisión. El test debe seguir en verde.
-4.  **CERTIFICACIÓN (Cumplimiento de SAD):** El **AI Solutions Architect** certifica que el modelo cumple con los requisitos de la Fase 1: tamaño del archivo, tiempo de respuesta en milisegundos y dependencias de librerías permitidas.
+4.  **CERTIFICACIÓN (Cumplimiento de SAD):** El **AI Solutions Architect** certifica que el modelo cumple con los requisitos de la Phase Discovery: tamaño del archivo, tiempo de respuesta en milisegundos y dependencias de librerías permitidas.
 5.  **VALIDACIÓN (Generalización y Negocio):** Se realiza una validación cruzada ($Cross\text{-}Validation$) y se evalúa el modelo contra un *Hold-out set* (datos que el modelo jamás ha visto). El **AI Business Analyst** valida que el impacto en el KPI de negocio sea el esperado.
 
 
@@ -288,13 +300,13 @@ El entrenamiento del modelo y la creación de su módulo de predicción (`modelo
 | **Model Codebase (.py)**      | AI ML Engineer         | `src/`                 | Módulos de entrenamiento, evaluación e inferencia bajo **SpecDD**.                                |
 | **Experiment Log / Registry** | AI MLOps Specialist    | `mlruns/` (o eq)       | Historial completo de parámetros, métricas y versiones del modelo.                                |
 | **Serialized Model File**     | AI ML Engineer         | `models/`              | El artefacto final (ONNX, Pickle, etc.) listo para ser consumido por la API.                      |
-| **Model Validation Report**   | AI Model QA            | `docs/Fase_3/`         | Informe de performance, análisis de errores, pruebas de sesgo y robustez.                         |
-| **Updated SAD (Model View)**  | AI Solutions Architect | `docs/Fase_3/`         | Documentación de la arquitectura del modelo, hiperparámetros finales y métricas de SLA.           |
+| **Model Validation Report**   | AI Model QA            | `docs/Phase_modeling/`         | Informe de performance, análisis de errores, pruebas de sesgo y robustez.                         |
+| **Updated SAD (Model View)**  | AI Solutions Architect | `docs/Phase_modeling/`         | Documentación de la arquitectura del modelo, hiperparámetros finales y métricas de SLA.           |
 | **Notebooks de R&D**          | AI Data Scientist      | `notebooks/`           | Archivos `.ipynb` documentados que explican el proceso de descubrimiento y descarte de hipótesis. |
 
 ---
 
-> **Resultado Final de la Fase 3:** Un modelo de Machine Learning certificado, robusto y serializado. No es solo un archivo de pesos; es un componente de software testeado bajo el ciclo **Red, Green, Refactor, Certificación y Validación**, listo para ser integrado en el **Backend** (Fase 4) y servido al cliente final.
+> **Resultado Final de la Phase Modeling:** Un modelo de Machine Learning certificado, robusto y serializado. No es solo un archivo de pesos; es un componente de software testeado bajo el ciclo **Red, Green, Refactor, Certificación y Validación**, listo para ser integrado en el **Backend** (Phase Delivery) y servido al cliente final.
 
 
 # ------------------------------------------------------------------------------------------------------------------
@@ -302,7 +314,7 @@ El entrenamiento del modelo y la creación de su módulo de predicción (`modelo
 # ------------------------------------------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------------------------------------------
 
-# Fase 4: Software Application, Integration & Deployment (SAI&D)
+# Phase Delivery: Software Application, Integration & Deployment (SAI&D)
 
 Esta fase representa el clímax técnico del proyecto, donde el modelo de Machine Learning y los pipelines de datos dejan de ser artefactos de laboratorio para convertirse en un **Producto de Software de Grado Industrial**. Aquí, la inteligencia se encapsula en una interfaz funcional, escalable y segura, diseñada para el consumo final del cliente. Se opera bajo una arquitectura desacoplada, garantizando que cada componente cumpla con el **SAD** y supere el ciclo de calidad **Red, Green, Refactor, Certificación y Validación**.
 
@@ -319,7 +331,7 @@ En esta etapa, el enfoque se desplaza de la precisión del modelo hacia la **dis
 **Nombre:** ai-backend-engineer
 **Misión:** Construir el motor robusto que sirve el modelo y gestiona la comunicación entre la base de datos y la interfaz.
 * **Funciones Detalladas:**
-    * **Desarrollo de API de Alta Performance:** Crea los endpoints (usualmente con FastAPI o gRPC) para recibir datos crudos, invocar los módulos de la Fase 2 (limpieza/imputación) y ejecutar la inferencia del modelo de la Fase 3.
+    * **Desarrollo de API de Alta Performance:** Crea los endpoints (usualmente con FastAPI o gRPC) para recibir datos crudos, invocar los módulos de la Phase Engineering (limpieza/imputación) y ejecutar la inferencia del modelo de la Phase Modeling.
     * **Gestión de Concurrencia y Asincronía:** Implementa colas de mensajes (Redis/RabbitMQ) y tareas asíncronas (Celery) para procesos pesados, evitando bloqueos en la experiencia del usuario.
     * **Validación de Contratos de Entrada (SpecDD):** Implementa el *Schema Enforcement* estricto para rechazar datos corruptos antes de que toquen el modelo.
 
@@ -357,13 +369,13 @@ Cada funcionalidad de la aplicación (ej. el botón de "Predecir") sigue este ci
 2.  **GREEN (Funcionalidad Mínima):** El **AI Backend** expone el modelo y el **AI Frontend** realiza la llamada `fetch`. El test pasa: la aplicación devuelve un número.
 3.  **REFACTOR (Optimización de Software):** Se mejora el manejo de errores (ej. mostrar un "Spinner" de carga), se optimiza el tamaño de los paquetes de datos y se asegura que el código siga los estándares del **SAD**.
 4.  **CERTIFICACIÓN (SAD & Security Compliance):** El **AI Solutions Architect** certifica que la aplicación cumple con los protocolos de seguridad (SSL/HTTPS, OAuth) y que la latencia cumple el SLA definido.
-5.  **VALIDACIÓN (UAT - User Acceptance Testing):** El **AI Business Analyst** (Fase 1) valida con el cliente que la herramienta realmente resuelve la necesidad operativa inicial.
+5.  **VALIDACIÓN (UAT - User Acceptance Testing):** El **AI Business Analyst** (Phase Discovery) valida con el cliente que la herramienta realmente resuelve la necesidad operativa inicial.
 
 
 
 ---
 
-## 4. El Análisis Exploratorio de Datos (EDA) en la Fase 4
+## 4. El Análisis Exploratorio de Datos (EDA) en la Phase Delivery
 
 En esta etapa final, el EDA evoluciona hacia el **Perfilado de Producción**:
 
@@ -392,10 +404,10 @@ En esta etapa final, el EDA evoluciona hacia el **Perfilado de Producción**:
 | **Production API (Backend)**          | AI Backend Engineer    | `src/`                 | Repositorio de código con documentación OpenAPI/Swagger.                |
 | **Web Application (Frontend)**        | AI Frontend Engineer   | `src/`                 | Interfaz de usuario productiva y manual de usuario técnico.             |
 | **Infraestructura como Código (IaC)** | AI MLOps Architect     | `infra/`               | Scripts de despliegue (Terraform/Docker Compose/K8s manifests).         |
-| **E2E & Load Test Report**            | AI SDET                | `docs/Fase_4/`         | Certificado de resistencia y correcto funcionamiento sistémico.         |
-| **Monitoring Dashboard**              | AI MLOps Architect     | `docs/Fase_4/`         | Panel de control (Grafana/Prometheus) para vigilar la salud del modelo. |
-| **SAD Finalizado (As-Built)**         | AI Solutions Architect | `docs/Fase_4/`         | Documentación final de la arquitectura tal como quedó desplegada.       |
+| **E2E & Load Test Report**            | AI SDET                | `docs/Phase_delivery/`         | Certificado de resistencia y correcto funcionamiento sistémico.         |
+| **Monitoring Dashboard**              | AI MLOps Architect     | `docs/Phase_delivery/`         | Panel de control (Grafana/Prometheus) para vigilar la salud del modelo. |
+| **SAD Finalizado (As-Built)**         | AI Solutions Architect | `docs/Phase_delivery/`         | Documentación final de la arquitectura tal como quedó desplegada.       |
 
 ---
 
-> **Resultado Final de la Fase 4:** Una solución de IA integral, robusta y accesible. No es solo un modelo; es un producto de software certificado que ha superado el ciclo **Red, Green, Refactor, EDA, Certificación y Validación**, garantizando que el valor de la ciencia de datos llegue intacto a las manos del cliente.
+> **Resultado Final de la Phase Delivery:** Una solución de IA integral, robusta y accesible. No es solo un modelo; es un producto de software certificado que ha superado el ciclo **Red, Green, Refactor, EDA, Certificación y Validación**, garantizando que el valor de la ciencia de datos llegue intacto a las manos del cliente.

@@ -7,7 +7,7 @@
 > **Fecha:** 2026-04-19
 > **Autor:** ai-ux-designer
 > **Stakeholder:** jdrodriguez1000@gmail.com
-> **Archivo del prototipo:** `docs/Fase_1/mockup/index.html`
+> **Archivo del prototipo:** `mockup/index.html`
 
 ---
 
@@ -15,10 +15,10 @@
 
 | Artefacto | Ruta relativa |
 |:----------|:--------------|
-| Prototipo interactivo (HTML) | `docs/Fase_1/mockup/index.html` |
-| Este documento | `docs/Fase_1/mockup.md` |
+| Prototipo interactivo (HTML) | `mockup/index.html` |
+| Este documento | `docs/Phase_discovery/mockup.md` |
 
-Para visualizar el prototipo, abrir `docs/Fase_1/mockup/index.html` directamente en cualquier navegador web moderno (Chrome, Edge, Firefox). No requiere servidor ni dependencias externas.
+Para visualizar el prototipo, abrir `mockup/index.html` directamente en cualquier navegador web moderno (Chrome, Edge, Firefox). No requiere servidor ni dependencias externas.
 
 ---
 
@@ -175,12 +175,12 @@ Los siguientes elementos visuales del prototipo implican logica de implementacio
 
 | Elemento visual | Complejidad de implementacion | Tarea futura sugerida |
 |:----------------|:------------------------------|:----------------------|
-| Barra de confianza dinamica | Media — depende de `predict_proba()` del modelo | Fase 3: conectar output del modelo a la UI |
-| Grafico de probabilidades por clase | Media — usar `st.bar_chart` o Altair | Fase 4: implementar componente de visualizacion |
-| Validacion de rangos en tiempo real | Baja-Media — logica if/else en Streamlit | Fase 4: implementar `validate_inputs()` en `src/app.py` |
-| Ilustraciones SVG de especies | Baja — activos estaticos | Fase 4: incluir como archivos en `src/assets/` |
-| Boton de feedback con log | Baja-Media — escribir a `logs/feedback.log` | Fase 4: implementar `record_feedback()` en `src/app.py` |
-| Alerta de baja confianza (threshold 60%) | Baja — condicional simple | Fase 4: constante `CONFIDENCE_THRESHOLD = 0.60` en config |
+| Barra de confianza dinamica | Media — depende de `predict_proba()` del modelo | Phase Modeling: conectar output del modelo a la UI |
+| Grafico de probabilidades por clase | Media — usar `st.bar_chart` o Altair | Phase Delivery: implementar componente de visualizacion |
+| Validacion de rangos en tiempo real | Baja-Media — logica if/else en Streamlit | Phase Delivery: implementar `validate_inputs()` en `src/app.py` |
+| Ilustraciones SVG de especies | Baja — activos estaticos | Phase Delivery: incluir como archivos en `src/assets/` |
+| Boton de feedback con log | Baja-Media — escribir a `logs/feedback.log` | Phase Delivery: implementar `record_feedback()` en `src/app.py` |
+| Alerta de baja confianza (threshold 60%) | Baja — condicional simple | Phase Delivery: constante `CONFIDENCE_THRESHOLD = 0.60` en config |
 | Sidebar con historial de predicciones | Media-Alta — requiere estado de sesion | Fuera de alcance v1.0 (OUT OF SCOPE) |
 
 ---
@@ -189,7 +189,7 @@ Los siguientes elementos visuales del prototipo implican logica de implementacio
 
 Para validar el prototipo:
 
-1. Abrir el archivo `docs/Fase_1/mockup/index.html` en su navegador (doble clic o arrastrar al navegador).
+1. Abrir el archivo `mockup/index.html` en su navegador (doble clic o arrastrar al navegador).
 2. Navegar entre los 4 estados usando los botones en la barra superior.
 3. Verificar que cada pantalla representa correctamente el comportamiento esperado segun las User Stories del BRD.
 4. Proporcionar feedback a jdrodriguez1000@gmail.com con aprobacion o cambios solicitados.
@@ -207,4 +207,4 @@ Criterio de aprobacion: el Stakeholder confirma por escrito que las 4 pantallas 
 
 ---
 
-> **Nota de Gobernanza:** Este artefacto es el entregable de la tarea de prototipado de la Fase 1. Su aprobacion por el Stakeholder es prerequisito para el inicio de la Fase 2 (EDA y preprocesamiento de datos). Cualquier cambio solicitado debe registrarse en el decisions.md antes de ser implementado.
+> **Nota de Gobernanza:** Este artefacto es el entregable de la tarea de prototipado de la Phase Discovery. Su aprobacion por el Stakeholder es prerequisito para el inicio de la Phase Engineering (EDA y preprocesamiento de datos). Cualquier cambio solicitado debe registrarse en el decisions.md antes de ser implementado.

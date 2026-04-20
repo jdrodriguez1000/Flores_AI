@@ -36,7 +36,7 @@ Para garantizar la organización y trazabilidad, se sigue esta jerarquía de car
 
 | Directorio   | Propósito                                   | Regla de Oro                                                 |
 | :----------- | :------------------------------------------ | :----------------------------------------------------------- |
-| `docs/`      | Documentación técnica y de negocio oficial. | Segmentado por fases (`Fase_1` a `Fase_4`).                  |
+| `docs/`      | Documentación técnica y de negocio oficial. | Segmentado por fases (`Phase_discovery` a `Phase_delivery`).                  |
 | `src/`       | Código fuente productivo (.py).             | Modularizado según el SAD (Ingesta, Modelado, API).          |
 | `data/`      | Almacenamiento de datos.                    | Estructura Bronze (crudo), Silver (limpio), Gold (features). |
 | `models/`    | Artefactos de modelos serializados.         | Solo modelos certificados (ONNX, Pickle, Joblib).            |
@@ -55,10 +55,10 @@ Para garantizar la organización y trazabilidad, se sigue esta jerarquía de car
 | **SAD**         | `docs/governance/` | Software Architecture Document: Stack y Diseño técnico.   |
 | **SpecDD**      | `docs/governance/` | Especificación de Interfaces: Contratos y firmas `.py`.   |
 | **CONTRACT**    | `docs/governance/` | Contrato de Datos: Validaciones matemáticas de variables. |
-| **FEASIBILITY** | `docs/Fase_1/`     | Reporte de Factibilidad: Diagnóstico de salud de datos.   |
-| **EDAs**        | `docs/Fase_2/`     | Reportes de Ingesta, Limpieza y Análisis Estadístico.     |
-| **MODEL QA**    | `docs/Fase_3/`     | Validación de Modelos: Benchmarking y Sesgo.              |
-| **QA SYSTEM**   | `docs/Fase_4/`     | Certificados E2E y Stress Testing.                        |
+| **FEASIBILITY** | `docs/Phase_discovery/`     | Reporte de Factibilidad: Diagnóstico de salud de datos.   |
+| **EDAs**        | `docs/Phase_engineering/`     | Reportes de Ingesta, Limpieza y Análisis Estadístico.     |
+| **MODEL QA**    | `docs/Phase_modeling/`     | Validación de Modelos: Benchmarking y Sesgo.              |
+| **QA SYSTEM**   | `docs/Phase_delivery/`     | Certificados E2E y Stress Testing.                        |
 | **HANDOFF**     | `docs/references/` | Estado Operativo diario (sobrescribible).                 |
 | **DECISIONS**   | `docs/references/` | Log histórico de decisiones y lecciones.                  |
 

@@ -10,7 +10,7 @@ allowed-tools: [Read, Write, Edit]
 Por cada módulo `.py` definido en el SAD, el agente debe establecer:
 1. **Definición de Firmas:** Especificar nombres de funciones, parámetros (con tipos) y valores de retorno.
 2. **Manejo de Excepciones:** Definir qué errores debe lanzar cada componente y cómo deben ser capturados por la capa superior.
-3. **Contratos de Comunicación:** Establecer cómo se comunicará la Fase 2 con la 3 (ej: archivos Parquet) y la 3 con la 4 (ej: JSON via FastAPI).
+3. **Contratos de Comunicación:** Establecer cómo se comunicará la Phase Engineering con la 3 (ej: archivos Parquet) y la 3 con la 4 (ej: JSON via FastAPI).
 4. **Documentación Obligatoria:** El SpecDD debe guardarse en `docs/governance/specdd.md`.
 
 ## 📐 II. Protocolo SpecDD (Specification-Driven Development)

@@ -33,19 +33,19 @@ las cuatro dimensiones muestre el tipo de especie predicha.
 
 | Campo                  | Valor                          |
 | :--------------------- | :----------------------------- |
-| **Fase Actual**        | Fase 1 - Discovery             |
-| **Hito Activo**        | Fase 1 completada — todos los entregables de gobernanza entregados. Próximo: iniciar Fase 2 |
-| **Progreso Estimado**  | 40% (Fase 1 al 100%) |
+| **Fase Actual**        | Phase Discovery - Discovery             |
+| **Hito Activo**        | Phase Discovery completada — todos los entregables de gobernanza entregados. Próximo: iniciar Phase Engineering |
+| **Progreso Estimado**  | 40% (Phase Discovery al 100%) |
 | **Estado**             | En curso                       |
 
 ### Mapa de Fases
 
 | Fase   | Nombre          | Estado      | Notas                          |
 | :----- | :-------------- | :---------- | :----------------------------- |
-| Fase 1 | Discovery       | Completada (100%) | Todos los entregables completados — 2026-04-19 |
-| Fase 2 | Data & EDA      | Pendiente   |                                |
-| Fase 3 | Modeling        | Pendiente   |                                |
-| Fase 4 | Deployment      | Pendiente   |                                |
+| Phase Discovery | Discovery       | Completada (100%) | Todos los entregables completados — 2026-04-19 |
+| Phase Engineering | Data & EDA      | Pendiente   |                                |
+| Phase Modeling | Modeling        | Pendiente   |                                |
+| Phase Delivery | Deployment      | Pendiente   |                                |
 
 ---
 
@@ -55,8 +55,8 @@ las cuatro dimensiones muestre el tipo de especie predicha.
 | :---------------------- | :---------------------------- | :-------------- | :---------------------------------- |
 | **Lenguaje**            | Python 3.12+                  | Confirmado      | Segun protocolo CLAUDE.md           |
 | **Aplicacion Web**      | Streamlit                     | Confirmado      | Interfaz de prediccion de especies  |
-| **Librerias ML**        | scikit-learn (Pipeline, StandardScaler, clasificadores) | Confirmado (SAD ADR-001) | Se implementara en Fase 2 |
-| **Librerias de Datos**  | pandas, NumPy                 | Confirmado (SAD)| Se implementara en Fase 2           |
+| **Librerias ML**        | scikit-learn (Pipeline, StandardScaler, clasificadores) | Confirmado (SAD ADR-001) | Se implementara en Phase Engineering |
+| **Librerias de Datos**  | pandas, NumPy                 | Confirmado (SAD)| Se implementara en Phase Engineering           |
 | **Validacion**          | Pydantic v2                   | Confirmado (SpecDD) | Contratos de frontera entre modulos |
 | **Testing**             | Por definir                   | Pendiente       | Se definira segun necesidades       |
 | **Serializacion**       | Joblib                        | Confirmado (SAD ADR-002) | `models/iris_model.joblib` |
@@ -96,10 +96,10 @@ Estructura de carpetas mandatoria segun CLAUDE.md:
 Flores_AI/
 ├── CLAUDE.md                      # Constitución del proyecto
 ├── docs/
-│   ├── Fase_1/                    # Reporte de Factibilidad (FEASIBILITY)
-│   ├── Fase_2/                    # EDAs: Ingesta, Limpieza, Analisis
-│   ├── Fase_3/                    # Validacion de Modelos (MODEL QA)
-│   ├── Fase_4/                    # Certificados E2E y Stress Testing
+│   ├── Phase_discovery/                    # Reporte de Factibilidad (FEASIBILITY)
+│   ├── Phase_engineering/                    # EDAs: Ingesta, Limpieza, Analisis
+│   ├── Phase_modeling/                    # Validacion de Modelos (MODEL QA)
+│   ├── Phase_delivery/                    # Certificados E2E y Stress Testing
 │   ├── governance/                # BACKLOG, BRD, SAD, SpecDD, CONTRACT
 │   └── references/                # handoff, decisions, config
 ├── src/                           # Codigo fuente productivo (.py)
@@ -124,8 +124,8 @@ Flores_AI/
 | SAD             | docs/governance/             | Completado - 2026-04-19 (v1.0.0) |
 | SpecDD          | docs/governance/             | Completado - 2026-04-19 (v1.0.0) |
 | contract        | docs/governance/             | Completado - 2026-04-19 (v1.0.0) |
-| mockup          | docs/Fase_1/                 | Completado y aprobado por Stakeholder - 2026-04-19 (v1.0.0) |
-| FEASIBILITY     | docs/Fase_1/                 | Completado - 2026-04-19 |
+| mockup          | mockup/ (raíz del proyecto)           | Completado y aprobado por Stakeholder - 2026-04-19 (v1.0.0) |
+| FEASIBILITY     | docs/Phase_discovery/                 | Completado - 2026-04-19 |
 | handoff         | docs/references/             | Completado - 2026-04-19 |
 | decisions       | docs/references/             | Completado - 2026-04-19 |
 
@@ -141,4 +141,4 @@ Flores_AI/
 | 2026-04-19  | handoff y decisions creados; progreso actualizado a 25% | ai-session-steward |
 | 2026-04-19  | sad, specdd y contract completados; progreso actualizado a 30% | ai-solutions-architect |
 | 2026-04-19  | mockup aprobado por Stakeholder; progreso actualizado a 35%; stack tecnologico ampliado con Joblib y Pydantic v2 | ai-session-steward |
-| 2026-04-19  | backlog.md creado (F1-T08 DONE); Fase 1 completada al 100%; progreso global actualizado a 40% | ai-backlog-manager |
+| 2026-04-19  | backlog.md creado (F1-T08 DONE); Phase Discovery completada al 100%; progreso global actualizado a 40% | ai-backlog-manager |

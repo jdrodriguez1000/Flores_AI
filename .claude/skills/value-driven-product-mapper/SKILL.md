@@ -16,7 +16,7 @@ A diferencia de las historias de usuario tradicionales, estas deben incluir el c
 
 ## 📐 II. Definición de Criterios de Aceptación (DoD)
 
-El agente debe redactar los puntos que el sistema debe cumplir para ser aprobado en la Fase 4:
+El agente debe redactar los puntos que el sistema debe cumplir para ser aprobado en la Phase Delivery:
 
 * **Criterios de Performance:** "El sistema debe procesar la predicción en menos de $X$ milisegundos."
 * **Criterios de Interfaz:** "El dashboard debe mostrar un mapa de calor con las variables que más influyeron en el resultado."
@@ -26,7 +26,7 @@ El agente debe redactar los puntos que el sistema debe cumplir para ser aprobado
 
 Protocolo para el aprendizaje continuo tras el despliegue:
 1. **Captura de Reacción:** ¿Cómo sabremos si la predicción fue correcta en el mundo real? (Ground Truth de producción).
-2. **Mecanismo de Corrección:** Diseñar el flujo para que el usuario humano corrija al modelo (ej: un botón de "Esta predicción es incorrecta"), lo cual alimentará futuros reentrenamientos en la Fase 3.
+2. **Mecanismo de Corrección:** Diseñar el flujo para que el usuario humano corrija al modelo (ej: un botón de "Esta predicción es incorrecta"), lo cual alimentará futuros reentrenamientos en la Phase Modeling.
 
 ---
 

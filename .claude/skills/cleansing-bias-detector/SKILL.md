@@ -11,7 +11,7 @@ El agente debe comparar estadísticamente el estado de los datos antes y despué
 1. **Auditoría de Transformaciones:** Documentar cada regla de limpieza aplicada (imputación, filtrado, normalización).
 2. **Detección de Sesgos Técnicos:** Identificar si la limpieza está eliminando registros de forma desproporcionada en ciertos subgrupos.
 3. **Validación de Consistencia:** Asegurar que los datos en Silver sigan las reglas de negocio definidas.
-4. **Documentación Obligatoria:** El reporte de EDA de Limpieza debe guardarse en `docs/Fase_2/EDA_Limpieza.md`.
+4. **Documentación Obligatoria:** El reporte de EDA de Limpieza debe guardarse en `docs/Phase_engineering/EDA_Limpieza.md`.
 
 ## 📐 II. Validación de Integridad Estadística
 1. **Preservación de Varianza:** Garantizar que la limpieza de ruido no haya "aplanado" la señal necesaria para el modelo de ML.

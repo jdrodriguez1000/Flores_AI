@@ -31,6 +31,6 @@ El documento final debe seguir el **C4 Model** o similar, incluyendo:
 ---
 
 > **Check de Certificación Arquitectónica:**
-> - [ ] ¿El diseño garantiza el desacoplamiento entre la lógica de ML (Fase 3) y la API (Fase 4)?
+> - [ ] ¿El diseño garantiza el desacoplamiento entre la lógica de ML (Phase Modeling) y la API (Phase Delivery)?
 > - [ ] ¿Se ha definido una estrategia de escalabilidad para picos de inferencia?
 > - [ ] ¿El SAD especifica claramente cómo se gestionarán los estados y la caché (Redis)?
