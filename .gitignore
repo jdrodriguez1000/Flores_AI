@@ -1,0 +1,181 @@
+# =============================================================================
+# .gitignore - Flores AI Project
+# Standard Python/ML project exclusions following CLAUDE.md governance rules
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Python
+# -----------------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyd
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+parts/
+var/
+sdist/
+develop-eggs/
+.installed.cfg
+lib/
+lib64/
+*.manifest
+*.spec
+
+# -----------------------------------------------------------------------------
+# Virtual Environments
+# -----------------------------------------------------------------------------
+venv/
+env/
+.venv/
+ENV/
+conda-env/
+.conda/
+*.conda
+
+# -----------------------------------------------------------------------------
+# Jupyter Notebooks - checkpoints only (notebooks themselves are versioned)
+# -----------------------------------------------------------------------------
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+
+# -----------------------------------------------------------------------------
+# ML Artifacts - Root-level and generic (models/ directory is EXEMPT — see below)
+# -----------------------------------------------------------------------------
+mlruns/
+mlartifacts/
+.mlflow/
+
+# Serialized model files are BLOCKED at root and src/ level
+# Exception: models/ directory is ALLOWED (certified artifacts only)
+*.pkl
+*.joblib
+*.onnx
+*.h5
+*.hdf5
+*.pb
+*.pt
+*.pth
+*.safetensors
+
+# Re-allow certified models inside models/ directory
+!models/**/*.pkl
+!models/**/*.joblib
+!models/**/*.onnx
+!models/**/*.h5
+!models/**/*.hdf5
+!models/**/*.pt
+!models/**/*.pth
+
+# -----------------------------------------------------------------------------
+# Data Files - Medallion Architecture Rules
+# -----------------------------------------------------------------------------
+# Bronze raw data: Iris.csv is SMALL and MUST be versioned (exception granted)
+# Large CSVs/Parquet outside bronze are blocked
+data/silver/*.csv
+data/silver/*.parquet
+data/gold/*.csv
+data/gold/*.parquet
+
+# Generic large data file exclusions (override manually if needed)
+*.parquet
+!data/bronze/*.parquet
+
+# Allow Iris.csv specifically in bronze
+!data/bronze/Iris.csv
+!data/bronze/*.csv
+
+# -----------------------------------------------------------------------------
+# Claude Code local settings (project agents and skills ARE versioned)
+# -----------------------------------------------------------------------------
+.claude/settings.local.json
+
+# -----------------------------------------------------------------------------
+# Secrets and Environment Variables (CRITICAL - never commit)
+# -----------------------------------------------------------------------------
+.env
+*.env
+.env.*
+secrets.*
+*.secret
+credentials.*
+*.credentials
+*.key
+*.pem
+*.p12
+*.pfx
+config/local_*.yaml
+config/local_*.json
+
+# -----------------------------------------------------------------------------
+# IDE and Editors
+# -----------------------------------------------------------------------------
+.vscode/
+.idea/
+*.code-workspace
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+*.sublime-project
+*.sublime-workspace
+
+# -----------------------------------------------------------------------------
+# Operating System
+# -----------------------------------------------------------------------------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+$RECYCLE.BIN/
+
+# -----------------------------------------------------------------------------
+# Testing and Coverage
+# -----------------------------------------------------------------------------
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+*.cover
+nosetests.xml
+test-results/
+.tox/
+.nox/
+
+# -----------------------------------------------------------------------------
+# DVC (Data Version Control) - tracked files managed by DVC
+# -----------------------------------------------------------------------------
+/tmp/
+
+# -----------------------------------------------------------------------------
+# Logs
+# -----------------------------------------------------------------------------
+*.log
+logs/
+*.out
+
+# -----------------------------------------------------------------------------
+# Packaging / Distribution
+# -----------------------------------------------------------------------------
+MANIFEST
+
+# -----------------------------------------------------------------------------
+# mypy / type checkers
+# -----------------------------------------------------------------------------
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pytype/
+.pyre/
