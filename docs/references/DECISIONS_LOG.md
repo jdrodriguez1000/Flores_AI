@@ -124,4 +124,168 @@ Cada entrada debe contener: Fecha, Fase, ID de Decision, Contexto, Decision, Jus
 
 ---
 
-*Fin de entrada #1. La proxima entrada se agregara al cierre de la siguiente sesion.*
+*Fin de entrada #1.*
+
+---
+
+---
+
+## Entrada #2 — Sesion 2026-04-19 | Fase 1 - Discovery (Cierre de Arquitectura y Diseno)
+
+**Agente de Cierre:** ai-session-steward
+**Hora de Cierre:** Fin de jornada 2026-04-19 (segunda sesion)
+
+---
+
+### D-005: Mockup aprobado por el Stakeholder
+
+| Campo                   | Valor                                                                                     |
+| :---------------------- | :---------------------------------------------------------------------------------------- |
+| **Fecha**               | 2026-04-19                                                                                |
+| **Fase**                | Fase 1 - Discovery                                                                        |
+| **Origen**              | MOCKUP.md — Revision de prototipo con Stakeholder                                         |
+| **Tipo**                | Decision de diseno de interfaz de usuario                                                 |
+
+**Contexto:** El agente `ai-ux-designer` produjo un prototipo HTML interactivo de alta fidelidad con cuatro estados de pantalla: estado inicial (formulario con 4 sliders), resultado exitoso (alta confianza), resultado de baja confianza (advertencia prominente) y error de validacion (campos invalidos con mensajes descriptivos). El prototipo fue presentado al Stakeholder en sesion.
+
+**Decision:** El mockup fue aprobado por el Stakeholder sin modificaciones. La UI de Streamlit implementada en `src/app.py` durante la Fase 4 debe seguir fielmente este diseno. Cualquier desviacion requiere un Control de Cambios aprobado por el Stakeholder.
+
+**Justificacion:** Aprobar el mockup antes de comenzar el desarrollo del pipeline de datos y el modelo garantiza que la experiencia de usuario esta definida y congelada desde la Fase 1. Esto evita el retrabajo tipico de proyectos donde la UI se disena al final y obliga a modificar la logica de negocio para adaptarse. El patron "UI First" reduce el riesgo de desalineacion entre expectativa del usuario y producto final.
+
+**Impacto Transversal:**
+- `src/app.py`: Debe replicar los cuatro estados del mockup (inicial, exito, baja confianza, error) usando los mismos colores, jerarquia visual y mensajes de texto.
+- `docs/governance/SpecDD.md`: La seccion de `src/app.py` esta condicionada por los estados de pantalla del mockup.
+- `tests/`: Los tests de `app.py` deben validar que cada estado de pantalla se dispara con las condiciones correctas (confidence < 0.60 para baja confianza, validacion fallida para error).
+
+---
+
+### D-006: Patron arquitectonico — Monolito Modular con Medallion Architecture
+
+| Campo                   | Valor                                                                                     |
+| :---------------------- | :---------------------------------------------------------------------------------------- |
+| **Fecha**               | 2026-04-19                                                                                |
+| **Fase**                | Fase 1 - Discovery                                                                        |
+| **Origen**              | SAD v1.0.0 — Seccion 1: Vision General de la Arquitectura                                 |
+| **Tipo**                | Decision de arquitectura de sistema                                                       |
+
+**Contexto:** Se evaluaron tres patrones arquitectonicos para el sistema: Monolito Modular, Microservicios y Pipeline Funcional puro. El proyecto tiene un dataset de 150 registros estaticos, un equipo de 1 desarrollador + agentes de IA, y un requisito de latencia de inferencia <= 3,000 ms dominado por el render de Streamlit, no por el modelo.
+
+**Decision:** Se adopta el patron Monolito Modular con separacion de capas de datos Medallion (Bronze / Silver / Gold). La estructura de `src/` queda definida en 5 modulos raiz (`config.py`, `validators.py`, `predictor.py`, `feedback.py`, `app.py`) y 2 sub-paquetes (`src/data/` con 3 modulos, `src/training/` con 2 modulos).
+
+**Justificacion:** Los microservicios generan sobrecarga operativa (networking, serialization, deployment complexity) injustificada para 150 registros. El Monolito Modular provee la separacion de responsabilidades necesaria (cada capa tiene un contrato de interfaz rigido) sin el overhead de microservicios. El patron Medallion (Bronze/Silver/Gold) es el estandar de la industria para pipelines de datos con transformacion progresiva y es directamente auditable. El diseno garantiza que cada capa puede ser extraida a un servicio independiente en el futuro sin reescribir logica de negocio.
+
+**Impacto Transversal:**
+- `src/`: La estructura de modulos es mandatoria. No se pueden crear archivos `.py` fuera de la jerarquia definida en el SAD.
+- `docs/governance/SpecDD.md`: Cada modulo de `src/` tiene su seccion de especificacion de interfaz en el SpecDD.
+- `tests/`: Los tests se organizan en espejo de la estructura de `src/`: `tests/unit/`, `tests/integration/`, `tests/e2e/`, `tests/model_qa/`.
+- `data/`: Las tres subcarpetas `bronze/`, `silver/`, `gold/` corresponden a las capas Medallion definidas en el SAD.
+
+---
+
+### D-007: Serializacion del modelo — Joblib en lugar de Pickle
+
+| Campo                   | Valor                                                                                     |
+| :---------------------- | :---------------------------------------------------------------------------------------- |
+| **Fecha**               | 2026-04-19                                                                                |
+| **Fase**                | Fase 1 - Discovery                                                                        |
+| **Origen**              | SAD v1.0.0 — ADR-002: Joblib como mecanismo de serializacion                              |
+| **Tipo**                | Decision de tecnologia de serializacion                                                   |
+
+**Contexto:** El sistema requiere serializar y deserializar el pipeline de ML (StandardScaler + clasificador) para desacoplar el entrenamiento offline de la inferencia online. Se evaluaron: Pickle (stdlib), Joblib (scikit-learn) y ONNX (formato abierto).
+
+**Decision:** Se adopta Joblib como mecanismo de serializacion. El artefacto se almacena en `models/iris_model.joblib`. Este archivo es el unico punto de acoplamiento entre el pipeline offline (entrenamiento) y el pipeline online (inferencia en Streamlit).
+
+**Justificacion:** Joblib es el mecanismo recomendado oficialmente por scikit-learn para serializar pipelines que contienen arrays NumPy (como los parametros de StandardScaler). Es entre 2x y 10x mas rapido que Pickle para objetos con grandes arrays numericos. ONNX fue descartado por agregar complejidad de conversion sin beneficio observable en un modelo de clasificacion tabular simple. El formato `.joblib` es legible por cualquier entorno Python con scikit-learn instalado, garantizando portabilidad.
+
+**Impacto Transversal:**
+- `models/iris_model.joblib`: Unico artefacto de modelo permitido en produccion.
+- `src/training/serializer.py`: Responsable exclusivo de serializar y deserializar usando `joblib.dump()` / `joblib.load()`.
+- `src/predictor.py`: Carga el modelo via `serializer.load_model()`. No llama a `joblib` directamente.
+- `requirements.txt`: `joblib` debe estar listado como dependencia explicita (aunque scikit-learn lo instala transitivamente).
+- `tests/`: El test de carga del modelo debe verificar que el archivo `.joblib` existe y que el objeto cargado es una instancia de `sklearn.pipeline.Pipeline`.
+
+---
+
+### D-008: StandardScaler dentro de sklearn.Pipeline (no como paso independiente)
+
+| Campo                   | Valor                                                                                     |
+| :---------------------- | :---------------------------------------------------------------------------------------- |
+| **Fecha**               | 2026-04-19                                                                                |
+| **Fase**                | Fase 1 - Discovery                                                                        |
+| **Origen**              | SAD v1.0.0 — ADR-003: StandardScaler encapsulado en Pipeline                              |
+| **Tipo**                | Decision de prevencion de Data Leakage en el pipeline de ML                               |
+
+**Contexto:** El pipeline de ML requiere normalizacion de features antes del clasificador. Existen dos formas de implementarlo: (a) ajustar el StandardScaler sobre todo el dataset y luego hacer train/test split, o (b) encapsularlo dentro de `sklearn.Pipeline` para que el ajuste ocurra solo sobre el conjunto de entrenamiento.
+
+**Decision:** El StandardScaler se encapsula obligatoriamente dentro de `sklearn.Pipeline` como primer paso. El pipeline completo (scaler + clasificador) es lo que se serializa en `models/iris_model.joblib`. El scaler nunca se ajusta sobre datos de validacion o test.
+
+**Justificacion:** Ajustar el StandardScaler sobre todo el dataset antes del split constituye Data Leakage de preprocesamiento (RT3 del BRD). La informacion estadistica del conjunto de validacion "contamina" el entrenamiento, produciendo metricas optimistas que no se replicaran en produccion. Encapsulando el scaler en `sklearn.Pipeline`, el metodo `.fit()` ajusta el scaler solo sobre los datos de entrenamiento, y `.transform()` en validacion/test usa los parametros aprendidos del entrenamiento. Esta es la unica implementacion que elimina completamente este riesgo.
+
+**Impacto Transversal:**
+- `src/training/trainer.py`: Debe construir el pipeline con `sklearn.pipeline.Pipeline([('scaler', StandardScaler()), ('classifier', <modelo>)])`.
+- `src/training/serializer.py`: Serializa el objeto `Pipeline` completo, no el clasificador aislado.
+- `src/predictor.py`: Llama a `pipeline.predict()` directamente; el scaler se aplica automaticamente en cada prediccion.
+- `tests/model_qa/`: Debe incluir un test que verifique que el scaler fue ajustado solo sobre datos de entrenamiento.
+- `docs/Fase_3/MODEL_QA.md`: Debe documentar que RT3 (Data Leakage) fue mitigado mediante esta decision arquitectonica.
+
+---
+
+### D-009: pathlib.Path en src/config.py como unico gestor de rutas
+
+| Campo                   | Valor                                                                                     |
+| :---------------------- | :---------------------------------------------------------------------------------------- |
+| **Fecha**               | 2026-04-19                                                                                |
+| **Fase**                | Fase 1 - Discovery                                                                        |
+| **Origen**              | SAD v1.0.0 — ADR-004: pathlib para gestion de rutas                                       |
+| **Tipo**                | Decision de ingenieria de software (portabilidad y mantenibilidad)                        |
+
+**Contexto:** El proyecto debe ejecutarse en Windows, macOS y Linux sin modificaciones de codigo. Las rutas de archivos (dataset CSV, modelo serializado, directorio de logs) deben ser gestionadas de forma centralizada y portable.
+
+**Decision:** Todas las rutas del sistema se definen en `src/config.py` usando `pathlib.Path`. La raiz del proyecto se calcula dinamicamente con `Path(__file__).parent.parent`. Ningun otro modulo de `src/` puede contener strings hardcodeados de rutas. Los modulos que necesitan una ruta importan la constante correspondiente desde `config.py`.
+
+**Justificacion:** `os.path` (alternativa anterior) produce strings que no son portables entre sistemas operativos sin manipulacion manual. `pathlib.Path` maneja automaticamente los separadores de ruta (`/` vs `\`) en todos los sistemas operativos. La centralizacion en `config.py` garantiza que cambiar la ubicacion de cualquier artefacto (e.g., mover el modelo a un bucket S3 en el futuro) requiere modificar un solo archivo. La prohibicion de strings hardcodeados en el resto del codigo es auditabe mediante un grep simple en el repositorio.
+
+**Impacto Transversal:**
+- `src/config.py`: Unica fuente de verdad para rutas. Debe exportar constantes como `BRONZE_PATH`, `SILVER_PATH`, `GOLD_PATH`, `MODEL_PATH`.
+- Todos los modulos de `src/`: Deben importar rutas desde `config.py`, nunca construirlas localmente.
+- `tests/`: Los tests deben usar `config.MODEL_PATH` y similares, nunca rutas literales.
+- CLAUDE.md confirma: "Se prohíbe el uso de rutas absolutas" — esta decision es la implementacion tecnica de esa regla.
+
+---
+
+### D-010: Pipeline offline y online completamente desacoplados
+
+| Campo                   | Valor                                                                                     |
+| :---------------------- | :---------------------------------------------------------------------------------------- |
+| **Fecha**               | 2026-04-19                                                                                |
+| **Fase**                | Fase 1 - Discovery                                                                        |
+| **Origen**              | SAD v1.0.0 — Seccion 1.1: Principio "Decoupling is King"                                  |
+| **Tipo**                | Decision de arquitectura de sistema (separacion de responsabilidades)                     |
+
+**Contexto:** El sistema tiene dos flujos de trabajo con ciclos de vida distintos: (a) el pipeline offline de entrenamiento (carga de datos, limpieza, features, train/test split, entrenamiento, serializacion) que se ejecuta una vez o periodicamente, y (b) el pipeline online de inferencia (cargar modelo, recibir input del usuario, predecir, mostrar resultado) que se ejecuta en tiempo real en Streamlit.
+
+**Decision:** Los pipelines offline y online son completamente independientes. `src/app.py` (online) unicamente importa `src/predictor.py` y `src/validators.py`. Nunca importa modulos de `src/data/` ni de `src/training/`. El unico punto de acoplamiento entre ambos pipelines es el artefacto `models/iris_model.joblib`.
+
+**Justificacion:** Acoplar el pipeline de entrenamiento con la aplicacion web produce sistemas fragiles donde un cambio en la logica de datos puede romper la UI, y donde el tiempo de inicio de la aplicacion incluye el tiempo de carga del dataset completo. El desacoplamiento total garantiza que: (1) la app de inferencia es extremadamente liviana, (2) el modelo puede ser reentrenado y actualizado sin tocar el codigo de la UI, (3) los tests de cada pipeline son independientes y mas simples. Este principio es la base para una eventual migracion a microservicios sin reescritura.
+
+**Impacto Transversal:**
+- `src/app.py`: Las unicas importaciones de `src/` permitidas son `from src.predictor import predict` y `from src.validators import IrisInput`. Cualquier otra importacion es una violacion arquitectonica.
+- `src/training/`: El sub-paquete completo es invisible para la UI. Puede ser removido del contenedor de produccion sin afectar la inferencia.
+- `tests/integration/`: Deben verificar que `app.py` no importa modulos de `data/` ni `training/` (test de dependencias).
+- `infra/`: El Dockerfile de produccion puede excluir `src/data/` y `src/training/` para reducir la superficie de ataque.
+
+---
+
+### Lecciones Aprendidas — Sesion 2026-04-19 (Segunda sesion)
+
+| # | Leccion                                                                                                                                                                          | Categoria              |
+| :- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :--------------------- |
+| 1 | Producir el Mockup antes del SAD permite que el arquitecto conozca exactamente que estados de la UI necesitan ser soportados por la logica de negocio. Mockup → SAD → SpecDD es el orden correcto. | Proceso / Metodologia  |
+| 2 | Encapsular el StandardScaler dentro de `sklearn.Pipeline` no es una buena practica opcional; es la unica forma de garantizar que no hay Data Leakage de preprocesamiento. Debe ser una regla no negociable en cualquier pipeline de ML con normalizacion. | Calidad de Modelos     |
+| 3 | El principio "Decoupling is King" debe establecerse en el SAD antes de escribir una sola linea de codigo. Intentar desacoplar pipelines offline/online despues de la implementacion es costoso y propenso a errores. | Arquitectura           |
+| 4 | Centralizar las rutas en `config.py` con `pathlib` es una decision que parece menor pero que evita bugs de portabilidad criticos en entornos CI/CD donde las rutas absolutas del desarrollador no existen. | Ingenieria de Software |
+| 5 | La aprobacion del Stakeholder del Mockup en sesion, antes de escribir codigo de UI, elimina el riesgo de "esto no era lo que imaginaba" al momento de la demo final. | Gestion de Stakeholders |
+
+---
+
+*Fin de entrada #2. La proxima entrada se agregara al cierre de la siguiente sesion.*

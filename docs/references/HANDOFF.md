@@ -6,52 +6,44 @@
 >
 > **Ultima actualizacion:** 2026-04-19
 > **Responsable de cierre:** ai-session-steward
-> **Fase activa:** Fase 1 - Discovery
+> **Fase activa:** Fase 1 - Discovery (cierre de fase en progreso)
 
 ---
 
 ## 1. Resumen de Estado
 
-| Campo               | Valor                                      |
-| :------------------ | :----------------------------------------- |
-| **Proyecto**        | Flores AI - Iris                           |
-| **Fase Actual**     | Fase 1 - Discovery                         |
-| **Iteracion**       | Sesion de arranque — Inicializacion        |
-| **Estado General**  | Fase 1 completada. Sin bloqueos activos.   |
-| **Progreso Fase 1** | 100% (BRD + FEASIBILITY entregados)        |
+| Campo               | Valor                                                                    |
+| :------------------ | :----------------------------------------------------------------------- |
+| **Proyecto**        | Flores AI - Iris                                                         |
+| **Fase Actual**     | Fase 1 - Discovery                                                       |
+| **Iteracion**       | Sesion de arquitectura y diseno — cierre de Fase 1                      |
+| **Estado General**  | Fase 1 al 85% completada. Unico pendiente: BACKLOG.                     |
+| **Progreso Fase 1** | 85% (BRD + FEASIBILITY + MOCKUP + SAD + SpecDD + DATA_CONTRACT entregados) |
 
 ---
 
 ## 2. Logros de la Sesion (2026-04-19)
 
-| # | Entregable                        | Archivo                                              | Estado      |
-| :-- | :-------------------------------- | :--------------------------------------------------- | :---------- |
-| 1 | Cedula de identidad del proyecto  | `docs/references/PROJECT_config.md`                  | Completado  |
-| 2 | Estructura de carpetas (14 dirs)  | Raiz del repositorio                                 | Completado  |
-| 3 | Business Requirements Document    | `docs/governance/BRD.md`                             | Completado  |
-| 4 | Data Feasibility Report           | `docs/Fase_1/DATA_FEASIBILITY_REPORT.md`             | Completado  |
+| # | Entregable                        | Archivo                                              | Estado      | Responsable         |
+| :-- | :-------------------------------- | :--------------------------------------------------- | :---------- | :------------------ |
+| 1 | Visual Mockup (HTML + documento)  | `docs/governance/MOCKUP/index.html` + `docs/governance/MOCKUP.md` | Completado y aprobado por Stakeholder | ai-ux-designer |
+| 2 | Software Architecture Document    | `docs/governance/SAD.md`                             | Completado  | ai-solutions-architect |
+| 3 | SpecDD (Especificacion de Interfaces) | `docs/governance/SpecDD.md`                      | Completado  | ai-solutions-architect |
+| 4 | Data Contract                     | `docs/governance/DATA_CONTRACT.md`                   | Completado  | ai-solutions-architect |
 
 ### Detalle de Logros
 
-**Entregable 1 — PROJECT_config.md**
-Se documento la cedula completa del proyecto: identidad, stack tecnologico confirmado (Python 3.12+ / Streamlit), fuentes de verdad (GitHub), estructura de carpetas y mapa de fases.
+**Entregable 1 — Visual Mockup**
+Prototipo interactivo HTML de alta fidelidad que cubre 4 estados de pantalla: estado inicial (formulario con sliders), resultado exitoso (alta confianza, 97.3%), resultado de baja confianza (advertencia prominente, 52.4%) y error de validacion (campos invalidos con mensajes descriptivos). El Stakeholder reviso y aprobo el diseno en sesion. La UI de Streamlit debe seguir este mockup como especificacion visual vinculante.
 
-**Entregable 2 — Estructura de carpetas**
-Se crearon los 14 directorios del estandar Medallion Architecture mas gobernanza:
-`data/bronze/`, `data/silver/`, `data/gold/`, `src/`, `notebooks/`, `tests/`, `infra/`, `models/`, `docs/Fase_1/` a `docs/Fase_4/`, `docs/governance/`, `docs/references/`.
+**Entregable 2 — SAD**
+Arquitectura Monolito Modular con Medallion Architecture (Bronze / Silver / Gold). Define la estructura completa de `src/` en 5 modulos: `config.py`, `validators.py`, `predictor.py`, `feedback.py`, `app.py`, mas los sub-paquetes `src/data/` y `src/training/`. Cuatro ADRs registrados: Streamlit como UI, Joblib para serializacion, StandardScaler dentro de sklearn.Pipeline, y pathlib para gestion de rutas. El principio "Decoupling is King" garantiza que `app.py` solo invoca `predictor.predict()` sin importar nada de los pipelines de datos o entrenamiento.
 
-**Entregable 3 — BRD**
-- Problema clasificado: clasificacion multi-clase supervisada (3 clases: Setosa, Versicolor, Virginica).
-- KPIs definidos con thresholds vinculantes: Accuracy >= 95%, F1-Score Macro >= 0.95, Latencia <= 3,000 ms.
-- 15 Criterios de Aceptacion binarios establecidos.
-- Hipotesis de confusion Versicolor/Virginica documentada como riesgo tecnico.
+**Entregable 3 — SpecDD**
+Define las firmas exactas (tipos de entrada, tipos de retorno, excepciones) de todos los modulos `.py` de `src/`. Ninguna implementacion en Fase 2 o Fase 3 puede desviarse de estas firmas sin un Control de Cambios aprobado. Incluye tipos Pydantic v2 compartidos (`IrisInput`, `PredictionResult`, `FeedbackRecord`) y el protocolo de Mock para desarrollo paralelo.
 
-**Entregable 4 — DATA_FEASIBILITY_REPORT**
-- Veredicto: GO — Confianza Alta (9.2/10).
-- Riesgo critico identificado: columna `Id` presenta data leakage (accion obligatoria M-01: eliminar antes del entrenamiento).
-- 3 near-duplicates detectados (eliminar antes del split train/test).
-- Hipotesis Versicolor/Virginica confirmada estadisticamente mediante analisis de superposicion de features.
-- Todos los KPIs del BRD declarados alcanzables con el dataset actual.
+**Entregable 4 — DATA_CONTRACT**
+Invariantes rigidos para las tres capas Medallion. Prohibicion explícita de la columna `Id` como feature valida. Define esquemas de Bronze (CSV crudo con 6 columnas incluyendo `Id`), Silver (150 filas, 5 columnas sin `Id`, sin nulos, sin near-duplicates) y Gold (arrays NumPy normalizados con StandardScaler). Incluye reglas de validacion matematica, politica de nulos, deteccion de data drift y mensajes de error estandarizados.
 
 ---
 
@@ -59,33 +51,41 @@ Se crearon los 14 directorios del estandar Medallion Architecture mas gobernanza
 
 | Prioridad | Tarea                          | Documento Destino              | Responsable              | Fase   |
 | :-------- | :----------------------------- | :----------------------------- | :----------------------- | :----- |
-| 1         | SAD (Software Architecture)    | `docs/governance/SAD.md`       | ai-solutions-architect   | Fase 1 |
-| 2         | Visual Mockup de la App        | `docs/governance/`             | ai-ux-designer           | Fase 1 |
-| 3         | SpecDD (Spec. de Interfaces)   | `docs/governance/SpecDD.md`    | ai-solutions-architect   | Fase 1 |
-| 4         | Contrato de Datos              | `docs/governance/CONTRACT.md`  | ai-solutions-architect   | Fase 1 |
-| 5         | BACKLOG detallado              | `docs/governance/BACKLOG.md`   | ai-backlog-manager       | Fase 1 |
+| 1 (CRITICA) | BACKLOG detallado (unico pendiente de Fase 1) | `docs/governance/BACKLOG.md` | ai-backlog-manager | Fase 1 |
+| 2         | Inicio de Fase 2: pipeline Bronze → Silver → Gold | `src/data/`, `data/bronze/`, `data/silver/`, `data/gold/` | ai-data-engineer | Fase 2 |
+| 3         | EDA (Ingesta, Limpieza, Analisis Estadistico) | `docs/Fase_2/`          | ai-data-analyst          | Fase 2 |
+
+**Nota critica sobre la Tarea 1:** El BACKLOG debe descomponer las Fases 2, 3 y 4 en iteraciones atomicas con Definition of Done (DoD) por tarea. No puede iniciarse Fase 2 sin BACKLOG aprobado.
 
 ---
 
 ## 4. Bloqueos Activos
 
-**Ninguno.** El dataset Iris tiene calidad excepcional (9.2/10) y todos los KPIs del BRD son alcanzables. El proyecto tiene luz verde para continuar hacia los documentos de arquitectura.
+**Ninguno.** Los seis entregables de arquitectura y diseno de Fase 1 estan completos. El unico paso restante de Fase 1 es la generacion del BACKLOG por el `ai-backlog-manager`.
 
 ---
 
 ## 5. Decisiones Criticas Activas (Consultar DECISIONS_LOG.md para contexto completo)
 
-| ID    | Decision                                                    | Impacto                              |
-| :---- | :---------------------------------------------------------- | :----------------------------------- |
-| D-001 | Eliminar columna `Id` antes de cualquier entrenamiento      | Previene data leakage                |
-| D-002 | Metrica primaria: Accuracy Global + F1-Score Macro >= 0.95  | Define criterio de exito del modelo  |
-| D-003 | Stack confirmado: Python 3.12+ y Streamlit                  | Condiciona SAD y SpecDD              |
-| D-004 | Veredicto GO con confianza Alta                             | Habilita continuacion a Fase 2       |
+| ID    | Decision                                                              | Impacto                                                    |
+| :---- | :-------------------------------------------------------------------- | :--------------------------------------------------------- |
+| D-001 | Eliminar columna `Id` antes de cualquier entrenamiento                | Previene data leakage — mandatorio en pipeline Silver      |
+| D-002 | Metrica primaria: Accuracy Global + F1-Score Macro >= 0.95            | Define criterio de exito del modelo                        |
+| D-003 | Stack confirmado: Python 3.12+ y Streamlit                            | Condiciona SAD y SpecDD                                    |
+| D-004 | Veredicto GO con confianza Alta (9.2/10)                              | Habilita continuacion a Fase 2                             |
+| D-005 | Mockup aprobado por el Stakeholder                                    | La UI de Streamlit debe seguir el diseno del mockup        |
+| D-006 | Patron arquitectonico: Monolito Modular + Medallion Architecture      | Define la estructura completa de `src/`                    |
+| D-007 | Serializacion: Joblib (no Pickle)                                     | `models/iris_model.joblib` es el unico punto de acoplamiento offline/online |
+| D-008 | StandardScaler dentro de sklearn.Pipeline                             | Elimina completamente el riesgo de Data Leakage (RT3 BRD) |
+| D-009 | pathlib.Path en `src/config.py` como unico gestor de rutas            | Cero strings hardcodeados en el codigo                     |
+| D-010 | Pipeline offline y online completamente desacoplados                  | `app.py` nunca importa modulos de ingesta o entrenamiento  |
 
 ---
 
 ## 6. Contexto para el Siguiente Agente
 
-El arranque del proyecto se completo exitosamente. La Fase 1 tiene dos de sus entregables principales listos (BRD y FEASIBILITY). Los cuatro documentos pendientes (SAD, Mockup, SpecDD, CONTRACT) dependen del trabajo del `ai-solutions-architect` y el `ai-ux-designer`. El `ai-backlog-manager` debe formalizar el BACKLOG con las iteraciones detalladas de cada fase antes de iniciar la Fase 2.
+La Fase 1 tiene seis de sus siete entregables listos. El unico documento faltante es el **BACKLOG** (`docs/governance/BACKLOG.md`), responsabilidad del `ai-backlog-manager`. Una vez entregado el BACKLOG, la Fase 1 queda formalmente cerrada y el proyecto puede iniciar la Fase 2 con plena trazabilidad.
 
-La tarea de mayor prioridad para la proxima sesion es la creacion del **SAD**, ya que el SpecDD y el CONTRACT dependen de las decisiones de arquitectura que este documento establece.
+Los documentos de arquitectura (SAD, SpecDD, DATA_CONTRACT) estan interconectados y deben leerse en ese orden antes de implementar cualquier modulo en `src/`. La firma de `predictor.predict()` en el SpecDD es el contrato mas critico del sistema: todas las demas capas se adaptan a ella.
+
+El prototipo en `docs/governance/MOCKUP/index.html` es la referencia visual oficial aprobada por el Stakeholder. Cualquier desviacion en la implementacion de `src/app.py` respecto al mockup requiere un Control de Cambios.

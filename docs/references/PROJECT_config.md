@@ -34,15 +34,15 @@ las cuatro dimensiones muestre el tipo de especie predicha.
 | Campo                  | Valor                          |
 | :--------------------- | :----------------------------- |
 | **Fase Actual**        | Fase 1 - Discovery             |
-| **Hito Activo**        | Fase 1 completada — Inicio SAD |
-| **Progreso Estimado**  | 25% (Fase 1 / 4 completada)    |
+| **Hito Activo**        | Fase 1 al 85% — MOCKUP, SAD, SpecDD y DATA_CONTRACT entregados. Pendiente: BACKLOG |
+| **Progreso Estimado**  | 35% (Fase 1 al 85% — falta solo BACKLOG) |
 | **Estado**             | En curso                       |
 
 ### Mapa de Fases
 
 | Fase   | Nombre          | Estado      | Notas                          |
 | :----- | :-------------- | :---------- | :----------------------------- |
-| Fase 1 | Discovery       | En curso    | Punto de inicio del proyecto   |
+| Fase 1 | Discovery       | En curso (85%) | MOCKUP, SAD, SpecDD, DATA_CONTRACT completados. Pendiente: BACKLOG |
 | Fase 2 | Data & EDA      | Pendiente   |                                |
 | Fase 3 | Modeling        | Pendiente   |                                |
 | Fase 4 | Deployment      | Pendiente   |                                |
@@ -55,10 +55,11 @@ las cuatro dimensiones muestre el tipo de especie predicha.
 | :---------------------- | :---------------------------- | :-------------- | :---------------------------------- |
 | **Lenguaje**            | Python 3.12+                  | Confirmado      | Segun protocolo CLAUDE.md           |
 | **Aplicacion Web**      | Streamlit                     | Confirmado      | Interfaz de prediccion de especies  |
-| **Librerias ML**        | Por definir                   | Pendiente       | Se definira en Fase 2               |
-| **Librerias de Datos**  | Por definir                   | Pendiente       | Se definira en Fase 2               |
+| **Librerias ML**        | scikit-learn (Pipeline, StandardScaler, clasificadores) | Confirmado (SAD ADR-001) | Se implementara en Fase 2 |
+| **Librerias de Datos**  | pandas, NumPy                 | Confirmado (SAD)| Se implementara en Fase 2           |
+| **Validacion**          | Pydantic v2                   | Confirmado (SpecDD) | Contratos de frontera entre modulos |
 | **Testing**             | Por definir                   | Pendiente       | Se definira segun necesidades       |
-| **Serializacion**       | Por definir (ONNX/Pickle/Joblib)| Pendiente     | Se definira en Fase 3               |
+| **Serializacion**       | Joblib                        | Confirmado (SAD ADR-002) | `models/iris_model.joblib` |
 
 > **Nota:** El archivo `requirements.txt` es la unica fuente de verdad para librerias instaladas.
 > Se actualizara cada vez que se incorpore una nueva dependencia.
@@ -118,11 +119,12 @@ Flores_AI/
 
 | Documento       | Ruta de Destino              | Estado      |
 | :-------------- | :--------------------------- | :---------- |
-| BACKLOG         | docs/governance/             | Pendiente   |
+| BACKLOG         | docs/governance/             | Pendiente — responsable: ai-backlog-manager |
 | BRD             | docs/governance/             | Completado - 2026-04-19 |
-| SAD             | docs/governance/             | Pendiente   |
-| SpecDD          | docs/governance/             | Pendiente   |
-| CONTRACT        | docs/governance/             | Pendiente   |
+| SAD             | docs/governance/             | Completado - 2026-04-19 (v1.0.0) |
+| SpecDD          | docs/governance/             | Completado - 2026-04-19 (v1.0.0) |
+| DATA_CONTRACT   | docs/governance/             | Completado - 2026-04-19 (v1.0.0) |
+| MOCKUP          | docs/governance/             | Completado y aprobado por Stakeholder - 2026-04-19 (v1.0.0) |
 | FEASIBILITY     | docs/Fase_1/                 | Completado - 2026-04-19 |
 | HANDOFF         | docs/references/             | Completado - 2026-04-19 |
 | DECISIONS_LOG   | docs/references/             | Completado - 2026-04-19 |
@@ -137,3 +139,5 @@ Flores_AI/
 | 2026-04-19  | BRD completado y estado actualizado | ai-business-strategist |
 | 2026-04-19  | FEASIBILITY completado y estado actualizado | ai-data-auditor |
 | 2026-04-19  | HANDOFF y DECISIONS_LOG creados; progreso actualizado a 25% | ai-session-steward |
+| 2026-04-19  | SAD, SpecDD y DATA_CONTRACT completados; progreso actualizado a 30% | ai-solutions-architect |
+| 2026-04-19  | MOCKUP aprobado por Stakeholder; progreso actualizado a 35%; stack tecnologico ampliado con Joblib y Pydantic v2 | ai-session-steward |
