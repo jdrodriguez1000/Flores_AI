@@ -43,6 +43,10 @@ Esta fase constituye el cimiento estratégico y técnico del proyecto. Su objeti
     * **Definición de KPIs:** Traducir objetivos como "mejorar ventas" en métricas técnicas como $Recall$ o $F_1\text{-score}$ vinculadas a un impacto financiero.
     * **Mapeo de User Stories:** Describir cómo el usuario final interactuará con la aplicación web (ej: "Como Gerente de Riesgos, quiero ver la probabilidad de impago para decidir si apruebo un crédito").
     * **Análisis de Costo-Beneficio:** Estimar si el esfuerzo de desarrollo compensa la ganancia esperada.
+    * **Gherkin Authoring (BDD):** Tras la aprobación del BRD, traducir cada User Story en escenarios Given/When/Then con datos reales del dominio. Este paso es obligatorio y produce el **Contrato de Comportamiento** (`docs/governance/behavior.md`), que se posiciona entre el BRD y el SpecDD en la jerarquía de especificación: `BRD (Intención) → BDD (Comportamiento) → TDD (Corrección)`.
+* **Skill:** `gherkin-scenario-author`
+* **Trigger:** Aprobación del BRD (`docs/governance/BRD.md`).
+* **Entregable:** `docs/governance/behavior.md` (Contrato de Comportamiento vinculante para `ai-data-qa-engineer` y `ai-full-stack-sdet`).
 
 ### B. AI Data Analytics Consultant (El Auditor)
 **Nombre:** ai-data-auditor
@@ -75,14 +79,15 @@ Esta fase constituye el cimiento estratégico y técnico del proyecto. Su objeti
 
 ## 3. Artefactos y Entregables Técnicos
 
-| Artefacto                                | Responsable                  | Ruta de Almacenamiento | Contenido Detallado                                                                                        |
-| :--------------------------------------- | :--------------------------- | :--------------------- | :--------------------------------------------------------------------------------------------------------- |
-| **Business Requirements Document (BRD)** | AI Business Analyst          | `docs/governance/`     | Objetivos, KPIs, restricciones de negocio y criterios de aceptación.                                       |
-| **Data Feasibility Report**              | AI Data Analytics Consultant | `docs/Phase_discovery/`         | Catálogo de variables, diagnóstico de calidad y plan de mitigación de datos faltantes.                     |
-| **Visual Mockup (Prototype)**            | AI UX Designer (ai-ux-designer) | `mockup/` (raíz del proyecto) + `docs/Phase_discovery/mockup.md` | Prototipo HTML/CSS no funcional de alta fidelidad para validación de flujos y estética. Requiere aprobación del Stakeholder (UAT) antes de avanzar a Phase Engineering. |
-| **Software Architecture Document (SAD)** | AI Solutions Architect       | `docs/governance/`     | Diagramas de componentes (C4 Model), diagramas de secuencia, stack tecnológico e infraestructura.          |
-| **Interface Specification (SpecDD)**     | AI Solutions Architect       | `docs/governance/`     | Definición de funciones, parámetros de entrada/salida y manejo de excepciones.                             |
-| **Contrato de Datos (Data Schema)**      | AI Solutions Architect       | `docs/governance/`     | Diccionario de datos técnico: tipo de dato, rango permitido y obligatoriedad.                              |
+| Artefacto                                | Responsable                                  | Ruta de Almacenamiento                                           | Contenido Detallado                                                                                                                                                               |
+| :--------------------------------------- | :------------------------------------------- | :--------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Business Requirements Document (BRD)** | AI Business Analyst                          | `docs/governance/`                                               | Objetivos, KPIs, restricciones de negocio y criterios de aceptación.                                                                                                              |
+| **Data Feasibility Report**              | AI Data Analytics Consultant                 | `docs/Phase_discovery/`                                          | Catálogo de variables, diagnóstico de calidad y plan de mitigación de datos faltantes.                                                                                            |
+| **Behavior Contract (BDD)**              | AI Business Analyst (ai-business-strategist) | `docs/governance/behavior.md`                                    | Escenarios Gherkin (Given/When/Then) por User Story con datos reales del dominio. Fuente de verdad para tests E2E del `ai-full-stack-sdet` y tests RED del `ai-data-qa-engineer`. |
+| **Visual Mockup (Prototype)**            | AI UX Designer (ai-ux-designer)              | `mockup/` (raíz del proyecto) + `docs/Phase_discovery/mockup.md` | Prototipo HTML/CSS no funcional de alta fidelidad para validación de flujos y estética. Requiere aprobación del Stakeholder (UAT) antes de avanzar a Phase Engineering.           |
+| **Software Architecture Document (SAD)** | AI Solutions Architect                       | `docs/governance/`                                               | Diagramas de componentes (C4 Model), diagramas de secuencia, stack tecnológico e infraestructura.                                                                                 |
+| **Interface Specification (SpecDD)**     | AI Solutions Architect                       | `docs/governance/`                                               | Definición de funciones, parámetros de entrada/salida y manejo de excepciones.                                                                                                    |
+| **Contrato de Datos (Data Schema)**      | AI Solutions Architect                       | `docs/governance/`                                               | Diccionario de datos técnico: tipo de dato, rango permitido y obligatoriedad.                                                                                                     |
 
 ---
 
@@ -97,10 +102,12 @@ Este es el componente más crítico para la comunicación entre agentes. Debe in
 ---
 
 ## 5. Preparación para TDD y Desarrollo Modular
-Al finalizar esta fase, el **SAD** y el **SpecDD** permiten que la creación de módulos sea una tarea de "ensamblaje":
+Al finalizar esta fase, el **SAD**, el **behavior.md** y el **SpecDD** permiten que la creación de módulos sea una tarea de "ensamblaje" bajo la jerarquía SpecDD + BDD + TDD:
+
 1. El **SAD** dicta la arquitectura (ej: Arquitectura de Cebolla o Hexagonal).
-2. El **SpecDD** dicta la interfaz (qué hace el código).
-3. El **TDD** dicta la prueba (qué debe validar el código).
+2. El **SpecDD** dicta la interfaz (qué hace el código — contratos y firmas).
+3. El **behavior.md** dicta el comportamiento observable (cómo reacciona el sistema ante ejemplos reales — Gherkin).
+4. El **TDD** dicta la prueba (qué debe validar el código para que cumpla los dos anteriores).
 
 ---
 
@@ -108,10 +115,6 @@ Al finalizar esta fase, el **SAD** y el **SpecDD** permiten que la creación de 
 
 
 
-# ------------------------------------------------------------------------------------------------------------------
-# ------------------------------------------------------------------------------------------------------------------
-# ------------------------------------------------------------------------------------------------------------------
-# ------------------------------------------------------------------------------------------------------------------
 
 # Phase Engineering: Data Ingestion, Engineering & Quality Assurance (DI&E)
 
@@ -199,14 +202,14 @@ En esta fase, la creación de cada módulo `.py` (ej. `imputacion.py`, `limpieza
 
 ## 6. Artefactos y Entregables Técnicos
 
-| Artefacto                      | Responsable             | Ruta de Almacenamiento | Detalle Técnico                                                              |
-| :----------------------------- | :---------------------- | :--------------------- | :--------------------------------------------------------------------------- |
-| **Data Pipeline Orchestrator** | AI Data Engineer        | `src/`                 | Código del `main.py` y configuración del orquestador (Airflow/Prefect).      |
-| **Library of Modules (.py)**   | Analytics Engineer      | `src/`                 | Scripts testeados de limpieza, transformación e ingeniería de variables.     |
-| **EDA & Profiling Reports**    | Todos los agentes       | `docs/Phase_engineering/`         | Tres informes de diagnóstico (Ingesta, Transformación y Estadístico).        |
-| **Automated Test Suite**       | AI Data SDET            | `tests/`               | Repositorio de tests unitarios e integrales (Pytest / Great Expectations).   |
-| **Feature Store / Gold Layer** | Feature Store Architect | `data/gold/`           | Tablas finales certificadas, optimizadas y versionadas.                      |
-| **Updated SAD (Data View)**    | AI Solutions Architect  | `docs/Phase_engineering/`         | Mapa de linaje de datos y diagrama de componentes de ingeniería actualizado. |
+| Artefacto                      | Responsable             | Ruta de Almacenamiento    | Detalle Técnico                                                              |
+| :----------------------------- | :---------------------- | :------------------------ | :--------------------------------------------------------------------------- |
+| **Data Pipeline Orchestrator** | AI Data Engineer        | `src/`                    | Código del `main.py` y configuración del orquestador (Airflow/Prefect).      |
+| **Library of Modules (.py)**   | Analytics Engineer      | `src/`                    | Scripts testeados de limpieza, transformación e ingeniería de variables.     |
+| **EDA & Profiling Reports**    | Todos los agentes       | `docs/Phase_engineering/` | Tres informes de diagnóstico (Ingesta, Transformación y Estadístico).        |
+| **Automated Test Suite**       | AI Data SDET            | `tests/`                  | Repositorio de tests unitarios e integrales (Pytest / Great Expectations).   |
+| **Feature Store / Gold Layer** | Feature Store Architect | `data/gold/`              | Tablas finales certificadas, optimizadas y versionadas.                      |
+| **Updated SAD (Data View)**    | AI Solutions Architect  | `docs/Phase_engineering/` | Mapa de linaje de datos y diagrama de componentes de ingeniería actualizado. |
 
 ---
 
@@ -214,10 +217,6 @@ En esta fase, la creación de cada módulo `.py` (ej. `imputacion.py`, `limpieza
 
 
 
-# ------------------------------------------------------------------------------------------------------------------
-# ------------------------------------------------------------------------------------------------------------------
-# ------------------------------------------------------------------------------------------------------------------
-# ------------------------------------------------------------------------------------------------------------------
 
 # Phase Modeling: Model Development, Experimentation & ML Engineering
 
@@ -300,8 +299,8 @@ El entrenamiento del modelo y la creación de su módulo de predicción (`modelo
 | **Model Codebase (.py)**      | AI ML Engineer         | `src/`                 | Módulos de entrenamiento, evaluación e inferencia bajo **SpecDD**.                                |
 | **Experiment Log / Registry** | AI MLOps Specialist    | `mlruns/` (o eq)       | Historial completo de parámetros, métricas y versiones del modelo.                                |
 | **Serialized Model File**     | AI ML Engineer         | `models/`              | El artefacto final (ONNX, Pickle, etc.) listo para ser consumido por la API.                      |
-| **Model Validation Report**   | AI Model QA            | `docs/Phase_modeling/`         | Informe de performance, análisis de errores, pruebas de sesgo y robustez.                         |
-| **Updated SAD (Model View)**  | AI Solutions Architect | `docs/Phase_modeling/`         | Documentación de la arquitectura del modelo, hiperparámetros finales y métricas de SLA.           |
+| **Model Validation Report**   | AI Model QA            | `docs/Phase_modeling/` | Informe de performance, análisis de errores, pruebas de sesgo y robustez.                         |
+| **Updated SAD (Model View)**  | AI Solutions Architect | `docs/Phase_modeling/` | Documentación de la arquitectura del modelo, hiperparámetros finales y métricas de SLA.           |
 | **Notebooks de R&D**          | AI Data Scientist      | `notebooks/`           | Archivos `.ipynb` documentados que explican el proceso de descubrimiento y descarte de hipótesis. |
 
 ---
@@ -309,10 +308,7 @@ El entrenamiento del modelo y la creación de su módulo de predicción (`modelo
 > **Resultado Final de la Phase Modeling:** Un modelo de Machine Learning certificado, robusto y serializado. No es solo un archivo de pesos; es un componente de software testeado bajo el ciclo **Red, Green, Refactor, Certificación y Validación**, listo para ser integrado en el **Backend** (Phase Delivery) y servido al cliente final.
 
 
-# ------------------------------------------------------------------------------------------------------------------
-# ------------------------------------------------------------------------------------------------------------------
-# ------------------------------------------------------------------------------------------------------------------
-# ------------------------------------------------------------------------------------------------------------------
+
 
 # Phase Delivery: Software Application, Integration & Deployment (SAI&D)
 
@@ -355,7 +351,7 @@ En esta etapa, el enfoque se desplaza de la precisión del modelo hacia la **dis
 **Nombre:** ai-full-stack-sdet
 **Misión:** Aplicar la metodología **TDD** a nivel de integración total. Certifica que el "todo" es funcional.
 * **Funciones Detalladas:**
-    * **End-to-End (E2E) Testing:** Crea scripts que simulan un usuario real cargando un archivo y verificando que la gráfica final sea correcta.
+    * **End-to-End (E2E) Testing:** Crea scripts que simulan un usuario real cargando un archivo y verificando que la gráfica final sea correcta. Cada test E2E valida específicamente un escenario Gherkin definido en `docs/governance/behavior.md`: el Happy Path, la advertencia de baja confianza y el rechazo de entradas fuera de rango. El **behavior.md** es la fuente de verdad para la cobertura E2E.
     * **Load & Stress Testing:** Somete a la API a cargas masivas para identificar el punto de ruptura.
     * **Validación de Seguridad:** Realiza pruebas de penetración básicas y asegura que no haya fugas de datos sensibles en los logs.
 
@@ -404,9 +400,9 @@ En esta etapa final, el EDA evoluciona hacia el **Perfilado de Producción**:
 | **Production API (Backend)**          | AI Backend Engineer    | `src/`                 | Repositorio de código con documentación OpenAPI/Swagger.                |
 | **Web Application (Frontend)**        | AI Frontend Engineer   | `src/`                 | Interfaz de usuario productiva y manual de usuario técnico.             |
 | **Infraestructura como Código (IaC)** | AI MLOps Architect     | `infra/`               | Scripts de despliegue (Terraform/Docker Compose/K8s manifests).         |
-| **E2E & Load Test Report**            | AI SDET                | `docs/Phase_delivery/`         | Certificado de resistencia y correcto funcionamiento sistémico.         |
-| **Monitoring Dashboard**              | AI MLOps Architect     | `docs/Phase_delivery/`         | Panel de control (Grafana/Prometheus) para vigilar la salud del modelo. |
-| **SAD Finalizado (As-Built)**         | AI Solutions Architect | `docs/Phase_delivery/`         | Documentación final de la arquitectura tal como quedó desplegada.       |
+| **E2E & Load Test Report**            | AI SDET                | `docs/Phase_delivery/` | Certificado de resistencia y correcto funcionamiento sistémico.         |
+| **Monitoring Dashboard**              | AI MLOps Architect     | `docs/Phase_delivery/` | Panel de control (Grafana/Prometheus) para vigilar la salud del modelo. |
+| **SAD Finalizado (As-Built)**         | AI Solutions Architect | `docs/Phase_delivery/` | Documentación final de la arquitectura tal como quedó desplegada.       |
 
 ---
 

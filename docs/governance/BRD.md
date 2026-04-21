@@ -240,6 +240,23 @@ Aplicando el protocolo `value-driven-product-mapper` con estructura de IA-UX:
 
 **Explicabilidad Requerida (XAI):** No obligatoria en v1.0. La prediccion de la clase y su probabilidad es suficiente para el usuario final.
 
+**Escenarios de Comportamiento (BDD):** *(Especificaciones completas en `docs/governance/behavior.md`)*
+
+```gherkin
+Escenario: Clasificacion exitosa de Iris Setosa (Happy Path)
+  Dado que el usuario ingresa sepal_length=5.1, sepal_width=3.5, petal_length=1.4, petal_width=0.2
+  Cuando el usuario hace clic en "Predecir Especie"
+  Entonces el sistema muestra "setosa" como especie predicha
+  Y la confianza mostrada es mayor o igual al 60%
+  Y no se muestra ninguna advertencia de baja confianza
+
+Escenario: Advertencia de baja confianza en caso ambiguo
+  Dado que el usuario ingresa valores validos pero la confianza del modelo es menor al 60%
+  Cuando el usuario hace clic en "Predecir Especie"
+  Entonces el sistema muestra "Resultado de baja confianza. Verifique las medidas ingresadas."
+  Y el sistema muestra igualmente la especie predicha
+```
+
 ### US-02: Visualizacion de Probabilidades por Clase
 
 > **Como** usuario curioso o evaluador tecnico,
@@ -248,6 +265,17 @@ Aplicando el protocolo `value-driven-product-mapper` con estructura de IA-UX:
 > **para poder** entender el grado de certeza del modelo y detectar casos ambiguos,
 > **visible en** la interfaz web de Streamlit como un componente visual secundario.
 
+**Escenarios de Comportamiento (BDD):** *(Especificaciones completas en `docs/governance/behavior.md`)*
+
+```gherkin
+Escenario: Visualizacion completa de probabilidades tras una prediccion
+  Dado que el usuario realiza una prediccion valida
+  Cuando el sistema responde
+  Entonces muestra un grafico con tres barras: setosa, versicolor y virginica
+  Y la suma de las tres probabilidades mostradas es igual a 1.0
+  Y la barra de mayor altura corresponde a la especie predicha
+```
+
 ### US-03: Validacion de Entradas Invalidas
 
 > **Como** usuario que comete errores de tipeo,
@@ -255,6 +283,22 @@ Aplicando el protocolo `value-driven-product-mapper` con estructura de IA-UX:
 > **y recibir** un mensaje de error descriptivo (no un stack trace de Python),
 > **para poder** corregir mis datos y volver a intentar sin frustrarme,
 > **visible en** la interfaz web como un mensaje de alerta de color rojo.
+
+**Escenarios de Comportamiento (BDD):** *(Especificaciones completas en `docs/governance/behavior.md`)*
+
+```gherkin
+Escenario: Rechazo de entrada fuera de rango
+  Dado que el usuario ingresa sepal_length=15.0, sepal_width=3.5, petal_length=1.4, petal_width=0.2
+  Cuando el usuario hace clic en "Predecir Especie"
+  Entonces el sistema muestra un mensaje de error en color rojo
+  Y el mensaje indica el rango permitido para sepal_length [3.0, 9.0] cm
+  Y el mensaje no contiene trazas de Python
+
+Escenario: Aceptacion de valores en los limites del rango permitido
+  Dado que el usuario ingresa sepal_length=3.0, sepal_width=1.5, petal_length=0.5, petal_width=0.0
+  Cuando el usuario hace clic en "Predecir Especie"
+  Entonces el sistema procesa la prediccion sin mostrar advertencias de rango
+```
 
 **Rangos de validacion (del dataset de referencia, con margen del 20%):**
 
@@ -300,7 +344,18 @@ La Phase Delivery se considera exitosa y el proyecto es aprobado por el ai-busin
 | CA13 | El `requirements.txt` refleja exactamente las dependencias instaladas en el venv.                     | Comparacion `pip freeze` vs. `requirements.txt`. |
 | CA14 | El repositorio Git tiene historial semantico limpio sin commits de "fix typo" consecutivos.           | Revision del `git log`.                   |
 
-### 9.4 Criterio Final de Validacion (UAT)
+### 9.4 Vinculacion con Escenarios BDD
+
+Los escenarios de comportamiento definidos en `docs/governance/behavior.md` son la especificacion ejecutable de los siguientes criterios de aceptacion. Un criterio se considera verificado cuando su escenario BDD asociado pasa como test automatizado.
+
+| Criterio de Aceptacion | Escenario BDD Vinculado | Agente Verificador |
+| :--- | :--- | :--- |
+| CA07 (Validacion de entradas sin stack trace) | US-03: Rechazo de entrada fuera de rango | ai-full-stack-sdet |
+| CA08 (Muestra especie y probabilidades) | US-01: Happy Path · US-02: Visualizacion completa | ai-full-stack-sdet |
+| CA06 (Latencia <= 3000 ms) | Todos los escenarios Happy Path de US-01 | ai-full-stack-sdet |
+| CA01, CA02 (Accuracy y F1 >= 95%) | US-01: Clasificacion correcta de Setosa, Versicolor, Virginica | ai-model-qa-validator |
+
+### 9.5 Criterio Final de Validacion (UAT)
 
 | ID   | Criterio                                                                                               | Autoridad                                 |
 | :--- | :----------------------------------------------------------------------------------------------------- | :---------------------------------------- |

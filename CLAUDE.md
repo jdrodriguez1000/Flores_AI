@@ -12,8 +12,8 @@ Seguir la metodologia de trabajo para proyectos de ciencia de datos y machine le
 ### Mentalidad de Auditor (Devil's Advocate)
 Cuestiona proactivamente la factibilidad de los datos, la lógica de los KPIs y la arquitectura del modelo. **Rechaza tareas sin criterios de aceptación técnicos (Thresholds) definidos.** 
 
-### Soberanía Documental (SpecDD)
-El código productivo (`.py`) es un reflejo estricto de la especificación técnica. **Cada línea de código traza a: TAREA → SpecDD → SAD (Arquitectura) → BRD.** Se prohíbe la improvisación de lógica de limpieza o modelado fuera del flujo documentado.
+### Soberanía Documental (SpecDD + BDD)
+El código productivo (`.py`) es un reflejo estricto de la especificación técnica. **Cada línea de código traza a: TAREA → SpecDD → behavior.md → SAD (Arquitectura) → BRD.** La jerarquía de especificación es: `BRD (Intención) → BDD/behavior.md (Comportamiento) → SpecDD (Interfaz) → TDD (Corrección)`. Se prohíbe la improvisación de lógica de limpieza o modelado fuera del flujo documentado.
 
 ### Separación de Entornos (Notebook vs. Production)
 *   **Notebooks (`notebooks/`):** Espacio de R&D, descubrimiento y descarte de hipótesis algorítmicas. No requieren código "grado producción" pero deben ser legibles y estar documentados.
@@ -55,6 +55,7 @@ Para garantizar la organización y trazabilidad, se sigue esta jerarquía de car
 | **BRD**         | `docs/governance/` | Business Requirements Document: Objetivos y KPIs.         |
 | **SAD**         | `docs/governance/` | Software Architecture Document: Stack y Diseño técnico.   |
 | **SpecDD**      | `docs/governance/` | Especificación de Interfaces: Contratos y firmas `.py`.   |
+| **BEHAVIOR**    | `docs/governance/` | Contrato de Comportamiento BDD: Escenarios Gherkin por User Story. Fuente de verdad para tests E2E. |
 | **CONTRACT**    | `docs/governance/` | Contrato de Datos: Validaciones matemáticas de variables. |
 | **FEASIBILITY** | `docs/Phase_discovery/`     | Reporte de Factibilidad: Diagnóstico de salud de datos.   |
 | **EDAs**        | `docs/Phase_engineering/`     | Reportes de Ingesta, Limpieza y Análisis Estadístico.     |
@@ -65,15 +66,23 @@ Para garantizar la organización y trazabilidad, se sigue esta jerarquía de car
 
 ---
 
-## 🧪 4. Ciclo de Desarrollo: IA-TDD
+## 🧪 4. Ciclo de Desarrollo: SpecDD + BDD + TDD
+
+La metodología opera en tres capas de especificación que se complementan:
+
+| Capa | Documento | Pregunta que responde |
+| :--- | :--- | :--- |
+| **SpecDD** | `docs/governance/SpecDD.md` | ¿Qué hace cada función? (contratos e interfaces) |
+| **BDD** | `docs/governance/behavior.md` | ¿Cómo se comporta el sistema con ejemplos reales? (Gherkin) |
+| **TDD** | `tests/` | ¿El código es correcto para cumplir los dos anteriores? |
 
 Todo desarrollo sigue el ciclo **Red-Green-Refactor-Certificación-Validación**:
 
-1.  **RED (Test Fallido):** Escribir el test (código o datos) antes de la lógica.
+1.  **RED (Test Fallido):** El `ai-data-qa-engineer` escribe el test basado en el escenario Gherkin del `behavior.md` y el contrato del `SpecDD`. El test falla porque el módulo no existe aún.
 2.  **GREEN (Funcionalidad):** Escribir código mínimo para pasar el test.
 3.  **REFACTOR (Calidad):** Optimización técnica y cumplimiento del linaje.
 4.  **CERTIFICACIÓN (Técnica):** Validación contra SAD & SpecDD.
-5.  **VALIDACIÓN (Negocio):** Verificación final contra el BRD y KPIs.
+5.  **VALIDACIÓN (Negocio):** Verificación final contra el BRD, behavior.md y KPIs.
 
 ---
 
