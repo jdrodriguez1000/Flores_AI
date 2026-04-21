@@ -789,3 +789,97 @@ Cada entrada debe contener: Fecha, Fase, ID de Decision, Contexto, Decision, Jus
 ---
 
 *Fin de entrada #8.*
+
+---
+
+---
+
+## Entrada #9 — Sesion 2026-04-20 | Phase Engineering (Integracion de Capa BDD)
+
+**Agente de Cierre:** ai-session-steward
+**Hora de Cierre:** Fin de jornada 2026-04-20
+**Rama activa:** `feat/F2-engineering` (commit `3d4bb87`)
+
+---
+
+### D-025: Jerarquia de especificacion BRD → BDD → SpecDD → TDD como protocolo obligatorio
+
+| Campo     | Valor |
+| :-------- | :---- |
+| **Fecha** | 2026-04-20 |
+| **Fase**  | Transversal (Phase Engineering en adelante) |
+| **Origen** | Incorporacion de BDD como capa metodologica al proyecto |
+| **Tipo**  | Decision de proceso / jerarquia de especificacion |
+
+**Contexto:** El flujo de desarrollo del proyecto definia la cadena `BRD → SpecDD → TDD` (CLAUDE.md §1 "Soberania Documental"). Esta cadena saltaba directamente de los requisitos de negocio (BRD) a los contratos de interfaz tecnica (SpecDD), sin una capa intermedia que tradujera los requisitos de negocio en comportamiento observable del sistema. Esto generaba un gap: el `ai-data-qa-engineer` debia inferir los casos de prueba directamente del BRD, con riesgo de ambiguedad en las condiciones de frontera.
+
+**Decision:** Se incorpora BDD (Behavior-Driven Development) como capa obligatoria entre el BRD y el SpecDD. La jerarquia queda: `BRD (intencion) → behavior.md (comportamiento observable) → SpecDD (contrato tecnico) → TDD (correctitud del codigo)`. El documento `behavior.md` es el Contrato de Comportamiento del proyecto, escrito en Gherkin (Given/When/Then), y es la fuente de verdad para los tests RED de cada ciclo IA-TDD. Ningun test RED puede escribirse sin que exista el escenario BDD correspondiente en `behavior.md`.
+
+**Justificacion:** BDD cierra el gap de interpretacion entre negocio y tecnica. Los escenarios Gherkin son legibles por el Stakeholder (validacion de negocio) y ejecutables como tests (validacion tecnica). Al forzar la escritura del escenario BDD antes del test TDD, se garantiza que cada test tiene una justificacion de negocio trazable. Ademas, los escenarios de frontera (baja confianza, entradas invalidas) son mas faciles de identificar en lenguaje de comportamiento que en codigo de test.
+
+**Impacto Transversal:**
+- `CLAUDE.md`: Jerarquia BDD documentada en Soberania Documental y seccion 4 ("SpecDD + BDD + TDD").
+- `docs/governance/behavior.md`: Nuevo artefacto mandatorio de gobernanza.
+- `docs/governance/BRD.md`: Escenarios Gherkin añadidos a cada User Story; nueva seccion 9.4 de trazabilidad BDD.
+- `docs/methodology/ai_process.md`: behavior.md en tabla de artefactos Phase Discovery; jerarquia BDD documentada en seccion 5; ai-full-stack-sdet referencia behavior.md como fuente de verdad E2E.
+- `docs/governance/backlog.md`: Las tareas [RED] futuras de Phase Modeling y Phase Delivery deben referenciarse contra escenarios BDD de behavior.md.
+- Proyectos futuros: El skill `gherkin-scenario-author` genera behavior.md como parte del cierre de Phase Discovery, antes de iniciar Phase Engineering.
+
+---
+
+### D-026: SpecDD v1.0.0 cubre el 100% de los escenarios BDD sin modificaciones
+
+| Campo     | Valor |
+| :-------- | :---- |
+| **Fecha** | 2026-04-20 |
+| **Fase**  | Phase Engineering |
+| **Origen** | Auditoria de alineacion entre behavior.md v1.0.0 y specdd.md v1.0.0 |
+| **Tipo**  | Decision de validacion de arquitectura (verificacion de linaje) |
+
+**Contexto:** Al crear `behavior.md` con 10 escenarios Gherkin para US-01, US-02 y US-03, se realizo una auditoria de alineacion contra `specdd.md` v1.0.0 para determinar si el contrato de interfaz existente era suficiente o requeria extension. Los escenarios BDD dependen de cuatro campos del resultado de prediccion: `species` (nombre de la clase), `confidence` (probabilidad de la clase ganadora), `probabilities` (distribucion completa por clase) y `low_confidence` (flag booleano de advertencia).
+
+**Decision:** El objeto `PredictionResult` definido en SpecDD v1.0.0 (seccion 1.2 — `src/predictor.py`) ya expone exactamente los cuatro campos requeridos. El SpecDD no requiere modificaciones para soportar la capa BDD. La version del SpecDD permanece en v1.0.0. Esta alineacion queda documentada en la seccion "Nota de Alineacion con SpecDD" de `behavior.md`.
+
+**Justificacion:** La alineacion perfecta entre BDD y SpecDD sin modificaciones es una validacion de que la arquitectura tecnica fue disenada correctamente desde el inicio, anticipando las necesidades de comportamiento observable. Modificar el SpecDD en respuesta a un BDD es el escenario esperado en proyectos donde la arquitectura se disena antes del BDD; aqui el resultado opuesto confirma que el SAD/SpecDD diseñados en Phase Discovery son robustos. Esta decision elimina cualquier deuda tecnica de interfaz antes de iniciar la implementacion.
+
+**Impacto Transversal:**
+- `docs/governance/specdd.md`: Sin cambios. v1.0.0 permanece vigente.
+- `docs/governance/behavior.md`: Seccion "Nota de Alineacion con SpecDD" documenta la tabla de cobertura de campos.
+- `src/predictor.py` (Phase Delivery): La implementacion de `PredictionResult` puede proceder directamente contra SpecDD v1.0.0 y behavior.md v1.0.0 sin tension entre ambos contratos.
+
+---
+
+### D-027: behavior.md como documento de gobernanza de Phase Discovery, no de Phase Engineering
+
+| Campo     | Valor |
+| :-------- | :---- |
+| **Fecha** | 2026-04-20 |
+| **Fase**  | Phase Discovery (cierre retroactivo) |
+| **Origen** | Clasificacion del artefacto behavior.md en la tabla de gobernanza de ai_process.md |
+| **Tipo**  | Decision de clasificacion de artefactos / proceso metodologico |
+
+**Contexto:** Al incorporar `behavior.md` al proyecto en sesion de Phase Engineering, surgio la pregunta de a que fase pertenece este artefacto. El BDD es conceptualmente una actividad de definicion de requisitos (anterior a la implementacion), pero se creo durante la Phase Engineering. Se evaluo clasificarlo en Phase Engineering o retroactivamente en Phase Discovery.
+
+**Decision:** `behavior.md` pertenece a Phase Discovery como artefacto de cierre. Su posicion en `ai_process.md` es junto a los demas documentos de contrato (BRD, SAD, SpecDD) y debe generarse antes de iniciar Phase Engineering. En proyectos futuros que usen este framework, el skill `gherkin-scenario-author` debe ejecutarse al cerrar Phase Discovery, inmediatamente despues de aprobar el BRD y antes de iniciar la Phase Engineering. El comportamiento observable del sistema debe estar acordado con el Stakeholder antes de comenzar a escribir tests.
+
+**Justificacion:** Los escenarios BDD son una extension del BRD en lenguaje ejecutable. Pertenecen al mismo espacio de "que debe hacer el sistema" (not "como lo hace"). Crear BDD en Phase Engineering es aceptable si el SpecDD fue disenado correctamente (como fue el caso aqui), pero es un riesgo si los escenarios BDD revelan gaps en el SpecDD que ya fue usado como base para el backlog. El orden correcto es: BRD → behavior.md → SAD → SpecDD → backlog. En este proyecto el orden fue suboptimo pero no genero retrabajo gracias a la solidez del SpecDD v1.0.0.
+
+**Impacto Transversal:**
+- `docs/methodology/ai_process.md`: behavior.md posicionado en la tabla de artefactos de Phase Discovery.
+- `.claude/skills/gherkin-scenario-author/SKILL.md`: El skill documenta que debe ejecutarse al cierre de Phase Discovery.
+- Proyectos futuros: El backlog de Phase Discovery debe incluir una tarea para crear behavior.md antes de crear el SpecDD.
+
+---
+
+### Lecciones Aprendidas — Sesion 2026-04-20 (Integracion BDD)
+
+| # | Leccion | Categoria |
+| :- | :------- | :-------- |
+| 1 | Un SpecDD disenado con rigor de contratos (campos tipados, nombres semanticos) tiene alta probabilidad de cubrir los escenarios BDD sin modificacion. La alineacion perfecta entre behavior.md v1.0.0 y specdd.md v1.0.0 valida que el esfuerzo de precision en Phase Discovery se amortiza en cero deuda tecnica al incorporar BDD. | Calidad de Arquitectura |
+| 2 | El orden correcto de artefactos es BRD → behavior.md → SAD → SpecDD. Crear el SpecDD antes del BDD es un riesgo calculado: si el SpecDD es robusto, no hay retrabajo; si el BDD revela gaps en el SpecDD, hay que versionar el SpecDD y actualizar el backlog. Documentar este riesgo en el handoff evita que el proximo agente asuma que el orden fue intencional. | Proceso / Metodologia |
+| 3 | Los escenarios de frontera (baja confianza con umbral exacto del 60%, valores en los limites exactos del rango de validacion) son mas faciles de identificar en Gherkin que en TDD. El lenguaje de comportamiento observable obliga al autor a pensar en terminos de "dado este input exacto, que muestra la pantalla" antes de pensar en aserciones de codigo. | Calidad de Tests |
+| 4 | Crear un skill para una capacidad nueva (gherkin-scenario-author) inmediatamente al usarla por primera vez garantiza que la capacidad es reproducible en sesiones futuras sin depender de la memoria del agente. El skill es la documentacion ejecutable de la habilidad. | Gestion de Conocimiento |
+
+---
+
+*Fin de entrada #9.*
