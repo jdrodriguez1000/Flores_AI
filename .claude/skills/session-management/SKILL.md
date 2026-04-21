@@ -42,6 +42,7 @@ Esta habilidad instrumenta los rituales definidos en **CLAUDE.md** para garantiz
     | `contract.md` | `docs/governance/contract.md` | Si se creó o modificó el contrato de datos |
     | `feasibility.md` | `docs/Phase_discovery/feasibility.md` | Si se creó o modificó el reporte de factibilidad |
     | `decisions.md` | `docs/references/decisions.md` | **Siempre** — se modifica en cada cierre |
+    | `docs/changes/` | `docs/changes/CC-<ID>.md` | Si se creó o aprobó algún CC en la sesión |
 
     **Patrón de actualización por documento:**
     ```bash
@@ -52,7 +53,7 @@ Esta habilidad instrumenta los rituales definidos en **CLAUDE.md** para garantiz
     notebooklm source add <ruta_local> --notebook $NOTEBOOK_ID
     ```
 
-    **Regla:** `decisions.md` se sincroniza en **todos** los cierres de sesión sin excepción. Los demás documentos solo si fueron tocados en la sesión actual.
+    **Regla:** `decisions.md` se sincroniza en **todos** los cierres de sesión sin excepción. Las fichas de `docs/changes/` se sincronizan si hubo algún CC aprobado en la sesión. Los demás documentos solo si fueron tocados en la sesión actual.
 
 ## Criterios de Éxito
 ✅ **Continuidad Cognitiva:** Un nuevo agente debe ser capaz de retomar el trabajo leyendo únicamente el `handoff.md`.

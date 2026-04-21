@@ -883,3 +883,65 @@ Cada entrada debe contener: Fecha, Fase, ID de Decision, Contexto, Decision, Jus
 ---
 
 *Fin de entrada #9.*
+
+---
+
+## Entrada #10 — Sesión 2026-04-21 | Gobernanza
+
+**Agente:** ai-change-manager
+
+---
+
+### CC-028 (referencia): Expansión del Protocolo de Control de Cambios
+
+| Campo | Valor |
+|---|---|
+| **Tipo** | Control de Cambios |
+| **Estado** | APROBADO |
+| **Ficha completa** | `docs/changes/CC-028.md` |
+| **Resumen** | Protocolo CC expandido en CLAUDE.md Sección 5. Creación de `docs/changes/` como ubicación oficial de fichas CC. El ritual de cierre de sesión sincroniza `docs/changes/` a NotebookLM. |
+
+---
+
+*Fin de entrada #10.*
+
+---
+
+## Entrada #11 — Sesion 2026-04-21 | Phase Engineering — Gobernanza
+
+**Agente de Cierre:** ai-session-steward
+**Hora de Cierre:** Fin de jornada 2026-04-21
+
+---
+
+### D-029: NotebookLM se consulta a demanda, no en el ritual de apertura
+
+| Campo | Valor |
+|---|---|
+| **Contexto** | Se debatio si el ritual de apertura debia incluir una lectura de NotebookLM como paso obligatorio. |
+| **Decision** | NotebookLM es una base de conocimiento profundo que se consulta a demanda durante la sesion, no en apertura. Los 4 documentos operativos (handoff, decisions, backlog, config) son suficientes para reconstruir el contexto de arranque. |
+| **Justificacion** | Cargar el cerebro completo en cada apertura es costoso y generalmente innecesario. El conocimiento profundo solo es relevante cuando los documentos operativos no responden una pregunta especifica. |
+| **Impacto** | CLAUDE.md Seccion 8 (Ritual de Apertura) incluye nota explicita de este diseño. |
+
+---
+
+### D-030: AGENTS.md es la unica fuente de verdad del catalogo de agentes
+
+| Campo | Valor |
+|---|---|
+| **Contexto** | CLAUDE.md Seccion 7 listaba 4 agentes de forma redundante con AGENTS.md. |
+| **Decision** | Eliminar la lista duplicada de CLAUDE.md y reemplazar por una referencia directa a AGENTS.md. |
+| **Justificacion** | Un catalogo duplicado genera deriva — si se agrega un agente nuevo, hay dos lugares que actualizar. AGENTS.md es el documento diseñado para este proposito. |
+| **Impacto** | CLAUDE.md Seccion 7 actualizada. AGENTS.md es la fuente de verdad del escuadron de agentes. |
+
+---
+
+### Referencia CC-028: docs/changes/ como ubicacion oficial de fichas CC
+
+Ver ficha completa en `docs/changes/CC-028.md`.
+
+**Resumen:** Protocolo CC expandido en CLAUDE.md Seccion 5. Creacion de `docs/changes/` para fichas formales. decisions.md referencia CCs sin duplicar detalle. Session-steward sincroniza docs/changes/ a NotebookLM al cierre si hubo CC aprobado.
+
+---
+
+*Fin de entrada #11.*

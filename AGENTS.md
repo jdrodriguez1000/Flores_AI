@@ -26,7 +26,7 @@ Responsables de transformar una necesidad de negocio en una especificación téc
 
 | Agente | Cuándo usarlo | Skills |
 | :----- | :------------ | :----- |
-| **ai-business-strategist** | Traducir el problema de negocio a KPIs técnicos. Escribir User Stories. Elaborar el BRD. Realizar análisis de costo-beneficio. Validar el ROI esperado. | `business-to-ml-translator`, `value-driven-product-mapper` |
+| **ai-business-strategist** | Traducir el problema de negocio a KPIs técnicos. Escribir User Stories. Elaborar el BRD. Realizar análisis de costo-beneficio. Validar el ROI esperado. Redactar escenarios Gherkin (BDD) post-BRD. | `business-to-ml-translator`, `value-driven-product-mapper`, `gherkin-scenario-author` |
 | **ai-data-auditor** | Inventariar fuentes de datos. Ejecutar el Gap Analysis. Generar el Data Feasibility Report. Analizar salud de datos (nulos, desbalance, ruido). Emitir veredicto GO/NO-GO. | `diagnostic-data-auditor`, `feasibility-gap-analyzer` |
 | **ai-ux-designer** | Diseñar el prototipo visual (mockup) tras la aprobación del reporte de factibilidad. Validar flujos de usuario y navegación. Gestionar el ciclo UAT con el Stakeholder. | `ui-ux-prototyping` |
 | **ai-solutions-architect** | Diseñar el SAD (Software Architecture Document). Definir el SpecDD (interfaces `.py`). Diseñar el Contrato de Datos. Seleccionar el stack tecnológico. Definir la topología del sistema. | `software-architecture-designer`, `specdd-interface-definer`, `data-contract-architect` |

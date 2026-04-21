@@ -62,7 +62,8 @@ Para garantizar la organización y trazabilidad, se sigue esta jerarquía de car
 | **MODEL QA**    | `docs/Phase_modeling/`     | Validación de Modelos: Benchmarking y Sesgo.              |
 | **QA SYSTEM**   | `docs/Phase_delivery/`     | Certificados E2E y Stress Testing.                        |
 | **HANDOFF**     | `docs/references/` | Estado Operativo diario (sobrescribible).                 |
-| **DECISIONS**   | `docs/references/` | Log histórico de decisiones y lecciones.                  |
+| **DECISIONS**   | `docs/references/` | Log histórico de decisiones y lecciones (incluye referencias a CCs). |
+| **CHANGES (CC)**| `docs/changes/`    | Fichas formales de Control de Cambios. Una ficha por CC-ID. |
 
 ---
 
@@ -88,12 +89,30 @@ Todo desarrollo sigue el ciclo **Red-Green-Refactor-Certificación-Validación**
 
 ## 🏗️ 5. Protocolo de Control de Cambios (CC)
 
-Obligatorio cuando se detecta una desviación de los documentos de gobernanza.
+Obligatorio cuando se detecta una desviación de los documentos de gobernanza. Se ejecuta a través del agente **`ai-change-manager`**.
 
-1.  **Detección:** Parada inmediata del código ante lógica no documentada.
-2.  **Ficha de CC:** Generar ID, Justificación e Impacto Transversal.
-3.  **Autorización:** Esperar "APROBADO" explícito del usuario.
-4.  **Efecto Cascada:** Actualizar Gobernanza -> Modificar Código.
+### Paso 1 — `evaluate_drift` (Evaluación de Deriva)
+Parada inmediata del código. Comparar la intención del cambio contra el **SAD** y el **SpecDD**. Identificar qué secciones exactas de la documentación quedarían obsoletas.
+
+### Paso 2 — `generate_cc_proposal` (Ficha de CC)
+Generar la propuesta en el chat con los siguientes campos:
+- **CC-ID:** Identificador único correlativo.
+- **Cambio:** Descripción técnica clara de lo que se modifica.
+- **Justificación:** Por qué es necesario o mejor el cambio.
+- **Impacto:** Lista de documentos afectados con sección exacta.
+
+### Paso 3 — Autorización
+Esperar **"APROBADO"** explícito del usuario. Sin esta confirmación, no se ejecuta ningún cambio.
+
+### Paso 4 — `execute_approved_change` (Efecto Cascada)
+1. Actualizar los archivos de gobernanza (`.md`) afectados.
+2. Crear la ficha formal en **`docs/changes/CC-<ID>.md`**.
+3. Registrar una referencia al CC-ID en **`docs/references/decisions.md`**.
+4. Emitir un **Token de Continuidad** al agente original para que retome el trabajo con la nueva especificación vigente.
+
+### Reglas Técnicas
+- **Atomicidad:** Un CC trata un único cambio o grupo de cambios altamente relacionados. No mezclar cambios de negocio con refactores técnicos.
+- **Rollback Mental:** Si el usuario rechaza el CC, sugerir la alternativa más cercana a la documentación original sin romper el sistema.
 
 ---
 
@@ -114,22 +133,20 @@ Obligatorio cuando se detecta una desviación de los documentos de gobernanza.
 
 ## ⚙️ 7. Escuadrón de Agentes Especializados
 
-*   **ai-repository-governor:** Auditor de higiene del repo y Git.
-*   **ai-session-steward:** Gestor de continuidad y Handoff.
-*   **ai-change-manager:** Juez de integridad y Control de Cambios.
-*   **ai-backlog-manager:** Orquestador de Tareas, Iteraciones y DoD.
+El proyecto opera con un escuadrón de agentes especializados por fase y rol. El catálogo completo — incluyendo triggers, skills asignados y cuándo invocar cada agente — se encuentra en **[AGENTS.md](AGENTS.md)**.
 
 ---
 
 ## 🕒 8. Rituales de Sesión
 
 ### Ritual de Apertura (Session Kickoff)
-1.  **Sincronización:** Ejecutar `ai-session-steward.start_session`.
-2.  **Lectura Obligatoria:** `handoff.md`, `decisions.md`, `backlog.md` y `config.md`.
-3.  **Priorización:** Seleccionar la siguiente tarea atómica del Backlog.
+1.  **Lectura Obligatoria:** Leer `handoff.md`, `decisions.md`, `backlog.md` y `config.md` para reconstruir el contexto completo de la sesión anterior.
+2.  **Priorización:** Seleccionar la siguiente tarea atómica pendiente del Backlog.
+
+> **Nota:** NotebookLM no se consulta en apertura. Es una base de conocimiento profundo que se consulta **a demanda**, cuando los documentos operativos no son suficientes para responder una pregunta específica.
 
 ### Ritual de Cierre (Session Wrap-up)
-1.  **Commit:** Versionar el progreso con mensaje semántico.
-2.  **Validación:** Asegurar que los tests sean verdes.
-3.  **Handoff:** Actualizar `handoff.md` (Logros, Pendientes, Bloqueos).
-4.  **Memoria:** Registrar en `decisions.md` (Decisiones, Lecciones).
+1.  **Validación:** Asegurar que todos los tests estén en verde antes de cerrar.
+2.  **Documentación (`ai-session-steward`):** Actualizar `handoff.md` (Logros, Pendientes, Bloqueos) y registrar en `decisions.md` (Decisiones, Lecciones aprendidas).
+3.  **Sincronización del Cerebro (`notebooklm`):** Llevar al cerebro del proyecto en NotebookLM: `handoff.md`, `decisions.md` y las fichas nuevas o modificadas en `docs/changes/`.
+4.  **Versionado (`ai-repository-governor`):** Hacer commit semántico y subir los cambios al repositorio actual.

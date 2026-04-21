@@ -28,7 +28,8 @@ Esta habilidad instrumenta la "Soberanía Documental" asegurando que cualquier c
 ### 3. Ejecución de Efecto Cascada
 **Acción:** `execute_approved_change`
 - Actualiza los archivos de gobernanza (`.md`) con la nueva información.
-- Registra la decisión en `docs/references/decisions.md`.
+- Crea la ficha formal del cambio en **`docs/changes/CC-<ID>.md`** con estructura estándar: CC-ID, Fecha, Estado, Cambio, Justificación, Impacto Transversal, Token de Continuidad.
+- Registra una **referencia** al CC-ID (no el detalle completo) en `docs/references/decisions.md`.
 - Emite un **"Token de Continuidad"** al agente original para que retome el código con la nueva especificación.
 
 ## Criterios de Éxito
