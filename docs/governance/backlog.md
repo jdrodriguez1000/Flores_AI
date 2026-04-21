@@ -2,8 +2,9 @@
 
 > **Fuente de verdad:** [CLAUDE.md](../../CLAUDE.md) | **Metodología:** [ai_process.md](../methodology/ai_process.md)
 > **Proyecto:** Flores AI — Clasificación de especies Iris
-> **Última actualización:** 2026-04-20
+> **Última actualización:** 2026-04-21
 > **Responsable del backlog:** @ai-backlog-manager
+> **Auditoría aplicada:** 2026-04-21 — correcciones de rutas (SAD §5), tarea config.py añadida, tareas REFACTOR atomizadas, citas SpecDD corregidas (§6–8), reference_stats.json añadido al DoD.
 
 ---
 
@@ -86,83 +87,126 @@
 **Estado de Fase:** IN PROGRESS — inicio 2026-04-20.
 
 > Ciclo completo IA-TDD por capa: RED → GREEN → REFACTOR por iteración. CERTIFICACIÓN y VALIDACIÓN consolidan la fase antes de avanzar a Modeling.
+> **Tarea atómica:** Un único responsable por tarea. Un único entregable por tarea.
+
+### Iteración 2.0: Infraestructura Base
+
+#### [F2-T00A] [RED] Suite de pruebas para `src/config.py`
+- **Responsable:** @ai-data-qa-engineer
+- **Iteración:** 2.0
+- **Entregable:** `tests/unit/test_config.py`
+- **Acción:** Testing
+- **DoD:** Suite falla de forma controlada. Valida que las constantes del SpecDD §2 existen: `DATA_BRONZE`, `DATA_SILVER`, `DATA_GOLD_X`, `DATA_GOLD_Y`, `MODEL_PATH`, `FEEDBACK_LOG`, `RANDOM_STATE=42`, `TEST_SIZE=0.20`, `CV_FOLDS=5`, `CONFIDENCE_THRESHOLD=0.60`, `FEATURE_COLUMNS` (4 elementos), `CLASS_NAMES` (3 elementos). Ninguna constante de ruta es absoluta. Trazable al SpecDD §2 y SAD §5.
+- **Estado:** DONE ✅ — 2026-04-21
+
+#### [F2-T00B] [GREEN] Implementar `src/config.py`
+- **Responsable:** @ai-data-engineer
+- **Iteración:** 2.0
+- **Entregable:** `src/config.py`
+- **Acción:** Coding
+- **DoD:** Pasa la suite F2-T00A. Expone todas las constantes definidas en el SpecDD §2. `PROJECT_ROOT` calculado con `pathlib.Path(__file__).resolve().parent.parent`. Sin importar pandas, sklearn, streamlit ni pydantic. Trazable al SpecDD §2 y SAD §5 (ADR-004).
+- **Estado:** DONE ✅ — 2026-04-21
 
 ### Iteración 2.1: Ingesta y Capa Bronze
 
-#### [F2-T01] [RED] Desarrollar suite de pruebas para ingesta Bronze
+#### [F2-T01] [RED] Suite de pruebas para ingesta Bronze
 - **Responsable:** @ai-data-qa-engineer
 - **Iteración:** 2.1
-- **Entregable:** `tests/test_bronze_ingestion.py`
+- **Entregable:** `tests/unit/data/test_bronze_loader.py`
 - **Acción:** Testing
-- **DoD:** Suite falla de forma controlada (sin código productivo). Cubre: schema, tipos, rangos y cardinalidad del Contract.
-- **Estado:** TODO
+- **DoD:** Suite falla de forma controlada (sin código productivo). Cubre los invariantes BR-01 a BR-04 del contract.md §10.2: shape `(150, 6)`, columnas exactas, tipos `int64`/`float64`/`object`, cero nulos, tres clases válidas en `Species`. Trazable al SpecDD §6 y contract.md §2.
+- **Estado:** DONE ✅ — 2026-04-21
 
 #### [F2-T02] [GREEN] Implementar pipeline de ingesta Bronze
 - **Responsable:** @ai-data-engineer
 - **Iteración:** 2.1
-- **Entregable:** `src/ingestion/bronze_loader.py`
+- **Entregable:** `src/data/bronze_loader.py`
 - **Acción:** Coding
-- **DoD:** Pasa la suite F2-T01. Carga el dataset Iris crudo a `data/bronze/`. Trazable al SpecDD §2.1.
-- **Estado:** TODO
+- **DoD:** Pasa la suite F2-T01. Carga el dataset Iris crudo retornando `pd.DataFrame (150, 6)`. Sin transformaciones sobre los datos. Trazable al SpecDD §6.
+- **Estado:** DONE ✅ — 2026-04-21
 
-#### [F2-T03] [REFACTOR] Refactorizar Bronze + EDA técnico post-ingesta
-- **Responsable:** @ai-data-engineer + @ai-data-auditor
+#### [F2-T03a] [REFACTOR] Refactorizar `src/data/bronze_loader.py`
+- **Responsable:** @ai-data-engineer
 - **Iteración:** 2.1
-- **Entregables:** `src/ingestion/bronze_loader.py` (refactored), `docs/Phase_engineering/eda_bronze.md`
-- **Acción:** Refactoring + Documentation
-- **DoD:** Código con tipado estricto, sin rutas absolutas, módulo importable. Reporte EDA Bronze documenta completitud, distribución y outliers del dato crudo. Todos los tests F2-T01 siguen en verde.
-- **Estado:** TODO
+- **Entregable:** `src/data/bronze_loader.py` (refactored)
+- **Acción:** Refactoring
+- **DoD:** Código con tipado estricto (type hints en todas las firmas), sin rutas absolutas (usa `config.DATA_BRONZE`), módulo importable sin efectos secundarios. Sin importar sklearn, streamlit ni pydantic. Todos los tests F2-T01 siguen en verde. Trazable al SpecDD §6 y SAD §5.1.
+- **Estado:** DONE ✅ — 2026-04-21
+
+#### [F2-T03b] [EDA] Reporte EDA Bronze
+- **Responsable:** @ai-data-auditor
+- **Iteración:** 2.1
+- **Entregable:** `docs/Phase_engineering/eda_bronze.md`
+- **Acción:** Documentation
+- **DoD:** Reporte documenta completitud (0 nulos confirmados), distribución por feature (histogramas + estadísticas descriptivas) y outliers del dato crudo Bronze. Verifica los invariantes BR-01 a BR-04 del contract.md §2.2. Emite veredicto sobre la calidad del dato crudo.
+- **Estado:** DONE ✅ — 2026-04-21
 
 ### Iteración 2.2: Limpieza y Capa Silver
 
-#### [F2-T04] [RED] Desarrollar suite de pruebas para transformación Silver
+#### [F2-T04] [RED] Suite de pruebas para transformación Silver
 - **Responsable:** @ai-data-qa-engineer
 - **Iteración:** 2.2
-- **Entregable:** `tests/test_silver_transform.py`
+- **Entregable:** `tests/unit/data/test_silver_cleaner.py`
 - **Acción:** Testing
-- **DoD:** Suite falla de forma controlada. Cubre: imputación, detección de outliers y tipos del Contract.
+- **DoD:** Suite falla de forma controlada. Cubre los invariantes SR-01 a SR-05 del contract.md §10.3: `len(df)==147`, columna `Id` ausente, nombres en snake_case, etiquetas sin prefijo `Iris-`, cero duplicados, cero nulos. Trazable al SpecDD §7 y contract.md §3.
 - **Estado:** TODO
 
 #### [F2-T05] [GREEN] Implementar pipeline de transformación Silver
 - **Responsable:** @ai-analytics-engineer
 - **Iteración:** 2.2
-- **Entregable:** `src/processing/silver_transformer.py`
+- **Entregable:** `src/data/silver_cleaner.py`
 - **Acción:** Coding
-- **DoD:** Pasa la suite F2-T04. Genera dataset limpio en `data/silver/`. Trazable al SpecDD §2.2.
+- **DoD:** Pasa la suite F2-T04. Aplica las transformaciones M-01 a M-04 en orden. Genera dataset limpio `(147, 5)` en `data/silver/iris_silver.csv`. Trazable al SpecDD §7.
 - **Estado:** TODO
 
-#### [F2-T06] [REFACTOR] Refactorizar Silver + reporte de limpieza y sesgo
-- **Responsable:** @ai-analytics-engineer + @ai-data-auditor
+#### [F2-T06a] [REFACTOR] Refactorizar `src/data/silver_cleaner.py`
+- **Responsable:** @ai-analytics-engineer
 - **Iteración:** 2.2
-- **Entregables:** `src/processing/silver_transformer.py` (refactored), `docs/Phase_engineering/eda_silver.md`
-- **Acción:** Refactoring + Documentation
-- **DoD:** Código modular con estrategia de imputación documentada. Reporte Silver certifica ausencia de sesgo de limpieza y cambios de distribución vs Bronze. Todos los tests F2-T04 siguen en verde.
+- **Entregable:** `src/data/silver_cleaner.py` (refactored)
+- **Acción:** Refactoring
+- **DoD:** Código modular con `RENAME_MAP` y `LABEL_MAP` como constantes de módulo (SpecDD §7). Sin rutas absolutas. Sin importar sklearn, streamlit ni pydantic. Todos los tests F2-T04 siguen en verde. Trazable al SpecDD §7 y SAD §5.1.
+- **Estado:** TODO
+
+#### [F2-T06b] [EDA] Reporte EDA Silver
+- **Responsable:** @ai-data-auditor
+- **Iteración:** 2.2
+- **Entregable:** `docs/Phase_engineering/eda_silver.md`
+- **Acción:** Documentation
+- **DoD:** Reporte certifica ausencia de sesgo introducido por la limpieza. Incluye comparativa de distribución Bronze → Silver por feature. Verifica los invariantes SR-01 a SR-05 del contract.md §3.2. Confirma que las 3 transformaciones M-01 a M-04 no alteran la distribución estadística de las features.
 - **Estado:** TODO
 
 ### Iteración 2.3: Feature Engineering y Capa Gold
 
-#### [F2-T07] [RED] Desarrollar suite de pruebas para capa Gold
+#### [F2-T07] [RED] Suite de pruebas para capa Gold
 - **Responsable:** @ai-data-qa-engineer
 - **Iteración:** 2.3
-- **Entregable:** `tests/test_gold_features.py`
+- **Entregable:** `tests/unit/data/test_gold_builder.py`
 - **Acción:** Testing
-- **DoD:** Suite falla de forma controlada. Valida ausencia de target leakage y distribución de features.
+- **DoD:** Suite falla de forma controlada. Valida los invariantes GR-01 a GR-06 del contract.md §10.4: `X.shape==(147,4)`, `y.shape==(147,)`, `X.dtype==float64`, `np.isnan(X).sum()==0`, `np.isinf(X).sum()==0`, clases válidas en `y`. Verifica orden de columnas según `config.FEATURE_COLUMNS`. Trazable al SpecDD §8 y contract.md §4.
 - **Estado:** TODO
 
 #### [F2-T08] [GREEN] Implementar Feature Store (Gold Layer)
 - **Responsable:** @ai-feature-store-architect
 - **Iteración:** 2.3
-- **Entregable:** `src/features/gold_builder.py`
+- **Entregable:** `src/data/gold_builder.py`
 - **Acción:** Coding
-- **DoD:** Pasa la suite F2-T07. Genera dataset en `data/gold/`. Trazable al SpecDD §2.3.
+- **DoD:** Pasa la suite F2-T07. Genera `data/gold/X_gold.csv` y `data/gold/y_gold.csv`. Orden de columnas en `X` sigue `config.FEATURE_COLUMNS`. Trazable al SpecDD §8.
 - **Estado:** TODO
 
-#### [F2-T09] [REFACTOR] Refactorizar Gold + auditoría estadística Gold
-- **Responsable:** @ai-feature-store-architect + @ai-data-auditor
+#### [F2-T09a] [REFACTOR] Refactorizar `src/data/gold_builder.py`
+- **Responsable:** @ai-feature-store-architect
 - **Iteración:** 2.3
-- **Entregables:** `src/features/gold_builder.py` (refactored), `docs/Phase_engineering/eda_gold.md`
-- **Acción:** Refactoring + Documentation
-- **DoD:** Código con transformaciones deterministas y sin target leakage confirmado. Reporte Gold valida correlaciones, varianza y separabilidad de features por clase. Todos los tests F2-T07 siguen en verde.
+- **Entregable:** `src/data/gold_builder.py` (refactored)
+- **Acción:** Refactoring
+- **DoD:** Código con transformaciones deterministas. Sin target leakage: `species` no puede figurar en `X`. Orden de columnas explícito vía `config.FEATURE_COLUMNS`. Sin rutas absolutas. Todos los tests F2-T07 siguen en verde. Trazable al SpecDD §8 y SAD §5.1.
+- **Estado:** TODO
+
+#### [F2-T09b] [EDA] Reporte EDA Gold + `reference_stats.json`
+- **Responsable:** @ai-data-auditor
+- **Iteración:** 2.3
+- **Entregables:** `docs/Phase_engineering/eda_gold.md`, `data/gold/reference_stats.json`
+- **Acción:** Documentation
+- **DoD:** Reporte valida correlaciones (matriz de correlación vs. referencia del contract.md §8.3), varianza por feature y separabilidad de clases. Confirma ausencia de target leakage en `X`. Verifica invariantes GR-01 a GR-06. Genera `data/gold/reference_stats.json` con estadísticas de referencia (contract.md §11.1) para uso futuro en drift detection.
 - **Estado:** TODO
 
 ### Iteración 2.4: Certificación y Validación de Fase
@@ -172,7 +216,7 @@
 - **Iteración:** 2.4
 - **Entregable:** `docs/Phase_engineering/certification_f2.md`
 - **Acción:** Documentation
-- **DoD:** Reporte certifica trazabilidad total de datos (Bronze → Silver → Gold), cumplimiento del SAD §2 y del SpecDD §2.1–2.3. Todos los tests de la fase (F2-T01, F2-T04, F2-T07) pasan en conjunto. Sin rutas absolutas ni dependencias no declaradas en `requirements.txt`.
+- **DoD:** Reporte certifica trazabilidad total de datos (Bronze → Silver → Gold), cumplimiento del SAD §5 y del SpecDD §6–8. Todos los tests de la fase (F2-T01, F2-T04, F2-T07) pasan en conjunto con `pytest tests/unit/data/`. Sin rutas absolutas ni dependencias no declaradas en `requirements.txt`.
 - **Estado:** TODO
 
 #### [F2-T11] [VALIDACIÓN] Validar dataset Gold contra KPIs del BRD

@@ -945,3 +945,139 @@ Ver ficha completa en `docs/changes/CC-028.md`.
 ---
 
 *Fin de entrada #11.*
+
+---
+
+---
+
+## Entrada #12 — Sesion 2026-04-21 | Phase Engineering — Iteraciones 2.0 y 2.1 (Implementacion Bronze)
+
+**Agente de Cierre:** ai-session-steward
+**Hora de Cierre:** Fin de jornada 2026-04-21
+**Rama activa:** `feat/F2-engineering`
+
+---
+
+### D-028: Patron de inyeccion de dependencias en tests de modulos de datos
+
+| Campo     | Valor |
+| :-------- | :---- |
+| **Fecha** | 2026-04-21 |
+| **Fase**  | Phase Engineering |
+| **Origen** | Diseño de `tests/unit/data/test_bronze_loader.py` — necesidad de ejecutar F2-T01 antes de que F2-T00B estuviera listo |
+| **Tipo**  | Decision de diseño de tests (desacoplamiento de infraestructura) |
+
+**Contexto:** Al diseñar los tests para `bronze_loader.py`, se planteo si los tests debian importar `src.config` para obtener el path del CSV (acoplamiento con el modulo de configuracion) o si el path debia ser inyectado como argumento de la funcion testeada. F2-T01 (RED de bronze_loader) fue ejecutada antes de F2-T00B (GREEN de config.py), lo que hizo que el acoplamiento con config.py fuera imposible por ausencia del modulo.
+
+**Decision:** Los tests de modulos de datos (`test_bronze_loader.py`, `test_silver_cleaner.py`, `test_gold_builder.py`) NO importan `src.config` directamente. El path del CSV (u otro artefacto de entrada) se inyecta como argumento a la funcion testeada, construyendo el path en el fixture del test usando `pathlib.Path(__file__).resolve().parents[3] / "data" / "bronze" / "Iris.csv"`. Este patron sigue el principio SpecDD §12.4 de inyeccion de dependencias y se aplica a todos los modulos de datos de la fase Engineering.
+
+**Justificacion:** El desacoplamiento de los tests respecto a `config.py` tiene tres ventajas: (1) permite ejecutar los tests RED de cada capa antes de que la infraestructura base (config.py) este implementada, (2) los tests son mas robustos porque no dependen de que `config.py` se importe correctamente, (3) si `config.py` cambia sus constantes de ruta, los tests de datos no se rompen. Este patron replica el principio de "ports and adapters" en el nivel de tests.
+
+**Impacto Transversal:**
+- `tests/unit/data/test_bronze_loader.py`: Patron implementado. Path del CSV construido en fixture con `pathlib`.
+- `tests/unit/data/test_silver_cleaner.py` (F2-T04, pendiente): Debe seguir el mismo patron — inyectar el path de `data/bronze/Iris.csv` como argumento a `clean_silver()`, no importar `config.DATA_BRONZE`.
+- `tests/unit/data/test_gold_builder.py` (F2-T07, pendiente): Idem — inyectar paths de Silver como argumentos.
+
+---
+
+### D-029: `src/__init__.py` vacio es prerequisito obligatorio para importar desde `src`
+
+| Campo     | Valor |
+| :-------- | :---- |
+| **Fecha** | 2026-04-21 |
+| **Fase**  | Phase Engineering |
+| **Origen** | Error de importacion al ejecutar `pytest tests/unit/test_config.py` antes de crear `src/__init__.py` |
+| **Tipo**  | Decision de ingenieria de software (estructura de paquete Python) |
+
+**Contexto:** Al implementar `src/config.py` (F2-T00B) y ejecutar los tests, el comando `from src import config` fallo con `ModuleNotFoundError: No module named 'src'`. El directorio `src/` no tenia un archivo `__init__.py`, por lo que Python no lo reconocia como paquete importable.
+
+**Decision:** El archivo `src/__init__.py` (contenido vacio) debe crearse en el mismo momento que `src/config.py`. Analogamente, `src/data/__init__.py` debe crearse junto con el primer modulo en `src/data/`. Esta regla se extiende a todos los sub-paquetes de `src/` (`src/training/`). Cualquier directorio en `src/` que contenga modulos Python debe tener su `__init__.py` antes de que se pueda importar desde ese directorio.
+
+**Justificacion:** En Python, un directorio es un paquete importable solo si contiene `__init__.py`. Sin este archivo, `import src.config` y `from src import config` fallan con `ModuleNotFoundError`, aunque el archivo `config.py` exista fisicamente. La ausencia de `__init__.py` es un error de infraestructura silencioso que produce falsos negativos en los tests RED (el test falla por razon incorrecta, no porque el codigo de produccion no exista, sino porque el paquete no es importable).
+
+**Impacto Transversal:**
+- `src/__init__.py`: Creado (vacio) junto con `src/config.py` en F2-T00B.
+- `src/data/__init__.py`: Creado (vacio) junto con `src/data/bronze_loader.py` en F2-T02.
+- `src/training/__init__.py` (futuro): Debe crearse junto con el primer modulo de `src/training/` en Phase Modeling.
+- `tests/__init__.py`, `tests/unit/__init__.py`, `tests/unit/data/__init__.py`: Creados como scaffolding inicial de la suite de tests.
+
+---
+
+### D-030: FileNotFoundError explicito en bronze_loader antes de delegar a pandas
+
+| Campo     | Valor |
+| :-------- | :---- |
+| **Fecha** | 2026-04-21 |
+| **Fase**  | Phase Engineering |
+| **Origen** | Diseno del test `test_bronze_raises_file_not_found_for_missing_csv` en F2-T01 |
+| **Tipo**  | Decision de diseno de manejo de errores (contrato de interfaz) |
+
+**Contexto:** El test F2-T01 incluye el caso `test_bronze_raises_file_not_found_for_missing_csv` que verifica que `load_bronze(path)` levanta `FileNotFoundError` cuando el CSV no existe. pandas levanta internamente `FileNotFoundError` si el archivo no existe, pero el mensaje de error es generico y la excepcion proviene de las entrañas de pandas. Un consumidor del modulo que capture esta excepcion no puede saber si el error es del modulo de datos o de pandas.
+
+**Decision:** `bronze_loader.py` verifica explicitamente `csv_path.exists()` antes de llamar a `pd.read_csv()`. Si el archivo no existe, levanta `FileNotFoundError(f"CSV no encontrado en: {csv_path}")` con un mensaje descriptivo especifico del modulo. La verificacion con `pathlib.Path.exists()` es el patron estandar para este tipo de guard clause. Este patron se aplica a todos los modulos de carga de datos (`silver_cleaner.py`, `gold_builder.py`).
+
+**Justificacion:** (1) La excepcion con mensaje personalizado identifica inequivocamente el modulo origen del error sin necesidad de trazar el stack completo. (2) Verificar antes de delegar a pandas evita que el usuario del modulo reciba un mensaje de error de pandas que no menciona el contexto del pipeline de datos. (3) El test puede afirmar con precision que el modulo levanta la excepcion correcta, no que pandas la levanta internamente — esto es lo que valida el contrato de interfaz del SpecDD.
+
+**Impacto Transversal:**
+- `src/data/bronze_loader.py`: Guard clause implementada antes de `pd.read_csv()`.
+- `src/data/silver_cleaner.py` (F2-T05, pendiente): Debe implementar el mismo patron para verificar existencia del CSV Silver antes de procesar.
+- `src/data/gold_builder.py` (F2-T08, pendiente): Idem para los archivos Silver de entrada.
+
+---
+
+### D-031: Orden de ejecucion del backlog — prerequisitos de infraestructura base primero
+
+| Campo     | Valor |
+| :-------- | :---- |
+| **Fecha** | 2026-04-21 |
+| **Fase**  | Phase Engineering |
+| **Origen** | Ejecucion de F2-T01 antes de F2-T00A/B por error de lectura del backlog |
+| **Tipo**  | Decision de proceso (orden de ejecucion de tareas) |
+
+**Contexto:** En esta sesion se ejecuto F2-T01 (RED de bronze_loader) antes de F2-T00A/B (RED+GREEN de config.py). El error fue detectado mid-sesion y corregido: F2-T00A y F2-T00B se ejecutaron antes de continuar con F2-T02 y F2-T03. Sin embargo, el orden incorrecto inicial genero un loop de diagnostico de `ModuleNotFoundError` que costo tiempo de sesion.
+
+**Decision:** Al iniciar una sesion de implementacion, el primer paso es verificar el backlog y ejecutar las tareas de la Iteracion de menor numero disponible. La Iteracion 2.0 (Infraestructura Base) debe completarse antes de comenzar cualquier tarea de la Iteracion 2.1. En general, las tareas de infraestructura base (config, `__init__.py`, scaffolding de tests) son prerequisito bloqueante de las tareas de capa de datos.
+
+**Justificacion:** Las tareas de infraestructura base (config.py, `__init__.py`) crean las dependencias de importacion que necesitan los modulos de capas superiores. Ejecutar tareas de capas superiores antes de que la infraestructura exista produce errores de importacion que oscurecen los errores reales del codigo en desarrollo. El tiempo de diagnostico de errores de infraestructura es siempre mayor que el tiempo de completar la infraestructura primero.
+
+**Impacto Transversal:**
+- Backlog F2: La Iteracion 2.0 es prerequisito de la Iteracion 2.1; la 2.1 es prerequisito de la 2.2; la 2.2 de la 2.3. Esta dependencia secuencial no esta marcada explicitamente en el backlog pero debe respetarse.
+- Ritual de apertura: El agente que inicie una sesion de implementacion debe verificar que todas las tareas de la iteracion anterior estan DONE antes de iniciar la siguiente.
+
+---
+
+### D-032: EDA Bronze — hallazgos y veredicto GO para Silver
+
+| Campo     | Valor |
+| :-------- | :---- |
+| **Fecha** | 2026-04-21 |
+| **Fase**  | Phase Engineering |
+| **Origen** | Ejecucion de F2-T03b — Reporte EDA Bronze |
+| **Tipo**  | Decision de calidad de datos (habilitacion de capa) |
+
+**Contexto:** El EDA Bronze analizo el dataset Iris crudo (150 filas, 6 columnas) para verificar los invariantes BR-01 a BR-04 del contract.md y determinar si los datos son aptos para la transformacion Silver.
+
+**Decision:** Se emite veredicto GO para la capa Silver. Los hallazgos clave del EDA Bronze son: (1) 5 near-duplicates confirmados en 2 grupos (4 instancias de Versicolor y 1 de Virginica con features identicas en todas las 4 dimensiones) — valida la proyeccion M-02 de 150→147 filas en Silver. (2) 4 outliers detectados en `SepalWidthCm` (valores en rango 2.0-2.2 cm) que son biologicamente plausibles segun literatura botanica — NO son errores de medicion, NO deben eliminarse en Silver. (3) 0 nulos, shape (150,6), tipos correctos — invariantes BR-01 a BR-04 del contract.md satisfechos al 100%.
+
+**Justificacion:** Los near-duplicates son el unico hallazgo que requiere accion en Silver (transformacion M-02). Los outliers de `SepalWidthCm` son caracteristicas biologicas reales de la especie Setosa y su eliminacion introducirìa sesgo en el modelo. El veredicto GO es firme y no requiere condiciones adicionales antes de iniciar la Iteracion 2.2.
+
+**Impacto Transversal:**
+- `docs/Phase_engineering/eda_bronze.md`: Veredicto GO documentado con justificacion.
+- `tests/unit/data/test_silver_cleaner.py` (F2-T04): El test SR-02 debe verificar `len(df) == 147` (no 145, no 150 — exactamente 147, eliminando los 5 near-duplicates en 2 grupos).
+- `src/data/silver_cleaner.py` (F2-T05): La transformacion M-02 (eliminacion de near-duplicates) elimina exactamente 3 filas (de 150 a 147), no mas.
+
+---
+
+### Lecciones Aprendidas — Sesion 2026-04-21 (Implementacion Bronze + Infraestructura Base)
+
+| # | Leccion | Categoria |
+| :- | :------- | :-------- |
+| 1 | Verificar el orden de iteraciones en el backlog antes de ejecutar cualquier tarea. Las tareas de Iteracion 2.0 (infraestructura base) son prerequisito bloqueante de todas las demas. El tiempo de detectar y corregir un orden incorrecto mid-sesion es mayor que el tiempo de verificar el orden al inicio. | Proceso / Backlog |
+| 2 | `src/__init__.py` vacio es prerequisito de cualquier modulo en `src/`. Su ausencia produce `ModuleNotFoundError` que es silencioso — el archivo `.py` existe pero Python no puede importarlo. Debe crearse siempre junto con el primer modulo del directorio, no como tarea separada posterior. | Ingenieria de Software |
+| 3 | El patron de inyeccion de dependencias en tests (inyectar paths como argumentos en lugar de importar config) desacopla los tests de la infraestructura base y permite ejecutar suites RED antes de que config.py exista. Este patron debe documentarse en el primer test de datos de la fase como referencia para los tests posteriores. | Calidad de Tests |
+| 4 | Los guard clauses explicititos (`csv_path.exists()` antes de `pd.read_csv()`) producen mensajes de error que identifican el modulo origen sin trazar el stack completo de pandas. Son contratos de interfaz observables que los tests pueden afirmar con precision. | Calidad de Codigo |
+| 5 | Los outliers detectados en EDA deben clasificarse como "error de medicion" vs. "caracteristica biologica real" antes de decidir si eliminarlos. En el dataset Iris, los valores bajos de `SepalWidthCm` en Setosa son documentados en literatura botanica — eliminarlos introduce sesgo. La fuente de verdad para esta decision es el dominio del problema, no solo la estadistica. | Calidad de Datos |
+
+---
+
+*Fin de entrada #12.*
