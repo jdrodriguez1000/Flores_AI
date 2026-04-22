@@ -1081,3 +1081,53 @@ Ver ficha completa en `docs/changes/CC-028.md`.
 ---
 
 *Fin de entrada #12.*
+
+---
+
+---
+
+## Entrada #13 — Sesion 2026-04-22 | Phase Engineering — Infraestructura CI/CD
+
+**Agente de Cierre:** ai-session-steward
+**Hora de Cierre:** Fin de jornada 2026-04-22
+**Rama activa:** `feat/F2-engineering`
+
+---
+
+### D-033: Toolchain de calidad formalizado — ruff + pytest + GitHub Actions como estandar CI/CD del proyecto
+
+| Campo     | Valor |
+| :-------- | :---- |
+| **Fecha** | 2026-04-22 |
+| **Fase**  | Phase Engineering (transversal a todas las fases tecnicas) |
+| **Origen** | Creacion de `requirements.txt`, `pytest.ini` y `.github/workflows/ci.yml` |
+| **Tipo**  | Decision de infraestructura de calidad (CI/CD) |
+
+**Contexto:** El proyecto tenia una suite de tests local funcional (28/28 en verde) pero no habia ninguna garantia automatizada de que los tests se ejecutaran en cada push ni de que el codigo cumpliera un estandar de estilo. El workflow de GitHub Actions existente en el repositorio estaba configurado para un stack Node.js de ejemplo, no para el stack Python real del proyecto. `requirements.txt` y `pytest.ini` no existian como artefactos formales.
+
+**Decision:** Se formaliza el toolchain de calidad del proyecto con tres artefactos:
+1. `requirements.txt` en la raiz del repositorio como unica fuente de verdad de dependencias (pandas>=2.2, numpy>=1.26, scikit-learn>=1.4, joblib>=1.3, streamlit>=1.32, pydantic>=2.6, pytest>=8.0, ruff>=0.4).
+2. `pytest.ini` con `pythonpath = .` y `testpaths = tests`. Esta configuracion permite que `from src import config` funcione sin manipulacion manual de variables de entorno, tanto en local como en CI.
+3. `.github/workflows/ci.yml` adaptado al stack Python: checkout → setup Python 3.12 con cache pip → `pip install -r requirements.txt` → `ruff check .` → `pytest -v`. El workflow se dispara en push a ramas que no sean `main`/`dev` y en PRs hacia `main`/`dev`.
+
+**Justificacion:** Sin `pytest.ini`, los tests con `from src import config` requieren que el desarrollador configure `PYTHONPATH` manualmente antes de ejecutar pytest, lo que es fragil y no reproducible en CI. Sin `requirements.txt`, el entorno de CI no puede construirse de forma determinista. Sin el workflow, el estado verde de los tests solo es verificable localmente — cualquier push puede introducir una regresion sin deteccion automatica. Los tres artefactos juntos cierran el ciclo de calidad: el codigo es verificable en cualquier entorno sin configuracion manual.
+
+**Impacto Transversal:**
+- `requirements.txt`: Debe actualizarse inmediatamente si se instala una nueva dependencia en cualquier fase futura. Es la fuente de verdad para `pip install` en CI y en onboarding de nuevos colaboradores.
+- `pytest.ini`: El campo `testpaths = tests` garantiza que `pytest` sin argumentos ejecuta exactamente la suite correcta. No se necesita especificar la ruta en los comandos del backlog.
+- `.github/workflows/ci.yml`: El workflow falla en ruff antes de ejecutar pytest — los errores de estilo bloquean la integracion antes de verificar la logica. Todo codigo nuevo en `src/` debe pasar `ruff check .` localmente antes de hacer push.
+- Fases futuras (Modeling, Delivery): Al agregar nuevas dependencias (p. ej. `matplotlib`, `shap`), actualizar `requirements.txt` es obligatorio antes del commit.
+
+---
+
+### Lecciones Aprendidas — Sesion 2026-04-22 (Infraestructura CI/CD)
+
+| # | Leccion | Categoria |
+| :- | :------- | :-------- |
+| 1 | `pytest.ini` con `pythonpath = .` es la solucion mas simple y portable para hacer importables los modulos de `src/` sin manipular variables de entorno. Es preferible a soluciones como `conftest.py` con `sys.path.insert` porque es declarativa y visible a nivel de proyecto. | Configuracion de Tests |
+| 2 | El workflow de CI debe adaptarse al stack real del proyecto antes de que haya codigo productivo — no despues. Un workflow desalineado (Node.js en un proyecto Python) genera falsa confianza: el CI pasa porque no ejecuta nada relevante. La adaptacion debe ser la primera tarea de infraestructura de cualquier fase de implementacion. | Proceso de CI/CD |
+| 3 | Ejecutar `ruff check` antes de `pytest` en el pipeline CI es una decision de diseño con consecuencias: los errores de estilo bloquean la verificacion de tests. Esto obliga a mantener el codigo limpio de forma continua en lugar de acumular deuda de estilo. El costo es mayor disciplina por push; el beneficio es un historial de commits consistentemente limpio. | Calidad de Codigo |
+
+---
+
+*Fin de entrada #13.*

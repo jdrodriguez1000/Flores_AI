@@ -4,7 +4,7 @@
 > Este archivo es la foto nitida y actual del proyecto. Es sobrescribible al cierre de cada sesion.
 > Un nuevo agente debe poder retomar el trabajo leyendo unicamente este archivo.
 >
-> **Ultima actualizacion:** 2026-04-21
+> **Ultima actualizacion:** 2026-04-22
 > **Responsable de cierre:** ai-session-steward
 > **Fase activa:** Phase Engineering — Data & EDA (IN PROGRESS)
 
@@ -17,24 +17,20 @@
 | **Proyecto**        | Flores AI - Iris                                                                   |
 | **Fase Actual**     | Phase Engineering — Data & EDA (iniciada 2026-04-20)                              |
 | **Rama activa**     | `feat/F2-engineering`                                                              |
-| **Iteracion**       | Implementacion Iteracion 2.1 completada — inicio Iteracion 2.2 (2026-04-21)       |
-| **Estado General**  | Infraestructura base y capa Bronze completamente implementadas y documentadas. 28/28 tests en verde. Suite de 16 + 10 tests totales. Iteracion 2.2 (Silver) lista para iniciar. |
+| **Iteracion**       | Iteraciones 2.0 y 2.1 completadas — inicio Iteracion 2.2 pendiente (2026-04-22)   |
+| **Estado General**  | Infraestructura base, capa Bronze e infraestructura de CI/CD completamente implementadas. 28/28 tests en verde. Pipeline automatizado (ruff + pytest) operativo en GitHub Actions. Iteracion 2.2 (Silver) lista para iniciar. |
 | **Progreso Global** | 52% — Phase Discovery cerrada al 100%. Phase Engineering: Iteraciones 2.0 y 2.1 completadas (6/16 tareas F2 DONE). |
 
 ---
 
-## 2. Logros de la Sesion (2026-04-21 — Implementacion Bronze + Infraestructura Base)
+## 2. Logros de la Sesion (2026-04-22 — Infraestructura CI/CD)
 
 | # | Entregable / Accion | Archivos Afectados | Estado |
 | :- | :------------------ | :----------------- | :----- |
-| 1 | F2-T00A [RED]: Suite de pruebas para `src/config.py` — 16 tests, fallo controlado confirmado | `tests/unit/test_config.py` | DONE |
-| 2 | F2-T00B [GREEN]: Implementacion de `src/config.py` + creacion de `src/__init__.py` — 18/18 tests verde | `src/config.py`, `src/__init__.py` | DONE |
-| 3 | F2-T01 [RED]: Suite de pruebas para ingesta Bronze — 10 tests, fallo controlado confirmado | `tests/unit/data/test_bronze_loader.py` | DONE |
-| 4 | F2-T02 [GREEN]: Implementacion de `bronze_loader.py` + `src/data/__init__.py` — 28/28 tests verde | `src/data/bronze_loader.py`, `src/data/__init__.py` | DONE |
-| 5 | F2-T03a [REFACTOR]: Refactorizacion de `bronze_loader.py` con tipado estricto — 28/28 tests siguen verde | `src/data/bronze_loader.py` (refactored) | DONE |
-| 6 | F2-T03b [EDA]: Reporte EDA Bronze — veredicto GO emitido | `docs/Phase_engineering/eda_bronze.md` | DONE |
-| 7 | Scaffolding de tests: Creacion de `__init__.py` en tres niveles del paquete de tests | `tests/__init__.py`, `tests/unit/__init__.py`, `tests/unit/data/__init__.py` | DONE |
-| 8 | Backlog actualizado: 6 tareas marcadas DONE | `docs/governance/backlog.md` | DONE |
+| 1 | Creacion de `requirements.txt` — fuente de verdad de dependencias del proyecto | `requirements.txt` | DONE |
+| 2 | Creacion de `pytest.ini` — configuracion de pytest con `pythonpath = .` y `testpaths = tests` | `pytest.ini` | DONE |
+| 3 | Creacion de `.github/workflows/ci.yml` — workflow GitHub Actions: checkout + Python 3.12 + caché pip + ruff check + pytest -v | `.github/workflows/ci.yml` | DONE |
+| 4 | Verificacion: 28/28 tests en verde con la nueva configuracion de pytest | `tests/unit/` (suite completa) | DONE |
 
 ---
 
@@ -56,6 +52,9 @@
 | CLAUDE.md      | `CLAUDE.md` (raiz)                                | DONE — 2026-04-21 (refactorizado)        |
 | CC-028.md      | `docs/changes/CC-028.md`                          | DONE — 2026-04-21 (primer CC formal)    |
 | eda_bronze.md  | `docs/Phase_engineering/eda_bronze.md`            | DONE — 2026-04-21 (veredicto GO)        |
+| requirements.txt | `requirements.txt`                              | DONE — 2026-04-22 (nuevo)               |
+| pytest.ini     | `pytest.ini`                                      | DONE — 2026-04-22 (nuevo)               |
+| ci.yml         | `.github/workflows/ci.yml`                        | DONE — 2026-04-22 (nuevo)               |
 
 ---
 
@@ -68,6 +67,8 @@
 | **Total** | | **28** | **28/28 passed — 0 errores, 0 warnings** |
 
 Comando de verificacion: `pytest tests/unit/ -v`
+
+El mismo comando es ejecutado automaticamente por el workflow CI en cada push a la rama `feat/F2-engineering` y en PRs hacia `main` o `dev`.
 
 ---
 
@@ -85,10 +86,10 @@ Comando de verificacion: `pytest tests/unit/ -v`
 | specdd.md        | `docs/governance/specdd.md`                     | Cargado — 2026-04-20 |
 | contract.md      | `docs/governance/contract.md`                   | Cargado — 2026-04-20 |
 | feasibility.md   | `docs/Phase_discovery/feasibility.md`           | Cargado — 2026-04-20 |
-| decisions.md     | `docs/references/decisions.md`                  | **Pendiente re-sincronizacion** — entrada #12 añadida en esta sesion |
+| decisions.md     | `docs/references/decisions.md`                  | **Pendiente re-sincronizacion** — entrada #13 añadida en esta sesion |
 | CC-028.md        | `docs/changes/CC-028.md`                        | Cargado — 2026-04-21 |
 
-> **Accion requerida al inicio de la proxima sesion:** Sincronizar en NotebookLM los documentos pendientes: `decisions.md` (entrada #12 añadida), `ai_process.md`, `brd.md` (re-sincronizar) y `behavior.md` (carga inicial). El documento `eda_bronze.md` no esta en el mapa de sincronizacion del skill (no es un documento de gobernanza sino un EDA de fase).
+> **Accion requerida al inicio de la proxima sesion:** Sincronizar en NotebookLM los documentos pendientes: `decisions.md` (entrada #13 añadida), `ai_process.md`, `brd.md` (re-sincronizar) y `behavior.md` (carga inicial). Los artefactos de CI/CD (`requirements.txt`, `pytest.ini`, `ci.yml`) no forman parte del mapa de sincronizacion de NotebookLM.
 
 ---
 
@@ -113,7 +114,7 @@ Comando de verificacion: `pytest tests/unit/ -v`
 
 ## 7. Bloqueos Activos
 
-**Ninguno.** Las Iteraciones 2.0 (Infraestructura Base) y 2.1 (Bronze) estan completas. La siguiente accion es ejecutar F2-T04 (RED): escribir `tests/unit/data/test_silver_cleaner.py` guiandose por el SpecDD §7 y los invariantes SR-01 a SR-05 del contract.md.
+**Ninguno.** Las Iteraciones 2.0 (Infraestructura Base) y 2.1 (Bronze) estan completas. La infraestructura de CI/CD esta operativa. La siguiente accion es ejecutar F2-T04 (RED): escribir `tests/unit/data/test_silver_cleaner.py` guiandose por el SpecDD §7 y los invariantes SR-01 a SR-05 del contract.md.
 
 ---
 
@@ -129,17 +130,19 @@ Comando de verificacion: `pytest tests/unit/ -v`
 | D-009 | pathlib.Path en `src/config.py` como unico gestor de rutas            | Todos los paths en `src/data/` se importan desde `config.py`           |
 | D-025 | Jerarquia BDD: BRD → behavior.md → SpecDD → TDD                      | behavior.md es el contrato de comportamiento observable antes de tests RED |
 | D-028 | Patron de inyeccion de dependencias en tests de data modules          | Los tests de bronze_loader y silver_cleaner inyectan paths como argumento, no importan config directamente |
+| D-033 | Toolchain de calidad: ruff + pytest + GitHub Actions como estandar de CI/CD | `requirements.txt` y `pytest.ini` son prerequisito de cualquier tarea de implementacion futura |
 | CC-028 | docs/changes/ como ubicacion oficial de fichas CC                    | Todo cambio formal debe tener ficha en docs/changes/ + referencia en decisions.md |
 
 ---
 
 ## 9. Contexto para el Siguiente Agente
 
-La Phase Discovery esta cerrada. La Phase Engineering tiene la gobernanza completa incluyendo BDD y la infraestructura de tests operativa. Las Iteraciones 2.0 y 2.1 estan completadas y certificadas.
+La Phase Discovery esta cerrada. La Phase Engineering tiene la gobernanza completa incluyendo BDD y la infraestructura de tests operativa. Las Iteraciones 2.0 y 2.1 estan completadas y certificadas. El pipeline de CI/CD esta activo.
 
-- **Rama activa:** `feat/F2-engineering`. Commits de esta sesion: backlog.md (6 tareas DONE), nuevos archivos en `src/` y `tests/`, `docs/Phase_engineering/eda_bronze.md`, `HANDOFF.md` actualizado.
-- **Suite de tests:** `pytest tests/unit/` → 28/28 passed. Ejecutar antes de iniciar cualquier tarea nueva para verificar que el estado verde se mantiene.
+- **Rama activa:** `feat/F2-engineering`. Commits de esta sesion: `requirements.txt`, `pytest.ini`, `.github/workflows/ci.yml`.
+- **Suite de tests:** `pytest tests/unit/ -v` → 28/28 passed. El CI ejecuta esto mismo en cada push. Ejecutar localmente antes de iniciar cualquier tarea nueva.
 - **Protocolo CC activo:** Cualquier deriva tecnica debe pasar por `ai-change-manager` → ficha en `docs/changes/` → referencia en `decisions.md`.
 - **Patron de tests establecido:** Los tests de modulos de datos inyectan el path del CSV como argumento (no importan `config.py`). Ver `tests/unit/data/test_bronze_loader.py` como referencia de patron para escribir `test_silver_cleaner.py`.
-- **NotebookLM:** `decisions.md` pendiente re-sincronizacion (entrada #12 de esta sesion). Ademas pendiente: `ai_process.md`, `brd.md` y `behavior.md` de la sesion 2026-04-20.
+- **Linter activo:** `ruff check` es parte del pipeline CI. Todo codigo nuevo en `src/` debe pasar ruff antes de hacer push.
+- **NotebookLM:** `decisions.md` pendiente re-sincronizacion (entrada #13 de esta sesion). Ademas pendiente: `ai_process.md`, `brd.md` y `behavior.md` desde la sesion 2026-04-20.
 - **Orden de lectura obligatorio antes de F2-T04:** `specdd.md §7` → `contract.md §3 (SR-01 a SR-05)` → `behavior.md` → `eda_bronze.md (hallazgos near-duplicates)`.
