@@ -3,7 +3,7 @@
 Este archivo define las convenciones y protocolos agnósticos para Claude Code en proyectos de **Ciencia de Datos, Machine Learning e Ingeniería de IA**, siguiendo las metodologías **SpecDD** (Specification-Driven Development) y **TDD** (Test-Driven Development).
 
 ## Directrices de Comportamiento
-* **REFERENCIA OBLIGATORIA:** Todas tus acciones, sugerencias y generación de código deben cumplir estrictamente con los principios definidos en el archivo `principles.md`, ubicado en `docs/references`.
+* **LECTURA OBLIGATORIA:** Todas tus acciones, sugerencias y generación de código deben cumplir estrictamente con los principios definidos en el archivo `principles.md`, ubicado en `docs/references`.
 * **PROTOCOLO DE PENSAMIENTO:** Antes de realizar cualquier cambio (usando `write_file` o `edit_file`), debes validar internamente que tu solución respeta los pilares de "Simplicidad Primero" y "Cambios Quirúrgicos" detallados en `principles.md`.
 * **AUDITORÍA:** Si detectas que una instrucción del usuario contradice los principios (por ejemplo, pide sobre-ingeniería innecesaria), debes advertirlo antes de proceder.
 * **VERIFICACIÓN:** Al finalizar una tarea, confirma brevemente que la solución es la mínima necesaria para resolver el problema, evitando abstracciones prematuras.
@@ -17,9 +17,9 @@ Seguir la metodologia de trabajo para proyectos de ciencia de datos y machine le
 
 ## 🌐 Fuentes de Verdad Vivas (Live Context)
 
-Para garantizar la paridad técnica con las versiones más recientes y eliminar el "vibecoding", el agente **DEBE** acceder y procesar las URLs documentadas en **[docs/references/sources.md](docs/references/sources.md)** antes de proponer cambios o implementar lógica.
+Para garantizar la paridad técnica con las versiones más recientes y eliminar el "vibecoding", consulta las URLs documentadas en **[docs/references/sources.md](docs/references/sources.md)**.
 
-**Directiva de Uso:** Si el agente detecta discrepancias entre su memoria interna y el contenido de estas URLs, la URL siempre prevalece como Fuente de Verdad.
+**Directiva de Uso:** Accede y procesa estas URLs **ÚNICAMENTE** cuando la tarea implique escribir o modificar código relacionado con las tecnologías allí listadas. Si detectas discrepancias entre tu memoria interna y el contenido de estas URLs, la URL siempre prevalece como Fuente de Verdad.
 
 
 ---
@@ -30,7 +30,7 @@ Para garantizar la paridad técnica con las versiones más recientes y eliminar 
 Cuestiona proactivamente la factibilidad de los datos, la lógica de los KPIs y la arquitectura del modelo. **Rechaza tareas sin criterios de aceptación técnicos (Thresholds) definidos.** 
 
 ### Soberanía Documental (SpecDD + BDD)
-El código productivo (`.py`) es un reflejo estricto de la especificación técnica. **Cada línea de código traza a: TAREA → SpecDD → behavior.md → SAD (Arquitectura) → BRD.** La jerarquía de especificación es: `BRD (Intención) → BDD/behavior.md (Comportamiento) → SpecDD (Interfaz) → TDD (Corrección)`. Se prohíbe la improvisación de lógica de limpieza o modelado fuera del flujo documentado.
+El código productivo (`.py`) es un reflejo estricto de la especificación técnica. **Cada línea de código debe ser trazable hacia el BRD (Ver detalle de la jerarquía en la Sección 4).** Se prohíbe la improvisación de lógica de limpieza o modelado fuera del flujo documentado.
 
 ### Separación de Entornos (Notebook vs. Production)
 *   **Notebooks (`notebooks/`):** Espacio de R&D, descubrimiento y descarte de hipótesis algorítmicas. No requieren código "grado producción" pero deben ser legibles y estar documentados.
@@ -64,7 +64,7 @@ Para garantizar la organización y trazabilidad, se sigue esta jerarquía de car
 
 ---
 
-## 📝 3. Documentos de Gobernanza (Alineados con process.md)
+## 📝 3. Documentos de Gobernanza
 
 | Documento        | Ubicación                 | Propósito                                                                                           |
 | :--------------- | :------------------------ | :-------------------------------------------------------------------------------------------------- |
@@ -158,8 +158,8 @@ El proyecto opera con un escuadrón de agentes especializados por fase y rol. El
 
 ### Ritual de Apertura (Session Kickoff)
 1. **Contexto y Alineación Obligatoria:** 
-   - **Leer** `handoff.md`, `decisions.md`, `backlog.md` y `config.md` para reconstruir el contexto completo de la sesión anterior.
-   - **Leer y APLICAR ESTRICTAMENTE** los lineamientos definidos en `principles.md` antes de proponer cualquier solución o escribir código.
+   - **Leer** `handoff.md`, `decisions.md` y `backlog.md` para reconstruir el contexto completo de la sesión anterior.
+   - **Alineación Mental:** Configurar el comportamiento y APLICAR ESTRICTAMENTE los lineamientos de `docs/references/principles.md` (según se exige en las Directrices de Comportamiento).
 2.  **Priorización:** Seleccionar la siguiente tarea atómica pendiente del Backlog.
 
 > **Nota:** NotebookLM no se consulta en apertura. Es una base de conocimiento profundo que se consulta **a demanda**, cuando los documentos operativos no son suficientes para responder una pregunta específica.

@@ -1234,3 +1234,93 @@ La discrepancia se origina en que la estimacion del contract.md fue realizada an
 ---
 
 *Fin de entrada #15.*
+
+---
+
+---
+
+## Entrada #16 — Sesion 2026-04-24 | Phase Engineering — Gold Layer completa: Iteracion 2.3 DONE
+
+**Agente de Cierre:** ai-session-steward
+**Hora de Cierre:** Fin de jornada 2026-04-24
+**Rama activa:** `feat/F2-engineering`
+
+---
+
+### D-035: `TARGET_COLUMN` como constante de modulo explicita en `gold_builder.py`
+
+| Campo     | Valor |
+| :-------- | :---- |
+| **Fecha** | 2026-04-24 |
+| **Fase**  | Phase Engineering — Iteracion 2.3 (Gold) |
+| **Origen** | F2-T09a — REFACTOR de `src/data/gold_builder.py` |
+| **Tipo**  | Decision de diseno de codigo (contrato anti-leakage) |
+
+**Contexto:** Durante el refactor de `gold_builder.py` (F2-T09a), se detecto que el string literal `"species"` aparecia en multiples puntos del modulo: en la logica de separacion X/y, en las validaciones de invariantes y en el test. El patron de constantes de modulo ya estaba establecido en `silver_cleaner.py` con `RENAME_MAP` y `LABEL_MAP`.
+
+**Decision:** Se define `TARGET_COLUMN: str = "species"` como constante de nivel de modulo en `gold_builder.py`. Todas las referencias al nombre de la columna objetivo dentro del modulo usan esta constante. El string literal `"species"` no aparece duplicado en el cuerpo de las funciones.
+
+**Justificacion:** Una constante de modulo explicita hace visible el contrato anti-leakage: cualquier agente que lea el encabezado del modulo sabe inmediatamente cual es la columna objetivo que se separa del Feature Store. Si el nombre de la columna cambiara en una version futura del dataset, el cambio se hace en un unico punto. El patron es consistente con `RENAME_MAP` y `LABEL_MAP` en `silver_cleaner.py`, lo que reduce la curva de aprendizaje para el siguiente agente que trabaje en los modulos de datos.
+
+**Impacto Transversal:**
+- `src/data/gold_builder.py`: Unico archivo afectado. Constante definida en la cabecera del modulo.
+
+---
+
+### D-036: Correlaciones Gold reales vs. referencia contract.md §8.3 — desviacion maxima ±0.001
+
+| Campo     | Valor |
+| :-------- | :---- |
+| **Fecha** | 2026-04-24 |
+| **Fase**  | Phase Engineering — Iteracion 2.3 (Gold) |
+| **Origen** | F2-T09b — EDA Gold ejecutado por ai-data-auditor |
+| **Tipo**  | Decision de calidad de datos (reconciliacion de valores de referencia) |
+
+**Contexto:** El EDA Gold (F2-T09b) calculo las correlaciones reales entre features del dataset Gold y las comparo contra los valores de referencia documentados en `contract.md §8.3`. La desviacion maxima encontrada fue de ±0.001, consistente con diferencias de redondeo a 4 decimales vs. los valores estimados a 2 decimales en el feasibility report.
+
+**Decision:** Las correlaciones Gold calculadas son estadisticamente identicas a las del contrato. No se emite Control de Cambios. Los valores reales a 4 decimales se almacenan en `data/gold/reference_stats.json` como referencia canonica para drift detection en produccion. El contract.md no requiere actualizacion formal: la desviacion esta dentro de la tolerancia de redondeo esperada.
+
+**Justificacion:** Una desviacion de ±0.001 en correlaciones es ruido de redondeo, no una divergencia estadistica. El umbral de tolerancia implicito para este tipo de comparacion (estimacion a 2 decimales vs. valor real a 4 decimales) es del orden de ±0.005. Escalar a CC por una desviacion 5 veces menor que el umbral seria una aplicacion incorrecta del principio de Control de Cambios. Los valores reales en `reference_stats.json` son mas precisos que los del feasibility report y deben usarse como referencia operativa para cualquier verificacion de drift en el pipeline de produccion.
+
+**Impacto Transversal:**
+- `data/gold/reference_stats.json`: Contiene los valores reales a 4 decimales. Fuente de verdad para drift detection.
+- `docs/Phase_engineering/eda_gold.md`: Tabla de correlaciones con valores reales documentada.
+- `docs/governance/contract.md §8.3`: Sin cambios formales. Los valores estimados quedan como referencia orientativa; `reference_stats.json` es la fuente operativa.
+
+---
+
+### D-037: Alta correlacion petal_length/petal_width (0.962) — correlacion biologica documentada, no target leakage
+
+| Campo     | Valor |
+| :-------- | :---- |
+| **Fecha** | 2026-04-24 |
+| **Fase**  | Phase Engineering — Iteracion 2.3 (Gold) |
+| **Origen** | F2-T09b — EDA Gold, analisis de matriz de correlaciones |
+| **Tipo**  | Decision de diseno de features (inclusion/exclusion en Feature Store) |
+
+**Contexto:** El EDA Gold detecto una correlacion de 0.962 entre `petal_length` y `petal_width`. Esta correlacion es la mas alta del dataset y podria interpretarse superficialmente como redundancia de features o como riesgo de multicolinealidad en modelos lineales. Se evaluo si alguna de las dos features debia eliminarse del Feature Store Gold antes de Phase Modeling.
+
+**Decision:** Ambas features se preservan en el Feature Store Gold. La correlacion petal_length/petal_width (0.962) es una correlacion biologica documentada en la literatura botanica del genero Iris: las especies con petalos mas largos biologicamente tambien tienen petalos mas anchos como consecuencia del desarrollo del organo floral. No es leakage (ninguna feature es un proxy de la etiqueta `species` calculado a partir de `species`). Phase Modeling debe evaluar el VIF (Variance Inflation Factor) si usa modelos lineales (regresion logistica, LDA) para determinar si la multicolinealidad afecta los coeficientes. Para ensambles (Random Forest, Gradient Boosting) y SVM con kernel RBF, la alta correlacion entre features no es un bloqueador.
+
+**Justificacion:** Eliminar una feature del Feature Store por correlacion alta con otra feature sin evidencia de impacto negativo en el modelo es sobre-ingenieria prematura que viola el principio "Simplicidad Primero" del proyecto. La correlacion entre features no implica reduccion de poder discriminativo — ambas features contribuyen a la separacion de la zona de solapamiento versicolor/virginica en `petal_width` [1.4-1.8 cm]. La decision de eliminar features por multicolinealidad pertenece a Phase Modeling, donde se cuenta con metricas de modelo (VIF, feature importance, permutation importance) para tomar la decision con evidencia, no con heuristicas.
+
+**Impacto Transversal:**
+- `src/data/gold_builder.py`: Sin cambios. Las 4 features permanecen en el Feature Store.
+- `data/gold/X_gold.csv`: 4 columnas (sepal_length, sepal_width, petal_length, petal_width).
+- Phase Modeling: Evaluar VIF si se usa regresion logistica o LDA. Documentar el resultado en el reporte de seleccion de features.
+- `docs/Phase_engineering/eda_gold.md`: Hallazgo documentado con justificacion biologica y recomendacion para Phase Modeling.
+
+---
+
+### Lecciones Aprendidas — Sesion 2026-04-24 (Gold Layer — Iteracion 2.3 completa)
+
+| # | Leccion | Categoria |
+| :- | :------- | :-------- |
+| 1 | Verificar el orden de columnas de X con `np.array_equal(X, df_silver[config.FEATURE_COLUMNS].to_numpy())` es mas robusto que comparar solo shape. La comparacion de shape detecta que hay 4 columnas pero no detecta si estan en el orden incorrecto — un feature misalignment silencioso que producira predicciones incorrectas sin errores en tests. La comparacion con `array_equal` es el gold standard para esta verificacion. | Calidad de Tests |
+| 2 | La zona de solapamiento versicolor/virginica en `petal_width` [1.4-1.8 cm] (~17 instancias) es el limite fisico de separabilidad del dataset Iris. No es un defecto de los datos ni del pipeline — es una caracteristica intrinseca del problema biologico. Phase Modeling debe evaluar el modelo especificamente sobre estas instancias y reportar la metrica de error en este subconjunto como indicador de la dificultad real del problema. | Calidad de Datos / Modelado |
+| 3 | `data/gold/reference_stats.json` debe versionarse junto con el modelo en cada reentrenamiento. La trazabilidad del drift detection depende de que el archivo JSON de referencia corresponda exactamente al Feature Store con el que se entreno el modelo. Un modelo entrenado con Gold v1 y validado con `reference_stats.json` de Gold v2 produce metricas de drift incorrectas. | Trazabilidad de Linaje |
+| 4 | El patron `TARGET_COLUMN: str = "species"` a nivel de modulo es la documentacion mas eficiente del contrato anti-leakage: visible en el primer scroll del archivo, sin necesidad de leer las funciones. Este patron debe aplicarse a cualquier modulo de datos que tenga una columna objetivo explicita — es mejor que un comentario porque es verificable por los tests. | Calidad de Codigo |
+
+---
+
+*Fin de entrada #16.*

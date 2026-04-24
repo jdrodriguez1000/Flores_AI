@@ -183,7 +183,7 @@
 - **Entregable:** `tests/unit/data/test_gold_builder.py`
 - **Acción:** Testing
 - **DoD:** Suite falla de forma controlada. Valida los invariantes GR-01 a GR-06 del contract.md §10.4: `X.shape==(147,4)`, `y.shape==(147,)`, `X.dtype==float64`, `np.isnan(X).sum()==0`, `np.isinf(X).sum()==0`, clases válidas en `y`. Verifica orden de columnas según `config.FEATURE_COLUMNS`. Trazable al SpecDD §8 y contract.md §4.
-- **Estado:** TODO
+- **Estado:** DONE ✅ — 2026-04-24
 
 #### [F2-T08] [GREEN] Implementar Feature Store (Gold Layer)
 - **Responsable:** @ai-feature-store-architect
@@ -191,7 +191,7 @@
 - **Entregable:** `src/data/gold_builder.py`
 - **Acción:** Coding
 - **DoD:** Pasa la suite F2-T07. Genera `data/gold/X_gold.csv` y `data/gold/y_gold.csv`. Orden de columnas en `X` sigue `config.FEATURE_COLUMNS`. Trazable al SpecDD §8.
-- **Estado:** TODO
+- **Estado:** DONE ✅ — 2026-04-24
 
 #### [F2-T09a] [REFACTOR] Refactorizar `src/data/gold_builder.py`
 - **Responsable:** @ai-feature-store-architect
@@ -199,7 +199,7 @@
 - **Entregable:** `src/data/gold_builder.py` (refactored)
 - **Acción:** Refactoring
 - **DoD:** Código con transformaciones deterministas. Sin target leakage: `species` no puede figurar en `X`. Orden de columnas explícito vía `config.FEATURE_COLUMNS`. Sin rutas absolutas. Todos los tests F2-T07 siguen en verde. Trazable al SpecDD §8 y SAD §5.1.
-- **Estado:** TODO
+- **Estado:** DONE ✅ — 2026-04-24
 
 #### [F2-T09b] [EDA] Reporte EDA Gold + `reference_stats.json`
 - **Responsable:** @ai-data-auditor
@@ -207,7 +207,7 @@
 - **Entregables:** `docs/Phase_engineering/eda_gold.md`, `data/gold/reference_stats.json`
 - **Acción:** Documentation
 - **DoD:** Reporte valida correlaciones (matriz de correlación vs. referencia del contract.md §8.3), varianza por feature y separabilidad de clases. Confirma ausencia de target leakage en `X`. Verifica invariantes GR-01 a GR-06. Genera `data/gold/reference_stats.json` con estadísticas de referencia (contract.md §11.1) para uso futuro en drift detection.
-- **Estado:** TODO
+- **Estado:** DONE ✅ — 2026-04-24
 
 ### Iteración 2.4: Certificación y Validación de Fase
 
