@@ -1,4 +1,4 @@
-# AGENTS.md — Directorio Maestro de Agentes de IA
+# agents.md — Directorio Maestro de Agentes de IA
 
 Este documento centraliza el catálogo de agentes especializados disponibles en el proyecto. Cada agente tiene un rol único, un conjunto de habilidades (`skills`) y disparadores (`triggers`) que definen cuándo debe ser invocado.
 

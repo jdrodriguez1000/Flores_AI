@@ -1,6 +1,6 @@
 # Backlog del Proyecto: Flores AI - Iris
 
-> **Fuente de verdad:** [CLAUDE.md](../../CLAUDE.md) | **Metodología:** [ai_process.md](../methodology/ai_process.md)
+> **Fuente de verdad:** [CLAUDE.md](../../CLAUDE.md) | **Metodología:** [process.md](../methodology/process.md)
 > **Proyecto:** Flores AI — Clasificación de especies Iris
 > **Última actualización:** 2026-04-21
 > **Responsable del backlog:** @ai-backlog-manager

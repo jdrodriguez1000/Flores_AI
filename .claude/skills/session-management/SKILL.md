@@ -35,7 +35,7 @@ Esta habilidad instrumenta los rituales definidos en **CLAUDE.md** para garantiz
 
     | Documento | Ruta local | Cuándo sincronizar |
     | :-------- | :--------- | :----------------- |
-    | `ai_process.md` | `docs/methodology/ai_process.md` | Si se modificó la metodología |
+    | `process.md` | `docs/methodology/process.md` | Si se modificó la metodología |
     | `brd.md` | `docs/governance/brd.md` | Si se creó o modificó el BRD |
     | `sad.md` | `docs/governance/sad.md` | Si se creó o modificó el SAD |
     | `specdd.md` | `docs/governance/specdd.md` | Si se creó o modificó el SpecDD |

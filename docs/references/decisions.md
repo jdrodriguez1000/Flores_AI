@@ -1131,3 +1131,56 @@ Ver ficha completa en `docs/changes/CC-028.md`.
 ---
 
 *Fin de entrada #13.*
+
+---
+
+---
+
+## Entrada #14 — Sesion 2026-04-23 | Phase Engineering — Reorganizacion de Artefactos de Gobernanza
+
+**Agente de Cierre:** ai-session-steward
+**Hora de Cierre:** Fin de jornada 2026-04-23
+**Rama activa:** `feat/F2-engineering`
+
+---
+
+### D-031: Reorganizacion de artefactos de gobernanza agnostica — renombrado y reubicacion
+
+| Campo     | Valor |
+| :-------- | :---- |
+| **Fecha** | 2026-04-23 |
+| **Fase**  | Phase Engineering (transversal — gobernanza del proyecto) |
+| **Origen** | Instruccion del usuario: estandarizar nombres y ubicaciones de artefactos de referencia agnosticos |
+| **Tipo**  | Decision de organizacion documental (higiene de repositorio) |
+
+**Contexto:** El proyecto tenia dos artefactos de gobernanza agnostica con nombres no estandarizados: `AGENTS.md` en la raiz del repositorio (nombre en mayusculas, fuera de la estructura `docs/`) y `docs/methodology/ai_process.md` (con prefijo `ai_` redundante que no aplica a ningun otro documento del proyecto). La raiz del repositorio debe contener unicamente archivos de configuracion del proyecto (`CLAUDE.md`, `requirements.txt`, `pytest.ini`, etc.), no documentacion de referencia.
+
+**Decision:**
+1. `AGENTS.md` (raiz) → `docs/references/agents.md`: Centraliza el catalogo de agentes en el directorio de referencias junto con `config.md`, `decisions.md`, `handoff.md`, `principles.md` y `sources.md`. El titulo interno del archivo fue actualizado a `# agents.md`.
+2. `docs/methodology/ai_process.md` → `docs/methodology/process.md`: Elimina el prefijo `ai_` para uniformizar la nomenclatura. El archivo permanece en `docs/methodology/` — su ubicacion es correcta, solo el nombre cambia.
+3. Ambos cambios se ejecutaron con `git mv` para preservar el historial de commits de cada archivo.
+
+**Justificacion:** (1) La raiz del repositorio es mas limpia sin documentos de referencia navegacional — `AGENTS.md` es documentacion, no configuracion. (2) `docs/references/` ya contiene todos los artefactos de referencia del proyecto; concentrarlos en un unico directorio reduce el tiempo de navegacion para nuevos colaboradores. (3) El prefijo `ai_` en `ai_process.md` era un artifact del nombre original del documento — el resto de artefactos del proyecto no usan este prefijo (no existe `ai_brd.md`, `ai_sad.md`, etc.).
+
+**Impacto Transversal:**
+- `CLAUDE.md`: 3 referencias actualizadas (Seccion de metodologia, encabezado de tabla de gobernanza, Seccion 7 de agentes).
+- `docs/governance/backlog.md`: Enlace de metodologia actualizado.
+- `docs/references/handoff.md`: 3 referencias actualizadas (tabla de inventario, tabla NotebookLM, notas de contexto).
+- `docs/references/config.md`: Entrada en fuentes cargadas en NotebookLM actualizada.
+- `.claude/skills/session-management/SKILL.md`: Tabla de sincronizacion actualizada.
+- `.claude/skills/repository-governance/SKILL.md`: Cabecera de fuente de verdad actualizada.
+- Entradas historicas en `decisions.md` (D-012, D-030 y otras): Conservadas intactas — son registros de estado pasado, no referencias navegables.
+
+---
+
+### Lecciones Aprendidas — Sesion 2026-04-23 (Reorganizacion de Gobernanza)
+
+| # | Leccion | Categoria |
+| :- | :------- | :-------- |
+| 1 | `git mv` es el unico comando correcto para renombrar o mover archivos de gobernanza — preserva el historial de commits. Usar `cp` + `rm` rompe la trazabilidad del archivo. | Gestion de Versiones |
+| 2 | Las entradas historicas en `decisions.md` documentan el estado en el momento de la decision, no el estado actual del sistema. Actualizar su contenido para reflejar reorganizaciones posteriores seria revisionismo — se debe dejar intactas y registrar el cambio en una nueva entrada. | Gobernanza Documental |
+| 3 | La raiz del repositorio debe contener exclusivamente archivos de configuracion del proyecto (CLAUDE.md, requirements.txt, pytest.ini, .github/, .gitignore). Los documentos de referencia navegacional pertenecen a `docs/references/`, no a la raiz. | Organizacion de Repositorio |
+
+---
+
+*Fin de entrada #14.*
