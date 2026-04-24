@@ -10,7 +10,7 @@
 
 ## FASE 1: Discovery — Línea Base Documental
 
-**Entregable Principal:** Documentación de Gobernanza completa (config + BRD + Factibilidad + Mockup + SAD + SpecDD + Contract).
+**Entregable Principal:** Documentación de Gobernanza completa (config + [[BRD]] + Factibilidad + Mockup + SAD + SpecDD + Contract).
 **Estado de Fase:** DONE ✅ — 2026-04-19
 
 ### Iteración 1.1: Configuración e Identidad del Proyecto
@@ -25,10 +25,10 @@
 
 ### Iteración 1.2: Documentación de Negocio
 
-#### [F1-T02] Crear BRD (Business Requirements Document)
+#### [F1-T02] Crear [[BRD]] (Business Requirements Document)
 - **Responsable:** @ai-business-strategist
 - **Iteración:** 1.2
-- **Entregable:** `docs/governance/brd.md`
+- **Entregable:** `docs/governance/[[brd]].md`
 - **Acción:** Documentation
 - **DoD:** BRD contiene objetivos de negocio, KPIs con thresholds definidos y criterios de aceptación verificables.
 - **Estado:** DONE ✅ — 2026-04-19

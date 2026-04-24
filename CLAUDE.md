@@ -51,16 +51,16 @@ Toda transformación de datos y entrenamiento de modelos debe ser reproducible. 
 
 Para garantizar la organización y trazabilidad, se sigue esta jerarquía de carpetas obligatoria:
 
-| Directorio            | Propósito                                   | Regla de Oro                                                                                                                                                       |
-| :-------------------- | :------------------------------------------ | :----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `docs/`               | Documentación técnica y de negocio oficial. | Segmentado por fases (`Phase_discovery` a `Phase_delivery`).                                                                                                       |
-| `docs/design-system/` | Sistema de diseño del cliente (Brand).      | **Fuente de verdad de UI.** Obligatorio leer antes de generar cualquier interfaz. Contiene tokens de color, tipografía, reglas de componentes y referencia visual. |
-| `src/`                | Código fuente productivo (.py).             | Modularizado según el SAD (Ingesta, Modelado, API).                                                                                                                |
-| `data/`               | Almacenamiento de datos.                    | Estructura Bronze (crudo), Silver (limpio), Gold (features).                                                                                                       |
-| `models/`             | Artefactos de modelos serializados.         | Solo modelos certificados (ONNX, Pickle, Joblib).                                                                                                                  |
-| `notebooks/`          | Investigación y experimentación.            | Archivos `.ipynb` documentados y numerados.                                                                                                                        |
-| `tests/`              | Suite de pruebas técnicas.                  | Unit, Integration, E2E y Model QA.                                                                                                                                 |
-| `infra/`              | Infraestructura como Código (IaC).          | Scripts de Docker, Terraform o K8s.                                                                                                                                |
+| Directorio                | Propósito                                   | Regla de Oro                                                                                                                                                       |
+| :------------------------ | :------------------------------------------ | :----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `docs/`                   | Documentación técnica y de negocio oficial. | Segmentado por fases (`Phase_discovery` a `Phase_delivery`).                                                                                                       |
+| `docs/[[design]]-system/` | Sistema de diseño del cliente (Brand).      | **Fuente de verdad de UI.** Obligatorio leer antes de generar cualquier interfaz. Contiene tokens de color, tipografía, reglas de componentes y referencia visual. |
+| `src/`                    | Código fuente productivo (.py).             | Modularizado según el [[SAD]] (Ingesta, Modelado, API).                                                                                                                |
+| `data/`                   | Almacenamiento de datos.                    | Estructura Bronze (crudo), Silver (limpio), Gold (features).                                                                                                       |
+| `models/`                 | Artefactos de modelos serializados.         | Solo modelos certificados (ONNX, Pickle, Joblib).                                                                                                                  |
+| `notebooks/`              | Investigación y experimentación.            | Archivos `.ipynb` documentados y numerados.                                                                                                                        |
+| `tests/`                  | Suite de pruebas técnicas.                  | Unit, Integration, E2E y Model QA.                                                                                                                                 |
+| `infra/`                  | Infraestructura como Código (IaC).          | Scripts de Docker, Terraform o K8s.                                                                                                                                |
 
 ---
 
@@ -70,7 +70,7 @@ Para garantizar la organización y trazabilidad, se sigue esta jerarquía de car
 | :--------------- | :------------------------ | :-------------------------------------------------------------------------------------------------- |
 | **BACKLOG**      | `docs/governance/`        | Orquestación de tareas (Fases > Iteraciones > Tareas).                                              |
 | **BRD**          | `docs/governance/`        | Business Requirements Document: Objetivos y KPIs.                                                   |
-| **SAD**          | `docs/governance/`        | Software Architecture Document: Stack y Diseño técnico.                                             |
+| **[[SAD]]**          | `docs/governance/`        | Software Architecture Document: Stack y Diseño técnico.                                             |
 | **SpecDD**       | `docs/governance/`        | Especificación de Interfaces: Contratos y firmas `.py`.                                             |
 | **BEHAVIOR**     | `docs/governance/`        | Contrato de Comportamiento BDD: Escenarios Gherkin por User Story. Fuente de verdad para tests E2E. |
 | **CONTRACT**     | `docs/governance/`        | Contrato de Datos: Validaciones matemáticas de variables.                                           |
@@ -78,7 +78,7 @@ Para garantizar la organización y trazabilidad, se sigue esta jerarquía de car
 | **EDAs**         | `docs/Phase_engineering/` | Reportes de Ingesta, Limpieza y Análisis Estadístico.                                               |
 | **MODEL QA**     | `docs/Phase_modeling/`    | Validación de Modelos: Benchmarking y Sesgo.                                                        |
 | **QA SYSTEM**    | `docs/Phase_delivery/`    | Certificados E2E y Stress Testing.                                                                  |
-| **HANDOFF**      | `docs/references/`        | Estado Operativo diario (sobrescribible).                                                           |
+| **[[HANDOFF]]**      | `docs/references/`        | Estado Operativo diario (sobrescribible).                                                           |
 | **DECISIONS**    | `docs/references/`        | Log histórico de decisiones y lecciones (incluye referencias a CCs).                                |
 | **CHANGES (CC)** | `docs/changes/`           | Fichas formales de Control de Cambios. Una ficha por CC-ID.                                         |
 
@@ -99,7 +99,7 @@ Todo desarrollo sigue el ciclo **Red-Green-Refactor-Certificación-Validación**
 1.  **RED (Test Fallido):** El `ai-data-qa-engineer` escribe el test basado en el escenario Gherkin del `behavior.md` y el contrato del `SpecDD`. El test falla porque el módulo no existe aún.
 2.  **GREEN (Funcionalidad):** Escribir código mínimo para pasar el test.
 3.  **REFACTOR (Calidad):** Optimización técnica y cumplimiento del linaje.
-4.  **CERTIFICACIÓN (Técnica):** Validación contra SAD & SpecDD.
+4.  **CERTIFICACIÓN (Técnica):** Validación contra [[SAD]] & SpecDD.
 5.  **VALIDACIÓN (Negocio):** Verificación final contra el BRD, behavior.md y KPIs.
 
 ---
@@ -109,7 +109,7 @@ Todo desarrollo sigue el ciclo **Red-Green-Refactor-Certificación-Validación**
 Obligatorio cuando se detecta una desviación de los documentos de gobernanza. Se ejecuta a través del agente **`ai-change-manager`**.
 
 ### Paso 1 — `evaluate_drift` (Evaluación de Deriva)
-Parada inmediata del código. Comparar la intención del cambio contra el **SAD** y el **SpecDD**. Identificar qué secciones exactas de la documentación quedarían obsoletas.
+Parada inmediata del código. Comparar la intención del cambio contra el **[[SAD]]** y el **SpecDD**. Identificar qué secciones exactas de la documentación quedarían obsoletas.
 
 ### Paso 2 — `generate_cc_proposal` (Ficha de CC)
 Generar la propuesta en el chat con los siguientes campos:
@@ -158,7 +158,7 @@ El proyecto opera con un escuadrón de agentes especializados por fase y rol. El
 
 ### Ritual de Apertura (Session Kickoff)
 1. **Contexto y Alineación Obligatoria:** 
-   - **Leer** `handoff.md`, `decisions.md` y `backlog.md` para reconstruir el contexto completo de la sesión anterior.
+   - **Leer** `[[handoff]].md`, `decisions.md` y `backlog.md` para reconstruir el contexto completo de la sesión anterior.
    - **Alineación Mental:** Configurar el comportamiento y APLICAR ESTRICTAMENTE los lineamientos de `docs/references/principles.md` (según se exige en las Directrices de Comportamiento).
 2.  **Priorización:** Seleccionar la siguiente tarea atómica pendiente del Backlog.
 
@@ -167,5 +167,5 @@ El proyecto opera con un escuadrón de agentes especializados por fase y rol. El
 ### Ritual de Cierre (Session Wrap-up)
 1.  **Validación:** Asegurar que todos los tests estén en verde antes de cerrar.
 2.  **Documentación (`ai-session-steward`):** Actualizar `handoff.md` (Logros, Pendientes, Bloqueos) y registrar en `decisions.md` (Decisiones, Lecciones aprendidas).
-3.  **Sincronización del Cerebro (`notebooklm`):** Llevar al cerebro del proyecto en NotebookLM: `handoff.md`, `decisions.md` y las fichas nuevas o modificadas en `docs/changes/`.
+3.  **Sincronización del Cerebro (`notebooklm`):** Llevar al cerebro del proyecto en NotebookLM: `[[handoff]].md`, `decisions.md` y las fichas nuevas o modificadas en `docs/changes/`.
 4.  **Versionado (`ai-repository-governor`):** Hacer commit semántico y subir los cambios al repositorio actual.

@@ -93,7 +93,7 @@ las cuatro dimensiones muestre el tipo de especie predicha.
 - `feasibility.md` — Diagnostico del dataset
 - `decisions.md` — Historial de decisiones (re-sincronizar al cierre de cada fase)
 
-> **Nota:** `decisions.md` debe re-sincronizarse en NotebookLM al cierre de cada fase cuando acumule decisiones nuevas.
+> **Nota:** `[[decisions]].md` debe re-sincronizarse en NotebookLM al cierre de cada fase cuando acumule decisiones nuevas.
 
 ---
 

@@ -510,7 +510,7 @@ Cada entrada debe contener: Fecha, Fase, ID de Decision, Contexto, Decision, Jus
 | # | Leccion | Categoria |
 | :- | :------- | :-------- |
 | 1 | El agnosticismo de los skills no es solo cuestion de nombres de proyecto — tambien aplica a IDs de herramientas externas. Un ID hardcodeado en un skill es tan acoplado como un nombre de proyecto. La regla es: todo identificador especifico del proyecto vive en `config.md`. | Arquitectura de Agentes |
-| 2 | Al disenar la sincronizacion de una herramienta externa, la primera pregunta no es "que sincronizar" sino "que documentos tienen valor semantico persistente". `handoff.md` parece importante pero es transitorio; excluirlo del notebook evita confusion en consultas futuras. | Diseno de Integraciones |
+| 2 | Al disenar la sincronizacion de una herramienta externa, la primera pregunta no es "que sincronizar" sino "que documentos tienen valor semantico persistente". `[[handoff]].md` parece importante pero es transitorio; excluirlo del notebook evita confusion en consultas futuras. | Diseno de Integraciones |
 | 3 | Auditar el agnosticismo de 63+ archivos es viable si se hace con busqueda sistematica de strings especificos del proyecto. El patron es: buscar el nombre del proyecto, el nombre del dataset y los IDs conocidos. Si no aparecen fuera de config.md, el repositorio es agnostico. | Proceso de Auditoria |
 | 4 | La sincronizacion con herramientas de consulta semantica (NotebookLM, embeddings, RAG) debe diseñarse en Phase Discovery, no en Phase Delivery. Integrarla tarde obliga a re-leer documentos que ya se leyeron y puede generar inconsistencias si el notebook no esta al dia durante el desarrollo. | Proceso / Metodologia |
 
@@ -538,7 +538,7 @@ Cada entrada debe contener: Fecha, Fase, ID de Decision, Contexto, Decision, Jus
 | **Origen** | Necesidad de estandarizar el manejo de brand del cliente en proyectos de ML/IA |
 | **Tipo**  | Decision de convencion de organizacion de artefactos y gobernanza de UI |
 
-**Contexto:** Los clientes ocasionalmente entregan materiales de identidad corporativa (paletas de colores, tipografias, reglas de componentes, prototipos HTML) que los agentes de UI deben respetar al generar interfaces. Sin una convencion estandar, estos materiales se almacenaban en carpetas ad-hoc (ej: `parameters/`) sin integracion formal con el ecosistema de agentes. El proyecto tenia una carpeta `parameters/` con tres archivos: `DESIGN.md` (sistema de diseno), `code.html` (tokens Tailwind completos) y `screen.png` (referencia visual).
+**Contexto:** Los clientes ocasionalmente entregan materiales de identidad corporativa (paletas de colores, tipografias, reglas de componentes, prototipos HTML) que los agentes de UI deben respetar al generar interfaces. Sin una convencion estandar, estos materiales se almacenaban en carpetas ad-hoc (ej: `parameters/`) sin integracion formal con el ecosistema de agentes. El proyecto tenia una carpeta `parameters/` con tres archivos: `[[DESIGN]].md` (sistema de diseno), `code.html` (tokens Tailwind completos) y `screen.png` (referencia visual).
 
 **Decision:** Se establece `docs/design-system/` como la ubicacion estandar y agnostica para los materiales de identidad visual del cliente en cualquier proyecto que adopte este framework. Los contenidos de `parameters/` fueron migrados a esta ubicacion. El nombre `design-system` es el termino estandar de la industria. La ubicacion dentro de `docs/` es correcta porque es documentacion de referencia, no codigo productivo.
 
@@ -876,7 +876,7 @@ Cada entrada debe contener: Fecha, Fase, ID de Decision, Contexto, Decision, Jus
 | # | Leccion | Categoria |
 | :- | :------- | :-------- |
 | 1 | Un SpecDD disenado con rigor de contratos (campos tipados, nombres semanticos) tiene alta probabilidad de cubrir los escenarios BDD sin modificacion. La alineacion perfecta entre behavior.md v1.0.0 y specdd.md v1.0.0 valida que el esfuerzo de precision en Phase Discovery se amortiza en cero deuda tecnica al incorporar BDD. | Calidad de Arquitectura |
-| 2 | El orden correcto de artefactos es BRD → behavior.md → SAD → SpecDD. Crear el SpecDD antes del BDD es un riesgo calculado: si el SpecDD es robusto, no hay retrabajo; si el BDD revela gaps en el SpecDD, hay que versionar el SpecDD y actualizar el backlog. Documentar este riesgo en el handoff evita que el proximo agente asuma que el orden fue intencional. | Proceso / Metodologia |
+| 2 | El orden correcto de artefactos es BRD → behavior.md → SAD → SpecDD. Crear el SpecDD antes del BDD es un riesgo calculado: si el SpecDD es robusto, no hay retrabajo; si el BDD revela gaps en el SpecDD, hay que versionar el SpecDD y actualizar el backlog. Documentar este riesgo en el [[handoff]] evita que el proximo agente asuma que el orden fue intencional. | Proceso / Metodologia |
 | 3 | Los escenarios de frontera (baja confianza con umbral exacto del 60%, valores en los limites exactos del rango de validacion) son mas faciles de identificar en Gherkin que en TDD. El lenguaje de comportamiento observable obliga al autor a pensar en terminos de "dado este input exacto, que muestra la pantalla" antes de pensar en aserciones de codigo. | Calidad de Tests |
 | 4 | Crear un skill para una capacidad nueva (gherkin-scenario-author) inmediatamente al usarla por primera vez garantiza que la capacidad es reproducible en sesiones futuras sin depender de la memoria del agente. El skill es la documentacion ejecutable de la habilidad. | Gestion de Conocimiento |
 
@@ -892,13 +892,13 @@ Cada entrada debe contener: Fecha, Fase, ID de Decision, Contexto, Decision, Jus
 
 ---
 
-### CC-028 (referencia): Expansión del Protocolo de Control de Cambios
+### [[CC-028]] (referencia): Expansión del Protocolo de Control de Cambios
 
 | Campo | Valor |
 |---|---|
 | **Tipo** | Control de Cambios |
 | **Estado** | APROBADO |
-| **Ficha completa** | `docs/changes/CC-028.md` |
+| **Ficha completa** | `docs/changes/[[CC-028]].md` |
 | **Resumen** | Protocolo CC expandido en CLAUDE.md Sección 5. Creación de `docs/changes/` como ubicación oficial de fichas CC. El ritual de cierre de sesión sincroniza `docs/changes/` a NotebookLM. |
 
 ---
@@ -919,7 +919,7 @@ Cada entrada debe contener: Fecha, Fase, ID de Decision, Contexto, Decision, Jus
 | Campo | Valor |
 |---|---|
 | **Contexto** | Se debatio si el ritual de apertura debia incluir una lectura de NotebookLM como paso obligatorio. |
-| **Decision** | NotebookLM es una base de conocimiento profundo que se consulta a demanda durante la sesion, no en apertura. Los 4 documentos operativos (handoff, decisions, backlog, config) son suficientes para reconstruir el contexto de arranque. |
+| **Decision** | NotebookLM es una base de conocimiento profundo que se consulta a demanda durante la sesion, no en apertura. Los 4 documentos operativos ([[handoff]], decisions, backlog, config) son suficientes para reconstruir el contexto de arranque. |
 | **Justificacion** | Cargar el cerebro completo en cada apertura es costoso y generalmente innecesario. El conocimiento profundo solo es relevante cuando los documentos operativos no responden una pregunta especifica. |
 | **Impacto** | CLAUDE.md Seccion 8 (Ritual de Apertura) incluye nota explicita de este diseño. |
 
@@ -1156,7 +1156,7 @@ Ver ficha completa en `docs/changes/CC-028.md`.
 **Contexto:** El proyecto tenia dos artefactos de gobernanza agnostica con nombres no estandarizados: `AGENTS.md` en la raiz del repositorio (nombre en mayusculas, fuera de la estructura `docs/`) y `docs/methodology/ai_process.md` (con prefijo `ai_` redundante que no aplica a ningun otro documento del proyecto). La raiz del repositorio debe contener unicamente archivos de configuracion del proyecto (`CLAUDE.md`, `requirements.txt`, `pytest.ini`, etc.), no documentacion de referencia.
 
 **Decision:**
-1. `AGENTS.md` (raiz) → `docs/references/agents.md`: Centraliza el catalogo de agentes en el directorio de referencias junto con `config.md`, `decisions.md`, `handoff.md`, `principles.md` y `sources.md`. El titulo interno del archivo fue actualizado a `# agents.md`.
+1. `AGENTS.md` (raiz) → `docs/references/agents.md`: Centraliza el catalogo de agentes en el directorio de referencias junto con `config.md`, `decisions.md`, `[[handoff]].md`, `principles.md` y `sources.md`. El titulo interno del archivo fue actualizado a `# agents.md`.
 2. `docs/methodology/ai_process.md` → `docs/methodology/process.md`: Elimina el prefijo `ai_` para uniformizar la nomenclatura. El archivo permanece en `docs/methodology/` — su ubicacion es correcta, solo el nombre cambia.
 3. Ambos cambios se ejecutaron con `git mv` para preservar el historial de commits de cada archivo.
 
@@ -1165,7 +1165,7 @@ Ver ficha completa en `docs/changes/CC-028.md`.
 **Impacto Transversal:**
 - `CLAUDE.md`: 3 referencias actualizadas (Seccion de metodologia, encabezado de tabla de gobernanza, Seccion 7 de agentes).
 - `docs/governance/backlog.md`: Enlace de metodologia actualizado.
-- `docs/references/handoff.md`: 3 referencias actualizadas (tabla de inventario, tabla NotebookLM, notas de contexto).
+- `docs/references/[[handoff]].md`: 3 referencias actualizadas (tabla de inventario, tabla NotebookLM, notas de contexto).
 - `docs/references/config.md`: Entrada en fuentes cargadas en NotebookLM actualizada.
 - `.claude/skills/session-management/SKILL.md`: Tabla de sincronizacion actualizada.
 - `.claude/skills/repository-governance/SKILL.md`: Cabecera de fuente de verdad actualizada.
@@ -1218,7 +1218,7 @@ La discrepancia se origina en que la estimacion del contract.md fue realizada an
 - `data/gold/reference_stats.json` (F2-T09b — pendiente): Debe contener `{"setosa": 48, "versicolor": 50, "virginica": 49, "total": 147}` como distribucion canonica de referencia.
 - `docs/Phase_engineering/eda_silver.md`: Hallazgo documentado en la seccion de distribucion de clases.
 - `docs/governance/contract.md` §4.2: La estimacion existente (setosa=49, virginica=48) queda obsoleta como referencia numerica pero el contrato no requiere actualizacion formal porque el invariante SR-01 sigue siendo `len==147` y los valores reales no lo contradicen. Si en el futuro se requiere precision numerica en el contract, se puede emitir un CC menor para actualizar la tabla de proyeccion.
-- `handoff.md`: Nota critica añadida en la seccion de proximos pasos para que el agente que ejecute F2-T09b use los valores reales.
+- `[[handoff]].md`: Nota critica añadida en la seccion de proximos pasos para que el agente que ejecute F2-T09b use los valores reales.
 
 ---
 
@@ -1430,7 +1430,7 @@ La discrepancia se origina en que la estimacion del contract.md fue realizada an
 
 **Impacto Transversal:**
 - `docs/governance/backlog.md`: F3 actualizado de 3 a 9 tareas atomicas con DoDs trazables al SpecDD §9–10, SAD §9.2 y BRD §4.
-- `docs/references/handoff.md`: Proximos pasos actualizados con la ruta canonica de tests `tests/unit/training/` y el responsable correcto por tarea.
+- `docs/references/[[handoff]].md`: Proximos pasos actualizados con la ruta canonica de tests `tests/unit/training/` y el responsable correcto por tarea.
 - Phase Modeling: La primera tarea ejecutable es F3-T01 [RED] con entregable `tests/unit/training/test_trainer.py`.
 
 ---

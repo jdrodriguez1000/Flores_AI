@@ -232,7 +232,7 @@ Todas las desviaciones son menores a 0.025. Las diferencias respecto al contrato
 
 ### Autorizacion de Paso a Phase Modeling
 
-La capa Gold producida por `build_gold()` es apta para ser consumida por el pipeline de entrenamiento. El agente `ai-ml-engineer` puede proceder con la implementacion del modelo usando `data/gold/X_gold.csv` y `data/gold/y_gold.csv` como insumos, siguiendo las especificaciones del contract.md seccion 4 y el SAD.
+La capa Gold producida por `build_gold()` es apta para ser consumida por el pipeline de entrenamiento. El agente `ai-ml-engineer` puede proceder con la implementacion del modelo usando `data/gold/X_gold.csv` y `data/gold/y_gold.csv` como insumos, siguiendo las especificaciones del contract.md seccion 4 y el [[SAD]].
 
 ---
 

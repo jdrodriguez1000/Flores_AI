@@ -30,7 +30,7 @@
 | 1 | Auditoria de `principles.md` integrada como contexto de gobernanza para la sesion. Los 4 principios (Pensar antes de programar, Simplicidad Primero, Cambios Quirurgicos, Ejecucion Orientada a Objetivos) fueron leidos y aplicados en la toma de decisiones. | `docs/references/principles.md` | DONE |
 | 2 | Diagnostico completo del Backlog F3: detectadas 5 tareas faltantes, DoDs vagos y ruta de tests no canonica (`tests/test_model_training.py` → correcto: `tests/unit/training/`). | `docs/governance/backlog.md` | DONE |
 | 3 | Backlog F3 atomizado: de 3 tareas vagas a 9 tareas atomicas siguiendo el patron RED→GREEN→REFACTOR de Fase 2. Modulos `trainer.py` y `serializer.py` separados en iteraciones propias (3.1 y 3.2). Iteracion 3.3 de experimentacion y build añadida. Iteracion 3.4 de cierre con MODEL QA + CERTIFICACION + VALIDACION añadida. | `docs/governance/backlog.md` | DONE |
-| 4 | Agentes asignados correctamente desde `agents.md`: @ai-data-qa-engineer (RED), @ai-data-scientist (GREEN trainer + experimentacion), @ai-ml-engineer (GREEN serializer + REFACTOR + BUILD), @ai-model-qa-validator (MODEL QA), @ai-mlops-specialist (VALIDACION). | `docs/governance/backlog.md` | DONE |
+| 4 | Agentes asignados correctamente desde `[[agents]].md`: @ai-data-qa-engineer (RED), @ai-data-scientist (GREEN trainer + experimentacion), @ai-ml-engineer (GREEN serializer + REFACTOR + BUILD), @ai-model-qa-validator (MODEL QA), @ai-mlops-specialist (VALIDACION). | `docs/governance/backlog.md` | DONE |
 | 5 | `CLAUDE.md` actualizado por el usuario: referencia a `principles.md` reforzada como hipervínculo directo. | `CLAUDE.md` | DONE |
 
 ---
@@ -49,15 +49,15 @@
 | contract.md    | `docs/governance/contract.md`                     | DONE — 2026-04-19 (v1.0.0)              |
 | design-system  | `docs/design-system/`                             | DONE — 2026-04-20                        |
 | backlog.md     | `docs/governance/backlog.md`                      | DONE — 2026-04-24 (F2: 16/16 tareas DONE, F3: 9 tareas atomizadas, listo para ejecucion) |
-| agents.md      | `docs/references/agents.md`                       | DONE — 2026-04-23                        |
+| [[agents]].md      | `docs/references/[[agents]].md`                       | DONE — 2026-04-23                        |
 | process.md     | `docs/methodology/process.md`                     | DONE — 2026-04-23                        |
 | CLAUDE.md      | `CLAUDE.md` (raiz)                                | DONE — 2026-04-23                        |
-| CC-028.md      | `docs/changes/CC-028.md`                          | DONE — 2026-04-21                        |
+| [[CC-028]].md      | `docs/changes/CC-028.md`                          | DONE — 2026-04-21                        |
 | eda_bronze.md  | `docs/Phase_engineering/eda_bronze.md`            | DONE — 2026-04-21 (veredicto GO)        |
 | eda_silver.md  | `docs/Phase_engineering/eda_silver.md`            | DONE — 2026-04-23 (veredicto GO)        |
 | eda_gold.md    | `docs/Phase_engineering/eda_gold.md`              | DONE — 2026-04-24 (veredicto GO)        |
 | certification_f2.md | `docs/Phase_engineering/certification_f2.md` | DONE — 2026-04-24 (CERTIFICADO)         |
-| validation_f2.md | `docs/Phase_engineering/validation_f2.md`      | DONE — 2026-04-24 (GO)                  |
+| [[validation_f2]].md | `docs/Phase_engineering/[[validation_f2]].md`      | DONE — 2026-04-24 (GO)                  |
 | silver_cleaner.py | `src/data/silver_cleaner.py`                   | DONE — 2026-04-23                        |
 | test_silver_cleaner.py | `tests/unit/data/test_silver_cleaner.py`  | DONE — 2026-04-23                        |
 | gold_builder.py | `src/data/gold_builder.py`                       | DONE — 2026-04-24 (refactored con TARGET_COLUMN) |
@@ -97,7 +97,7 @@ El mismo comando es ejecutado automaticamente por el workflow CI en cada push a 
 
 **Pendientes tecnicos:**
 - Sincronizar en NotebookLM: `decisions.md` (entradas #17, #18 y leccion aprendida de Iteracion 2.4 añadidas en esta sesion), `brd.md` (re-sincronizar, modificado 2026-04-20) y `behavior.md` (carga inicial, nuevo 2026-04-20). Esta sincronizacion debe realizarse antes de iniciar Phase Modeling.
-- El commit de cierre de Phase 2 debe incluir: `certification_f2.md`, `validation_f2.md` y el `backlog.md` actualizado.
+- El commit de cierre de Phase 2 debe incluir: `certification_f2.md`, `[[validation_f2]].md` y el `backlog.md` actualizado.
 
 ---
 
