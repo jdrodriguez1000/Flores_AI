@@ -84,7 +84,7 @@
 ## FASE 2: Data & EDA — Feature Set Certificado
 
 **Entregable Principal:** Dataset Gold certificado con features validadas estadísticamente.
-**Estado de Fase:** IN PROGRESS — inicio 2026-04-20.
+**Estado de Fase:** DONE ✅ — 2026-04-24
 
 > Ciclo completo IA-TDD por capa: RED → GREEN → REFACTOR por iteración. CERTIFICACIÓN y VALIDACIÓN consolidan la fase antes de avanzar a Modeling.
 > **Tarea atómica:** Un único responsable por tarea. Un único entregable por tarea.
@@ -217,7 +217,7 @@
 - **Entregable:** `docs/Phase_engineering/certification_f2.md`
 - **Acción:** Documentation
 - **DoD:** Reporte certifica trazabilidad total de datos (Bronze → Silver → Gold), cumplimiento del SAD §5 y del SpecDD §6–8. Todos los tests de la fase (F2-T01, F2-T04, F2-T07) pasan en conjunto con `pytest tests/unit/data/`. Sin rutas absolutas ni dependencias no declaradas en `requirements.txt`.
-- **Estado:** TODO
+- **Estado:** DONE ✅ — 2026-04-24
 
 #### [F2-T11] [VALIDACIÓN] Validar dataset Gold contra KPIs del BRD
 - **Responsable:** @ai-data-scientist
@@ -225,7 +225,7 @@
 - **Entregable:** `docs/Phase_engineering/validation_f2.md`
 - **Acción:** Documentation
 - **DoD:** Reporte verifica que el Feature Set Gold cumple los thresholds de calidad definidos en el BRD. Incluye veredicto GO/NO-GO explícito para avanzar a Fase 3 (Modeling).
-- **Estado:** TODO
+- **Estado:** DONE ✅ — 2026-04-24
 
 ---
 

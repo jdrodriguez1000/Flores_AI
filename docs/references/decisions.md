@@ -1323,4 +1323,77 @@ La discrepancia se origina en que la estimacion del contract.md fue realizada an
 
 ---
 
+---
+
+## Entrada #17 — Sesion 2026-04-24 | Phase Engineering — Iteracion 2.4 (Certificacion)
+
+**Agente de Cierre:** ai-session-steward
+**Hora de Cierre:** Fin de jornada 2026-04-24
+**Tarea:** F2-T10 [CERTIFICACION] — Entregable: `docs/Phase_engineering/certification_f2.md`
+
+---
+
+### D-038: Certificacion de linaje Bronze→Silver→Gold — 34/34 tests PASS como criterio de cierre de Phase Engineering
+
+| Campo     | Valor |
+| :-------- | :---- |
+| **Fecha** | 2026-04-24 |
+| **Fase**  | Phase Engineering — Iteracion 2.4 (Certificacion) |
+| **Origen** | F2-T10 — Certificacion tecnica ejecutada por @ai-data-qa-engineer |
+| **Tipo**  | Decision de proceso (criterio de certificacion de capa de datos) |
+
+**Contexto:** La certificacion tecnica de la Fase 2 se ejecuto mediante `pytest tests/unit/data/ -v`, que cubre las tres capas del Medallion Architecture: 10 tests Bronze (invariantes BR), 12 tests Silver (invariantes SR), 12 tests Gold (invariantes GR). La suite de 34 tests es el subconjunto del pipeline que valida el linaje de datos de extremo a extremo, sin incluir los 16 tests de configuracion.
+
+**Decision:** El criterio de certificacion de linaje para Phase Engineering es 34/34 tests en verde en `tests/unit/data/`, con 0 fallos y 0 errores. Este criterio se ejecuto y se cumplio. El reporte formal queda en `docs/Phase_engineering/certification_f2.md`. Adicionalmente se verifico: ausencia de rutas absolutas en codigo fuente y todas las dependencias declaradas en `requirements.txt`.
+
+**Justificacion:** Separar la suite de linaje (34 tests de data) de la suite completa (50 tests incluyendo config) permite auditar el pipeline de datos de forma aislada sin ruido de tests de infraestructura. Este es el patron que usara Phase Modeling para certificar el pipeline de entrenamiento de forma analoga.
+
+**Impacto Transversal:**
+- `docs/Phase_engineering/certification_f2.md`: Reporte formal de certificacion. Fuente de verdad para el GO de Phase Modeling.
+- Phase Modeling: El mismo patron de certificacion por capa debe aplicarse al pipeline de entrenamiento antes de emitir el GO de Phase Modeling.
+
+---
+
+---
+
+## Entrada #18 — Sesion 2026-04-24 | Phase Engineering — Iteracion 2.4 (Validacion)
+
+**Agente de Cierre:** ai-session-steward
+**Hora de Cierre:** Fin de jornada 2026-04-24
+**Tarea:** F2-T11 [VALIDACION] — Entregable: `docs/Phase_engineering/validation_f2.md`
+
+---
+
+### D-039: Baseline RandomForest 5-fold CV 95.20% sobre Gold dataset — umbral BRD superado, GO para Phase Modeling
+
+| Campo     | Valor |
+| :-------- | :---- |
+| **Fecha** | 2026-04-24 |
+| **Fase**  | Phase Engineering — Iteracion 2.4 (Validacion) |
+| **Origen** | F2-T11 — Validacion de negocio ejecutada por @ai-data-scientist |
+| **Tipo**  | Decision de validacion de negocio (GO/NO-GO para Phase Modeling) |
+
+**Contexto:** La validacion de la Fase 2 consistio en verificar que el Feature Set Gold es suficientemente informativo para el problema de clasificacion Iris. Se ejecuto un proxy de separabilidad: RandomForest sin hiperparametrizar, 5-fold cross-validation, sobre `data/gold/X_gold.csv` y `data/gold/y_gold.csv`. El resultado fue 95.20% accuracy ± 3.53%. El umbral del BRD es Accuracy >= 95%.
+
+**Decision:** El Feature Set Gold supera el umbral de accuracy del BRD. Se emite veredicto GO para Phase Modeling. El baseline de 95.20% queda registrado como referencia: el modelo final de produccion debe igualar o superar este valor. Los cuatro criterios de validacion se cumplieron: linaje 100% documentado, trazabilidad SpecDD completa, cobertura de tests 100%, baseline ≥ 95%.
+
+**Justificacion:** La validacion del Feature Set con un clasificador proxy (no el modelo de produccion final) antes de iniciar Phase Modeling es una practica de bajo costo y alto valor: si el baseline no supera el umbral, el problema esta en los features o en la limpieza de datos, no en el modelo. Detectarlo aqui evita iteraciones costosas en Phase Modeling. El RandomForest sin tuning es el proxy mas honesto: no puede hacer overfitting por hiperparametrizacion agresiva y su performance real en CV refleja la separabilidad intrinseca del Feature Store.
+
+**Impacto Transversal:**
+- `docs/Phase_engineering/validation_f2.md`: Reporte formal de validacion con veredicto GO.
+- Phase Modeling: El modelo final debe superar 95.20% accuracy en el conjunto de test. Este valor es el piso, no el techo.
+- `docs/governance/brd.md`: KPI de accuracy validado formalmente contra el Feature Set Gold.
+
+---
+
+### Lecciones Aprendidas — Sesion 2026-04-24 (Iteracion 2.4 — Certificacion y Validacion)
+
+| # | Leccion | Categoria |
+| :- | :------- | :-------- |
+| 1 | El ciclo AI-TDD (Red→Green→Refactor→Certificacion→Validacion) por capa fue completado de forma limpia en Fase 2. La separacion de responsabilidades entre @ai-data-qa-engineer (certificacion tecnica — 34 tests, ausencia de rutas absolutas, dependencias declaradas) y @ai-data-scientist (validacion de negocio — linaje, trazabilidad SpecDD, baseline KPI) funcionó correctamente. Cada agente tiene un criterio de exito diferente y complementario. | Proceso / Organizacion de Agentes |
+| 2 | El baseline proxy de separabilidad (RandomForest 5-fold CV sin hiperparametrizar) es la herramienta mas honesta para validar un Feature Store antes de Phase Modeling. Un resultado de 95.20% ± 3.53% sobre el Gold dataset confirma que los datos son suficientemente informativos. La desviacion estandar de 3.53% es aceptable para un dataset de 147 instancias con 5 folds — indica varianza de muestreo, no inestabilidad del clasificador. | Calidad de Datos / Modelado |
+| 3 | La certificacion tecnica del linaje mediante ejecucion directa de pytest (sin mocks ni fixtures artificiales) es la auditoria mas rigurosa del pipeline. Si los 34 tests de data pasan, el codigo que implementa Bronze→Silver→Gold es correcto por construccion. No existe documentacion de linaje mas fiable que una suite de tests que falla si el contrato se rompe. | Calidad de Tests |
+
+---
+
 *Fin de entrada #16.*
