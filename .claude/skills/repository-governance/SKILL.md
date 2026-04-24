@@ -27,7 +27,7 @@ El archivo `docs/governance/backlog.md` debe ser creado con la siguiente estruct
 # Backlog del Proyecto
 
 > Generado automáticamente en el Bootstrap del repositorio.
-> Fuente de verdad: CLAUDE.md | Metodología: ai_process.md
+> Fuente de verdad: CLAUDE.md | Metodología: process.md
 
 ---
 

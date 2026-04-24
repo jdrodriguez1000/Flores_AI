@@ -85,7 +85,7 @@ las cuatro dimensiones muestre el tipo de especie predicha.
 | Documentacion externa| No definida                                  | Sin fuente externa por definir                            | Pendiente    |
 
 **Fuentes cargadas en NotebookLM (2026-04-20):**
-- `ai_process.md` — Marco metodologico
+- `process.md` — Marco metodologico
 - `brd.md` — Objetivos y KPIs
 - `sad.md` — Arquitectura tecnica
 - `specdd.md` — Contratos de interfaces

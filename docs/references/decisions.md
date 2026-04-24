@@ -721,3 +721,750 @@ Cada entrada debe contener: Fecha, Fase, ID de Decision, Contexto, Decision, Jus
 ---
 
 *Fin de entrada #7.*
+
+---
+
+---
+
+## Entrada #8 — Sesion 2026-04-20 | Phase Engineering (Apertura y Expansion del Backlog F2)
+
+**Agente de Cierre:** ai-session-steward
+**Hora de Cierre:** Fin de jornada 2026-04-20
+**Rama activa:** `feat/F2-engineering` (commit `802b22a`)
+
+---
+
+### D-023: Ciclo IA-TDD completo como estructura obligatoria del backlog por fase
+
+| Campo     | Valor |
+| :-------- | :---- |
+| **Fecha** | 2026-04-20 |
+| **Fase**  | Phase Engineering (aplicable a todas las fases tecnicas) |
+| **Origen** | Expansion del backlog F2 de 6 a 11 tareas |
+| **Tipo**  | Decision de proceso / estructura del backlog |
+
+**Contexto:** El backlog original de Phase Engineering tenia 6 tareas que cubrian solo los pasos RED y GREEN del ciclo IA-TDD definido en CLAUDE.md §4. Los pasos REFACTOR, CERTIFICACION y VALIDACION no estaban representados como tareas atomicas. Esto significaba que el ciclo quedaria incompleto sin trazabilidad formal de la calidad del codigo y del cumplimiento del linaje de datos.
+
+**Decision:** Cada iteracion tecnica del backlog debe contener obligatoriamente tres tareas: [RED] (tests primero), [GREEN] (implementacion minima que pasa los tests) y [REFACTOR] (calidad de codigo + EDA/documentacion del resultado de la capa). Adicionalmente, cada fase tecnica debe cerrar con una iteracion de [CERTIFICACION] (auditoria de linaje completo) y [VALIDACION] (verificacion contra KPIs del BRD). Esta estructura se aplico retroactivamente a Phase Engineering (F2) y debe aplicarse al disenar el backlog de Phase Modeling (F3) y Phase Delivery (F4).
+
+**Justificacion:** Sin las tareas [REFACTOR], el codigo GREEN (minimo para pasar tests) queda en produccion sin tipado estricto, sin documentacion de la transformacion y sin el EDA que valida el resultado de la capa. Esto viola el principio "Soberania Documental" de CLAUDE.md. Sin [CERTIFICACION] y [VALIDACION], una fase puede declararse completa sin haber verificado el linaje de datos de extremo a extremo ni haber confirmado que el Feature Set cumple los thresholds del BRD.
+
+**Impacto Transversal:**
+- `docs/governance/backlog.md`: Phase Engineering actualizada de 6 a 11 tareas con ciclo completo.
+- Phase Modeling (F3) y Phase Delivery (F4): Cuando se atomicen, deben incluir las tareas [REFACTOR], [CERTIFICACION] y [VALIDACION] correspondientes.
+- `ai-backlog-manager`: Al disenar backlogs de fases tecnicas futuras, debe usar esta estructura de 3 tareas por iteracion + iteracion de cierre como plantilla mandatoria.
+
+---
+
+### D-024: Sincronizacion de rama siempre desde origin/dev, no desde dev local
+
+| Campo     | Valor |
+| :-------- | :---- |
+| **Fecha** | 2026-04-20 |
+| **Fase**  | Transversal (gestion de ramas) |
+| **Origen** | Error de creacion de `feat/F2-engineering` desde `dev` local desactualizado |
+| **Tipo**  | Decision de protocolo Git |
+
+**Contexto:** Al crear la rama `feat/F2-engineering`, se uso `git checkout -b feat/F2-engineering dev` sin haber ejecutado `git fetch origin` previamente. La rama `dev` local estaba desactualizada respecto a `origin/dev` (le faltaba el commit del Merge PR #1). Esto produjo una rama que no incluia el ultimo merge y requirio correccion con `git reset --hard origin/dev` + `git rebase dev`.
+
+**Decision:** El protocolo obligatorio para crear ramas de feature es: (1) `git fetch origin`, (2) `git checkout -b feat/<nombre> origin/dev`. Nunca crear ramas desde referencias locales sin verificar su estado respecto al remoto. Si ya se creo una rama desde una referencia local desactualizada, el procedimiento de correccion es `git reset --hard origin/<base>` antes de realizar cualquier commit en la rama nueva.
+
+**Justificacion:** Una rama creada desde `dev` local desactualizado producira conflictos en el PR o perdera commits del merge mas reciente. El paso `git fetch origin` es gratuito en costo y elimina completamente este riesgo. El protocolo `origin/<rama>` como referencia explicita garantiza que siempre se parte del estado remoto verificado, independientemente del estado local.
+
+**Impacto Transversal:**
+- Todas las ramas `feat/F3-*` y `feat/F4-*` futuras deben crearse con `git checkout -b feat/<nombre> origin/dev`.
+- El ritual de apertura de sesion debe incluir `git fetch origin` como primer comando Git antes de cualquier operacion de ramas.
+
+---
+
+### Lecciones Aprendidas — Sesion 2026-04-20 (Apertura Phase Engineering)
+
+| # | Leccion | Categoria |
+| :- | :------- | :-------- |
+| 1 | El ciclo IA-TDD definido en CLAUDE.md §4 tiene 5 pasos, pero un backlog que solo atomiza RED y GREEN deja 3 pasos sin trazabilidad. La estructura del backlog debe reflejar el ciclo completo desde el primer borrador, no corregirse antes de empezar la fase. | Proceso / Backlog |
+| 2 | `git fetch origin` debe ser el primer comando de cualquier sesion que involucre trabajo con ramas. El costo es cero y el riesgo de omitirlo es crear ramas desde referencias obsoletas, lo que genera retrabajo de correccion. | Gestion de Versiones |
+| 3 | Las tareas [REFACTOR] no son opcionales ni "si hay tiempo" — son el paso que transforma codigo funcional en codigo industrializable. Sin ellas, el pipeline de datos puede pasar los tests pero no cumple el contrato del SpecDD (tipado estricto, importabilidad, sin rutas absolutas). | Calidad de Codigo |
+| 4 | La iteracion de CERTIFICACION al cierre de cada fase tecnica es el mecanismo que garantiza que el linaje Bronze → Silver → Gold es trazable antes de iniciar la siguiente fase. Sin este paso formal, la Phase Modeling podria iniciarse con un dataset Gold sin linaje verificado. | Trazabilidad de Datos |
+
+---
+
+*Fin de entrada #8.*
+
+---
+
+---
+
+## Entrada #9 — Sesion 2026-04-20 | Phase Engineering (Integracion de Capa BDD)
+
+**Agente de Cierre:** ai-session-steward
+**Hora de Cierre:** Fin de jornada 2026-04-20
+**Rama activa:** `feat/F2-engineering` (commit `3d4bb87`)
+
+---
+
+### D-025: Jerarquia de especificacion BRD → BDD → SpecDD → TDD como protocolo obligatorio
+
+| Campo     | Valor |
+| :-------- | :---- |
+| **Fecha** | 2026-04-20 |
+| **Fase**  | Transversal (Phase Engineering en adelante) |
+| **Origen** | Incorporacion de BDD como capa metodologica al proyecto |
+| **Tipo**  | Decision de proceso / jerarquia de especificacion |
+
+**Contexto:** El flujo de desarrollo del proyecto definia la cadena `BRD → SpecDD → TDD` (CLAUDE.md §1 "Soberania Documental"). Esta cadena saltaba directamente de los requisitos de negocio (BRD) a los contratos de interfaz tecnica (SpecDD), sin una capa intermedia que tradujera los requisitos de negocio en comportamiento observable del sistema. Esto generaba un gap: el `ai-data-qa-engineer` debia inferir los casos de prueba directamente del BRD, con riesgo de ambiguedad en las condiciones de frontera.
+
+**Decision:** Se incorpora BDD (Behavior-Driven Development) como capa obligatoria entre el BRD y el SpecDD. La jerarquia queda: `BRD (intencion) → behavior.md (comportamiento observable) → SpecDD (contrato tecnico) → TDD (correctitud del codigo)`. El documento `behavior.md` es el Contrato de Comportamiento del proyecto, escrito en Gherkin (Given/When/Then), y es la fuente de verdad para los tests RED de cada ciclo IA-TDD. Ningun test RED puede escribirse sin que exista el escenario BDD correspondiente en `behavior.md`.
+
+**Justificacion:** BDD cierra el gap de interpretacion entre negocio y tecnica. Los escenarios Gherkin son legibles por el Stakeholder (validacion de negocio) y ejecutables como tests (validacion tecnica). Al forzar la escritura del escenario BDD antes del test TDD, se garantiza que cada test tiene una justificacion de negocio trazable. Ademas, los escenarios de frontera (baja confianza, entradas invalidas) son mas faciles de identificar en lenguaje de comportamiento que en codigo de test.
+
+**Impacto Transversal:**
+- `CLAUDE.md`: Jerarquia BDD documentada en Soberania Documental y seccion 4 ("SpecDD + BDD + TDD").
+- `docs/governance/behavior.md`: Nuevo artefacto mandatorio de gobernanza.
+- `docs/governance/BRD.md`: Escenarios Gherkin añadidos a cada User Story; nueva seccion 9.4 de trazabilidad BDD.
+- `docs/methodology/ai_process.md`: behavior.md en tabla de artefactos Phase Discovery; jerarquia BDD documentada en seccion 5; ai-full-stack-sdet referencia behavior.md como fuente de verdad E2E.
+- `docs/governance/backlog.md`: Las tareas [RED] futuras de Phase Modeling y Phase Delivery deben referenciarse contra escenarios BDD de behavior.md.
+- Proyectos futuros: El skill `gherkin-scenario-author` genera behavior.md como parte del cierre de Phase Discovery, antes de iniciar Phase Engineering.
+
+---
+
+### D-026: SpecDD v1.0.0 cubre el 100% de los escenarios BDD sin modificaciones
+
+| Campo     | Valor |
+| :-------- | :---- |
+| **Fecha** | 2026-04-20 |
+| **Fase**  | Phase Engineering |
+| **Origen** | Auditoria de alineacion entre behavior.md v1.0.0 y specdd.md v1.0.0 |
+| **Tipo**  | Decision de validacion de arquitectura (verificacion de linaje) |
+
+**Contexto:** Al crear `behavior.md` con 10 escenarios Gherkin para US-01, US-02 y US-03, se realizo una auditoria de alineacion contra `specdd.md` v1.0.0 para determinar si el contrato de interfaz existente era suficiente o requeria extension. Los escenarios BDD dependen de cuatro campos del resultado de prediccion: `species` (nombre de la clase), `confidence` (probabilidad de la clase ganadora), `probabilities` (distribucion completa por clase) y `low_confidence` (flag booleano de advertencia).
+
+**Decision:** El objeto `PredictionResult` definido en SpecDD v1.0.0 (seccion 1.2 — `src/predictor.py`) ya expone exactamente los cuatro campos requeridos. El SpecDD no requiere modificaciones para soportar la capa BDD. La version del SpecDD permanece en v1.0.0. Esta alineacion queda documentada en la seccion "Nota de Alineacion con SpecDD" de `behavior.md`.
+
+**Justificacion:** La alineacion perfecta entre BDD y SpecDD sin modificaciones es una validacion de que la arquitectura tecnica fue disenada correctamente desde el inicio, anticipando las necesidades de comportamiento observable. Modificar el SpecDD en respuesta a un BDD es el escenario esperado en proyectos donde la arquitectura se disena antes del BDD; aqui el resultado opuesto confirma que el SAD/SpecDD diseñados en Phase Discovery son robustos. Esta decision elimina cualquier deuda tecnica de interfaz antes de iniciar la implementacion.
+
+**Impacto Transversal:**
+- `docs/governance/specdd.md`: Sin cambios. v1.0.0 permanece vigente.
+- `docs/governance/behavior.md`: Seccion "Nota de Alineacion con SpecDD" documenta la tabla de cobertura de campos.
+- `src/predictor.py` (Phase Delivery): La implementacion de `PredictionResult` puede proceder directamente contra SpecDD v1.0.0 y behavior.md v1.0.0 sin tension entre ambos contratos.
+
+---
+
+### D-027: behavior.md como documento de gobernanza de Phase Discovery, no de Phase Engineering
+
+| Campo     | Valor |
+| :-------- | :---- |
+| **Fecha** | 2026-04-20 |
+| **Fase**  | Phase Discovery (cierre retroactivo) |
+| **Origen** | Clasificacion del artefacto behavior.md en la tabla de gobernanza de ai_process.md |
+| **Tipo**  | Decision de clasificacion de artefactos / proceso metodologico |
+
+**Contexto:** Al incorporar `behavior.md` al proyecto en sesion de Phase Engineering, surgio la pregunta de a que fase pertenece este artefacto. El BDD es conceptualmente una actividad de definicion de requisitos (anterior a la implementacion), pero se creo durante la Phase Engineering. Se evaluo clasificarlo en Phase Engineering o retroactivamente en Phase Discovery.
+
+**Decision:** `behavior.md` pertenece a Phase Discovery como artefacto de cierre. Su posicion en `ai_process.md` es junto a los demas documentos de contrato (BRD, SAD, SpecDD) y debe generarse antes de iniciar Phase Engineering. En proyectos futuros que usen este framework, el skill `gherkin-scenario-author` debe ejecutarse al cerrar Phase Discovery, inmediatamente despues de aprobar el BRD y antes de iniciar la Phase Engineering. El comportamiento observable del sistema debe estar acordado con el Stakeholder antes de comenzar a escribir tests.
+
+**Justificacion:** Los escenarios BDD son una extension del BRD en lenguaje ejecutable. Pertenecen al mismo espacio de "que debe hacer el sistema" (not "como lo hace"). Crear BDD en Phase Engineering es aceptable si el SpecDD fue disenado correctamente (como fue el caso aqui), pero es un riesgo si los escenarios BDD revelan gaps en el SpecDD que ya fue usado como base para el backlog. El orden correcto es: BRD → behavior.md → SAD → SpecDD → backlog. En este proyecto el orden fue suboptimo pero no genero retrabajo gracias a la solidez del SpecDD v1.0.0.
+
+**Impacto Transversal:**
+- `docs/methodology/ai_process.md`: behavior.md posicionado en la tabla de artefactos de Phase Discovery.
+- `.claude/skills/gherkin-scenario-author/SKILL.md`: El skill documenta que debe ejecutarse al cierre de Phase Discovery.
+- Proyectos futuros: El backlog de Phase Discovery debe incluir una tarea para crear behavior.md antes de crear el SpecDD.
+
+---
+
+### Lecciones Aprendidas — Sesion 2026-04-20 (Integracion BDD)
+
+| # | Leccion | Categoria |
+| :- | :------- | :-------- |
+| 1 | Un SpecDD disenado con rigor de contratos (campos tipados, nombres semanticos) tiene alta probabilidad de cubrir los escenarios BDD sin modificacion. La alineacion perfecta entre behavior.md v1.0.0 y specdd.md v1.0.0 valida que el esfuerzo de precision en Phase Discovery se amortiza en cero deuda tecnica al incorporar BDD. | Calidad de Arquitectura |
+| 2 | El orden correcto de artefactos es BRD → behavior.md → SAD → SpecDD. Crear el SpecDD antes del BDD es un riesgo calculado: si el SpecDD es robusto, no hay retrabajo; si el BDD revela gaps en el SpecDD, hay que versionar el SpecDD y actualizar el backlog. Documentar este riesgo en el handoff evita que el proximo agente asuma que el orden fue intencional. | Proceso / Metodologia |
+| 3 | Los escenarios de frontera (baja confianza con umbral exacto del 60%, valores en los limites exactos del rango de validacion) son mas faciles de identificar en Gherkin que en TDD. El lenguaje de comportamiento observable obliga al autor a pensar en terminos de "dado este input exacto, que muestra la pantalla" antes de pensar en aserciones de codigo. | Calidad de Tests |
+| 4 | Crear un skill para una capacidad nueva (gherkin-scenario-author) inmediatamente al usarla por primera vez garantiza que la capacidad es reproducible en sesiones futuras sin depender de la memoria del agente. El skill es la documentacion ejecutable de la habilidad. | Gestion de Conocimiento |
+
+---
+
+*Fin de entrada #9.*
+
+---
+
+## Entrada #10 — Sesión 2026-04-21 | Gobernanza
+
+**Agente:** ai-change-manager
+
+---
+
+### CC-028 (referencia): Expansión del Protocolo de Control de Cambios
+
+| Campo | Valor |
+|---|---|
+| **Tipo** | Control de Cambios |
+| **Estado** | APROBADO |
+| **Ficha completa** | `docs/changes/CC-028.md` |
+| **Resumen** | Protocolo CC expandido en CLAUDE.md Sección 5. Creación de `docs/changes/` como ubicación oficial de fichas CC. El ritual de cierre de sesión sincroniza `docs/changes/` a NotebookLM. |
+
+---
+
+*Fin de entrada #10.*
+
+---
+
+## Entrada #11 — Sesion 2026-04-21 | Phase Engineering — Gobernanza
+
+**Agente de Cierre:** ai-session-steward
+**Hora de Cierre:** Fin de jornada 2026-04-21
+
+---
+
+### D-029: NotebookLM se consulta a demanda, no en el ritual de apertura
+
+| Campo | Valor |
+|---|---|
+| **Contexto** | Se debatio si el ritual de apertura debia incluir una lectura de NotebookLM como paso obligatorio. |
+| **Decision** | NotebookLM es una base de conocimiento profundo que se consulta a demanda durante la sesion, no en apertura. Los 4 documentos operativos (handoff, decisions, backlog, config) son suficientes para reconstruir el contexto de arranque. |
+| **Justificacion** | Cargar el cerebro completo en cada apertura es costoso y generalmente innecesario. El conocimiento profundo solo es relevante cuando los documentos operativos no responden una pregunta especifica. |
+| **Impacto** | CLAUDE.md Seccion 8 (Ritual de Apertura) incluye nota explicita de este diseño. |
+
+---
+
+### D-030: AGENTS.md es la unica fuente de verdad del catalogo de agentes
+
+| Campo | Valor |
+|---|---|
+| **Contexto** | CLAUDE.md Seccion 7 listaba 4 agentes de forma redundante con AGENTS.md. |
+| **Decision** | Eliminar la lista duplicada de CLAUDE.md y reemplazar por una referencia directa a AGENTS.md. |
+| **Justificacion** | Un catalogo duplicado genera deriva — si se agrega un agente nuevo, hay dos lugares que actualizar. AGENTS.md es el documento diseñado para este proposito. |
+| **Impacto** | CLAUDE.md Seccion 7 actualizada. AGENTS.md es la fuente de verdad del escuadron de agentes. |
+
+---
+
+### Referencia CC-028: docs/changes/ como ubicacion oficial de fichas CC
+
+Ver ficha completa en `docs/changes/CC-028.md`.
+
+**Resumen:** Protocolo CC expandido en CLAUDE.md Seccion 5. Creacion de `docs/changes/` para fichas formales. decisions.md referencia CCs sin duplicar detalle. Session-steward sincroniza docs/changes/ a NotebookLM al cierre si hubo CC aprobado.
+
+---
+
+*Fin de entrada #11.*
+
+---
+
+---
+
+## Entrada #12 — Sesion 2026-04-21 | Phase Engineering — Iteraciones 2.0 y 2.1 (Implementacion Bronze)
+
+**Agente de Cierre:** ai-session-steward
+**Hora de Cierre:** Fin de jornada 2026-04-21
+**Rama activa:** `feat/F2-engineering`
+
+---
+
+### D-028: Patron de inyeccion de dependencias en tests de modulos de datos
+
+| Campo     | Valor |
+| :-------- | :---- |
+| **Fecha** | 2026-04-21 |
+| **Fase**  | Phase Engineering |
+| **Origen** | Diseño de `tests/unit/data/test_bronze_loader.py` — necesidad de ejecutar F2-T01 antes de que F2-T00B estuviera listo |
+| **Tipo**  | Decision de diseño de tests (desacoplamiento de infraestructura) |
+
+**Contexto:** Al diseñar los tests para `bronze_loader.py`, se planteo si los tests debian importar `src.config` para obtener el path del CSV (acoplamiento con el modulo de configuracion) o si el path debia ser inyectado como argumento de la funcion testeada. F2-T01 (RED de bronze_loader) fue ejecutada antes de F2-T00B (GREEN de config.py), lo que hizo que el acoplamiento con config.py fuera imposible por ausencia del modulo.
+
+**Decision:** Los tests de modulos de datos (`test_bronze_loader.py`, `test_silver_cleaner.py`, `test_gold_builder.py`) NO importan `src.config` directamente. El path del CSV (u otro artefacto de entrada) se inyecta como argumento a la funcion testeada, construyendo el path en el fixture del test usando `pathlib.Path(__file__).resolve().parents[3] / "data" / "bronze" / "Iris.csv"`. Este patron sigue el principio SpecDD §12.4 de inyeccion de dependencias y se aplica a todos los modulos de datos de la fase Engineering.
+
+**Justificacion:** El desacoplamiento de los tests respecto a `config.py` tiene tres ventajas: (1) permite ejecutar los tests RED de cada capa antes de que la infraestructura base (config.py) este implementada, (2) los tests son mas robustos porque no dependen de que `config.py` se importe correctamente, (3) si `config.py` cambia sus constantes de ruta, los tests de datos no se rompen. Este patron replica el principio de "ports and adapters" en el nivel de tests.
+
+**Impacto Transversal:**
+- `tests/unit/data/test_bronze_loader.py`: Patron implementado. Path del CSV construido en fixture con `pathlib`.
+- `tests/unit/data/test_silver_cleaner.py` (F2-T04, pendiente): Debe seguir el mismo patron — inyectar el path de `data/bronze/Iris.csv` como argumento a `clean_silver()`, no importar `config.DATA_BRONZE`.
+- `tests/unit/data/test_gold_builder.py` (F2-T07, pendiente): Idem — inyectar paths de Silver como argumentos.
+
+---
+
+### D-029: `src/__init__.py` vacio es prerequisito obligatorio para importar desde `src`
+
+| Campo     | Valor |
+| :-------- | :---- |
+| **Fecha** | 2026-04-21 |
+| **Fase**  | Phase Engineering |
+| **Origen** | Error de importacion al ejecutar `pytest tests/unit/test_config.py` antes de crear `src/__init__.py` |
+| **Tipo**  | Decision de ingenieria de software (estructura de paquete Python) |
+
+**Contexto:** Al implementar `src/config.py` (F2-T00B) y ejecutar los tests, el comando `from src import config` fallo con `ModuleNotFoundError: No module named 'src'`. El directorio `src/` no tenia un archivo `__init__.py`, por lo que Python no lo reconocia como paquete importable.
+
+**Decision:** El archivo `src/__init__.py` (contenido vacio) debe crearse en el mismo momento que `src/config.py`. Analogamente, `src/data/__init__.py` debe crearse junto con el primer modulo en `src/data/`. Esta regla se extiende a todos los sub-paquetes de `src/` (`src/training/`). Cualquier directorio en `src/` que contenga modulos Python debe tener su `__init__.py` antes de que se pueda importar desde ese directorio.
+
+**Justificacion:** En Python, un directorio es un paquete importable solo si contiene `__init__.py`. Sin este archivo, `import src.config` y `from src import config` fallan con `ModuleNotFoundError`, aunque el archivo `config.py` exista fisicamente. La ausencia de `__init__.py` es un error de infraestructura silencioso que produce falsos negativos en los tests RED (el test falla por razon incorrecta, no porque el codigo de produccion no exista, sino porque el paquete no es importable).
+
+**Impacto Transversal:**
+- `src/__init__.py`: Creado (vacio) junto con `src/config.py` en F2-T00B.
+- `src/data/__init__.py`: Creado (vacio) junto con `src/data/bronze_loader.py` en F2-T02.
+- `src/training/__init__.py` (futuro): Debe crearse junto con el primer modulo de `src/training/` en Phase Modeling.
+- `tests/__init__.py`, `tests/unit/__init__.py`, `tests/unit/data/__init__.py`: Creados como scaffolding inicial de la suite de tests.
+
+---
+
+### D-030: FileNotFoundError explicito en bronze_loader antes de delegar a pandas
+
+| Campo     | Valor |
+| :-------- | :---- |
+| **Fecha** | 2026-04-21 |
+| **Fase**  | Phase Engineering |
+| **Origen** | Diseno del test `test_bronze_raises_file_not_found_for_missing_csv` en F2-T01 |
+| **Tipo**  | Decision de diseno de manejo de errores (contrato de interfaz) |
+
+**Contexto:** El test F2-T01 incluye el caso `test_bronze_raises_file_not_found_for_missing_csv` que verifica que `load_bronze(path)` levanta `FileNotFoundError` cuando el CSV no existe. pandas levanta internamente `FileNotFoundError` si el archivo no existe, pero el mensaje de error es generico y la excepcion proviene de las entrañas de pandas. Un consumidor del modulo que capture esta excepcion no puede saber si el error es del modulo de datos o de pandas.
+
+**Decision:** `bronze_loader.py` verifica explicitamente `csv_path.exists()` antes de llamar a `pd.read_csv()`. Si el archivo no existe, levanta `FileNotFoundError(f"CSV no encontrado en: {csv_path}")` con un mensaje descriptivo especifico del modulo. La verificacion con `pathlib.Path.exists()` es el patron estandar para este tipo de guard clause. Este patron se aplica a todos los modulos de carga de datos (`silver_cleaner.py`, `gold_builder.py`).
+
+**Justificacion:** (1) La excepcion con mensaje personalizado identifica inequivocamente el modulo origen del error sin necesidad de trazar el stack completo. (2) Verificar antes de delegar a pandas evita que el usuario del modulo reciba un mensaje de error de pandas que no menciona el contexto del pipeline de datos. (3) El test puede afirmar con precision que el modulo levanta la excepcion correcta, no que pandas la levanta internamente — esto es lo que valida el contrato de interfaz del SpecDD.
+
+**Impacto Transversal:**
+- `src/data/bronze_loader.py`: Guard clause implementada antes de `pd.read_csv()`.
+- `src/data/silver_cleaner.py` (F2-T05, pendiente): Debe implementar el mismo patron para verificar existencia del CSV Silver antes de procesar.
+- `src/data/gold_builder.py` (F2-T08, pendiente): Idem para los archivos Silver de entrada.
+
+---
+
+### D-031: Orden de ejecucion del backlog — prerequisitos de infraestructura base primero
+
+| Campo     | Valor |
+| :-------- | :---- |
+| **Fecha** | 2026-04-21 |
+| **Fase**  | Phase Engineering |
+| **Origen** | Ejecucion de F2-T01 antes de F2-T00A/B por error de lectura del backlog |
+| **Tipo**  | Decision de proceso (orden de ejecucion de tareas) |
+
+**Contexto:** En esta sesion se ejecuto F2-T01 (RED de bronze_loader) antes de F2-T00A/B (RED+GREEN de config.py). El error fue detectado mid-sesion y corregido: F2-T00A y F2-T00B se ejecutaron antes de continuar con F2-T02 y F2-T03. Sin embargo, el orden incorrecto inicial genero un loop de diagnostico de `ModuleNotFoundError` que costo tiempo de sesion.
+
+**Decision:** Al iniciar una sesion de implementacion, el primer paso es verificar el backlog y ejecutar las tareas de la Iteracion de menor numero disponible. La Iteracion 2.0 (Infraestructura Base) debe completarse antes de comenzar cualquier tarea de la Iteracion 2.1. En general, las tareas de infraestructura base (config, `__init__.py`, scaffolding de tests) son prerequisito bloqueante de las tareas de capa de datos.
+
+**Justificacion:** Las tareas de infraestructura base (config.py, `__init__.py`) crean las dependencias de importacion que necesitan los modulos de capas superiores. Ejecutar tareas de capas superiores antes de que la infraestructura exista produce errores de importacion que oscurecen los errores reales del codigo en desarrollo. El tiempo de diagnostico de errores de infraestructura es siempre mayor que el tiempo de completar la infraestructura primero.
+
+**Impacto Transversal:**
+- Backlog F2: La Iteracion 2.0 es prerequisito de la Iteracion 2.1; la 2.1 es prerequisito de la 2.2; la 2.2 de la 2.3. Esta dependencia secuencial no esta marcada explicitamente en el backlog pero debe respetarse.
+- Ritual de apertura: El agente que inicie una sesion de implementacion debe verificar que todas las tareas de la iteracion anterior estan DONE antes de iniciar la siguiente.
+
+---
+
+### D-032: EDA Bronze — hallazgos y veredicto GO para Silver
+
+| Campo     | Valor |
+| :-------- | :---- |
+| **Fecha** | 2026-04-21 |
+| **Fase**  | Phase Engineering |
+| **Origen** | Ejecucion de F2-T03b — Reporte EDA Bronze |
+| **Tipo**  | Decision de calidad de datos (habilitacion de capa) |
+
+**Contexto:** El EDA Bronze analizo el dataset Iris crudo (150 filas, 6 columnas) para verificar los invariantes BR-01 a BR-04 del contract.md y determinar si los datos son aptos para la transformacion Silver.
+
+**Decision:** Se emite veredicto GO para la capa Silver. Los hallazgos clave del EDA Bronze son: (1) 5 near-duplicates confirmados en 2 grupos (4 instancias de Versicolor y 1 de Virginica con features identicas en todas las 4 dimensiones) — valida la proyeccion M-02 de 150→147 filas en Silver. (2) 4 outliers detectados en `SepalWidthCm` (valores en rango 2.0-2.2 cm) que son biologicamente plausibles segun literatura botanica — NO son errores de medicion, NO deben eliminarse en Silver. (3) 0 nulos, shape (150,6), tipos correctos — invariantes BR-01 a BR-04 del contract.md satisfechos al 100%.
+
+**Justificacion:** Los near-duplicates son el unico hallazgo que requiere accion en Silver (transformacion M-02). Los outliers de `SepalWidthCm` son caracteristicas biologicas reales de la especie Setosa y su eliminacion introducirìa sesgo en el modelo. El veredicto GO es firme y no requiere condiciones adicionales antes de iniciar la Iteracion 2.2.
+
+**Impacto Transversal:**
+- `docs/Phase_engineering/eda_bronze.md`: Veredicto GO documentado con justificacion.
+- `tests/unit/data/test_silver_cleaner.py` (F2-T04): El test SR-02 debe verificar `len(df) == 147` (no 145, no 150 — exactamente 147, eliminando los 5 near-duplicates en 2 grupos).
+- `src/data/silver_cleaner.py` (F2-T05): La transformacion M-02 (eliminacion de near-duplicates) elimina exactamente 3 filas (de 150 a 147), no mas.
+
+---
+
+### Lecciones Aprendidas — Sesion 2026-04-21 (Implementacion Bronze + Infraestructura Base)
+
+| # | Leccion | Categoria |
+| :- | :------- | :-------- |
+| 1 | Verificar el orden de iteraciones en el backlog antes de ejecutar cualquier tarea. Las tareas de Iteracion 2.0 (infraestructura base) son prerequisito bloqueante de todas las demas. El tiempo de detectar y corregir un orden incorrecto mid-sesion es mayor que el tiempo de verificar el orden al inicio. | Proceso / Backlog |
+| 2 | `src/__init__.py` vacio es prerequisito de cualquier modulo en `src/`. Su ausencia produce `ModuleNotFoundError` que es silencioso — el archivo `.py` existe pero Python no puede importarlo. Debe crearse siempre junto con el primer modulo del directorio, no como tarea separada posterior. | Ingenieria de Software |
+| 3 | El patron de inyeccion de dependencias en tests (inyectar paths como argumentos en lugar de importar config) desacopla los tests de la infraestructura base y permite ejecutar suites RED antes de que config.py exista. Este patron debe documentarse en el primer test de datos de la fase como referencia para los tests posteriores. | Calidad de Tests |
+| 4 | Los guard clauses explicititos (`csv_path.exists()` antes de `pd.read_csv()`) producen mensajes de error que identifican el modulo origen sin trazar el stack completo de pandas. Son contratos de interfaz observables que los tests pueden afirmar con precision. | Calidad de Codigo |
+| 5 | Los outliers detectados en EDA deben clasificarse como "error de medicion" vs. "caracteristica biologica real" antes de decidir si eliminarlos. En el dataset Iris, los valores bajos de `SepalWidthCm` en Setosa son documentados en literatura botanica — eliminarlos introduce sesgo. La fuente de verdad para esta decision es el dominio del problema, no solo la estadistica. | Calidad de Datos |
+
+---
+
+*Fin de entrada #12.*
+
+---
+
+---
+
+## Entrada #13 — Sesion 2026-04-22 | Phase Engineering — Infraestructura CI/CD
+
+**Agente de Cierre:** ai-session-steward
+**Hora de Cierre:** Fin de jornada 2026-04-22
+**Rama activa:** `feat/F2-engineering`
+
+---
+
+### D-033: Toolchain de calidad formalizado — ruff + pytest + GitHub Actions como estandar CI/CD del proyecto
+
+| Campo     | Valor |
+| :-------- | :---- |
+| **Fecha** | 2026-04-22 |
+| **Fase**  | Phase Engineering (transversal a todas las fases tecnicas) |
+| **Origen** | Creacion de `requirements.txt`, `pytest.ini` y `.github/workflows/ci.yml` |
+| **Tipo**  | Decision de infraestructura de calidad (CI/CD) |
+
+**Contexto:** El proyecto tenia una suite de tests local funcional (28/28 en verde) pero no habia ninguna garantia automatizada de que los tests se ejecutaran en cada push ni de que el codigo cumpliera un estandar de estilo. El workflow de GitHub Actions existente en el repositorio estaba configurado para un stack Node.js de ejemplo, no para el stack Python real del proyecto. `requirements.txt` y `pytest.ini` no existian como artefactos formales.
+
+**Decision:** Se formaliza el toolchain de calidad del proyecto con tres artefactos:
+1. `requirements.txt` en la raiz del repositorio como unica fuente de verdad de dependencias (pandas>=2.2, numpy>=1.26, scikit-learn>=1.4, joblib>=1.3, streamlit>=1.32, pydantic>=2.6, pytest>=8.0, ruff>=0.4).
+2. `pytest.ini` con `pythonpath = .` y `testpaths = tests`. Esta configuracion permite que `from src import config` funcione sin manipulacion manual de variables de entorno, tanto en local como en CI.
+3. `.github/workflows/ci.yml` adaptado al stack Python: checkout → setup Python 3.12 con cache pip → `pip install -r requirements.txt` → `ruff check .` → `pytest -v`. El workflow se dispara en push a ramas que no sean `main`/`dev` y en PRs hacia `main`/`dev`.
+
+**Justificacion:** Sin `pytest.ini`, los tests con `from src import config` requieren que el desarrollador configure `PYTHONPATH` manualmente antes de ejecutar pytest, lo que es fragil y no reproducible en CI. Sin `requirements.txt`, el entorno de CI no puede construirse de forma determinista. Sin el workflow, el estado verde de los tests solo es verificable localmente — cualquier push puede introducir una regresion sin deteccion automatica. Los tres artefactos juntos cierran el ciclo de calidad: el codigo es verificable en cualquier entorno sin configuracion manual.
+
+**Impacto Transversal:**
+- `requirements.txt`: Debe actualizarse inmediatamente si se instala una nueva dependencia en cualquier fase futura. Es la fuente de verdad para `pip install` en CI y en onboarding de nuevos colaboradores.
+- `pytest.ini`: El campo `testpaths = tests` garantiza que `pytest` sin argumentos ejecuta exactamente la suite correcta. No se necesita especificar la ruta en los comandos del backlog.
+- `.github/workflows/ci.yml`: El workflow falla en ruff antes de ejecutar pytest — los errores de estilo bloquean la integracion antes de verificar la logica. Todo codigo nuevo en `src/` debe pasar `ruff check .` localmente antes de hacer push.
+- Fases futuras (Modeling, Delivery): Al agregar nuevas dependencias (p. ej. `matplotlib`, `shap`), actualizar `requirements.txt` es obligatorio antes del commit.
+
+---
+
+### Lecciones Aprendidas — Sesion 2026-04-22 (Infraestructura CI/CD)
+
+| # | Leccion | Categoria |
+| :- | :------- | :-------- |
+| 1 | `pytest.ini` con `pythonpath = .` es la solucion mas simple y portable para hacer importables los modulos de `src/` sin manipular variables de entorno. Es preferible a soluciones como `conftest.py` con `sys.path.insert` porque es declarativa y visible a nivel de proyecto. | Configuracion de Tests |
+| 2 | El workflow de CI debe adaptarse al stack real del proyecto antes de que haya codigo productivo — no despues. Un workflow desalineado (Node.js en un proyecto Python) genera falsa confianza: el CI pasa porque no ejecuta nada relevante. La adaptacion debe ser la primera tarea de infraestructura de cualquier fase de implementacion. | Proceso de CI/CD |
+| 3 | Ejecutar `ruff check` antes de `pytest` en el pipeline CI es una decision de diseño con consecuencias: los errores de estilo bloquean la verificacion de tests. Esto obliga a mantener el codigo limpio de forma continua en lugar de acumular deuda de estilo. El costo es mayor disciplina por push; el beneficio es un historial de commits consistentemente limpio. | Calidad de Codigo |
+
+---
+
+*Fin de entrada #13.*
+
+---
+
+---
+
+## Entrada #14 — Sesion 2026-04-23 | Phase Engineering — Reorganizacion de Artefactos de Gobernanza
+
+**Agente de Cierre:** ai-session-steward
+**Hora de Cierre:** Fin de jornada 2026-04-23
+**Rama activa:** `feat/F2-engineering`
+
+---
+
+### D-031: Reorganizacion de artefactos de gobernanza agnostica — renombrado y reubicacion
+
+| Campo     | Valor |
+| :-------- | :---- |
+| **Fecha** | 2026-04-23 |
+| **Fase**  | Phase Engineering (transversal — gobernanza del proyecto) |
+| **Origen** | Instruccion del usuario: estandarizar nombres y ubicaciones de artefactos de referencia agnosticos |
+| **Tipo**  | Decision de organizacion documental (higiene de repositorio) |
+
+**Contexto:** El proyecto tenia dos artefactos de gobernanza agnostica con nombres no estandarizados: `AGENTS.md` en la raiz del repositorio (nombre en mayusculas, fuera de la estructura `docs/`) y `docs/methodology/ai_process.md` (con prefijo `ai_` redundante que no aplica a ningun otro documento del proyecto). La raiz del repositorio debe contener unicamente archivos de configuracion del proyecto (`CLAUDE.md`, `requirements.txt`, `pytest.ini`, etc.), no documentacion de referencia.
+
+**Decision:**
+1. `AGENTS.md` (raiz) → `docs/references/agents.md`: Centraliza el catalogo de agentes en el directorio de referencias junto con `config.md`, `decisions.md`, `handoff.md`, `principles.md` y `sources.md`. El titulo interno del archivo fue actualizado a `# agents.md`.
+2. `docs/methodology/ai_process.md` → `docs/methodology/process.md`: Elimina el prefijo `ai_` para uniformizar la nomenclatura. El archivo permanece en `docs/methodology/` — su ubicacion es correcta, solo el nombre cambia.
+3. Ambos cambios se ejecutaron con `git mv` para preservar el historial de commits de cada archivo.
+
+**Justificacion:** (1) La raiz del repositorio es mas limpia sin documentos de referencia navegacional — `AGENTS.md` es documentacion, no configuracion. (2) `docs/references/` ya contiene todos los artefactos de referencia del proyecto; concentrarlos en un unico directorio reduce el tiempo de navegacion para nuevos colaboradores. (3) El prefijo `ai_` en `ai_process.md` era un artifact del nombre original del documento — el resto de artefactos del proyecto no usan este prefijo (no existe `ai_brd.md`, `ai_sad.md`, etc.).
+
+**Impacto Transversal:**
+- `CLAUDE.md`: 3 referencias actualizadas (Seccion de metodologia, encabezado de tabla de gobernanza, Seccion 7 de agentes).
+- `docs/governance/backlog.md`: Enlace de metodologia actualizado.
+- `docs/references/handoff.md`: 3 referencias actualizadas (tabla de inventario, tabla NotebookLM, notas de contexto).
+- `docs/references/config.md`: Entrada en fuentes cargadas en NotebookLM actualizada.
+- `.claude/skills/session-management/SKILL.md`: Tabla de sincronizacion actualizada.
+- `.claude/skills/repository-governance/SKILL.md`: Cabecera de fuente de verdad actualizada.
+- Entradas historicas en `decisions.md` (D-012, D-030 y otras): Conservadas intactas — son registros de estado pasado, no referencias navegables.
+
+---
+
+### Lecciones Aprendidas — Sesion 2026-04-23 (Reorganizacion de Gobernanza)
+
+| # | Leccion | Categoria |
+| :- | :------- | :-------- |
+| 1 | `git mv` es el unico comando correcto para renombrar o mover archivos de gobernanza — preserva el historial de commits. Usar `cp` + `rm` rompe la trazabilidad del archivo. | Gestion de Versiones |
+| 2 | Las entradas historicas en `decisions.md` documentan el estado en el momento de la decision, no el estado actual del sistema. Actualizar su contenido para reflejar reorganizaciones posteriores seria revisionismo — se debe dejar intactas y registrar el cambio en una nueva entrada. | Gobernanza Documental |
+| 3 | La raiz del repositorio debe contener exclusivamente archivos de configuracion del proyecto (CLAUDE.md, requirements.txt, pytest.ini, .github/, .gitignore). Los documentos de referencia navegacional pertenecen a `docs/references/`, no a la raiz. | Organizacion de Repositorio |
+
+---
+
+*Fin de entrada #14.*
+
+---
+
+---
+
+## Entrada #15 — Sesion 2026-04-23 | Phase Engineering — EDA Silver y Cierre de Iteracion 2.2
+
+**Agente de Cierre:** ai-session-steward
+**Hora de Cierre:** Fin de jornada 2026-04-23
+**Rama activa:** `feat/F2-engineering`
+
+---
+
+### D-034: Distribucion real de clases Silver diverge de la estimacion del contract.md — los valores reales prevalecen
+
+| Campo     | Valor |
+| :-------- | :---- |
+| **Fecha** | 2026-04-23 |
+| **Fase**  | Phase Engineering — Iteracion 2.2 (Silver) |
+| **Origen** | F2-T06b — EDA Silver ejecutado por ai-data-auditor |
+| **Tipo**  | Decision de calidad de datos (reconciliacion de estimacion vs. valor real) |
+
+**Contexto:** El EDA Silver (F2-T06b) calculo la distribucion real de clases despues de aplicar las transformaciones M-01 a M-04 sobre el dataset Bronze (150 filas, 3 clases balanceadas). El contract.md §4.2 incluia una estimacion de la distribucion post-limpieza: setosa=49, virginica=48. Sin embargo, los valores reales calculados por el pipeline `clean_silver()` aplicando `drop_duplicates(keep='first')` son: setosa=48, versicolor=50, virginica=49 (total=147).
+
+La discrepancia se origina en que la estimacion del contract.md fue realizada antes de conocer exactamente que near-duplicates serian eliminados y con que criterio de ordenamiento. El criterio `keep='first'` retiene la primera ocurrencia en el orden de aparicion del CSV original, lo que determina de forma determinista cuales filas sobreviven en cada especie.
+
+**Decision:** Los valores reales de la distribucion Silver (setosa=48, versicolor=50, virginica=49) son los valores canonicos para cualquier operacion posterior. Al ejecutar F2-T09b, el archivo `data/gold/reference_stats.json` debe construirse usando estos valores reales, no la estimacion del contract.md §4.2. No se emite un Control de Cambios para el contract.md porque la estimacion era una proyeccion orientativa, no un invariante vinculante — el invariante vinculante SR-01 (`len(df) == 147`) se cumple correctamente.
+
+**Justificacion:** El contrato de datos define invariantes verificables (SR-01 a SR-07), no estimaciones de distribucion. El invariante SR-01 establece que el dataset Silver debe tener exactamente 147 filas — este invariante se cumple. El desbalance resultante entre clases es del 4.2% (maximo absoluto entre conteos: 50 vs. 48), que esta por debajo del umbral del 5% establecido en el contract.md como aceptable. Por lo tanto, la situacion no es un bloqueo ni requiere re-ejecucion del pipeline. El hallazgo no afecta la viabilidad del modelo: un desbalance del 4.2% en un dataset de 147 filas es estadisticamente irrelevante para las metricas de Accuracy y F1-Score Macro. La decision de preservar los valores reales en `reference_stats.json` garantiza que cualquier verificacion futura del linaje de datos encuentre consistencia entre el EDA Silver, el archivo JSON y los datos reales en `data/silver/`.
+
+**Impacto Transversal:**
+- `data/gold/reference_stats.json` (F2-T09b — pendiente): Debe contener `{"setosa": 48, "versicolor": 50, "virginica": 49, "total": 147}` como distribucion canonica de referencia.
+- `docs/Phase_engineering/eda_silver.md`: Hallazgo documentado en la seccion de distribucion de clases.
+- `docs/governance/contract.md` §4.2: La estimacion existente (setosa=49, virginica=48) queda obsoleta como referencia numerica pero el contrato no requiere actualizacion formal porque el invariante SR-01 sigue siendo `len==147` y los valores reales no lo contradicen. Si en el futuro se requiere precision numerica en el contract, se puede emitir un CC menor para actualizar la tabla de proyeccion.
+- `handoff.md`: Nota critica añadida en la seccion de proximos pasos para que el agente que ejecute F2-T09b use los valores reales.
+
+---
+
+### Lecciones Aprendidas — Sesion 2026-04-23 (EDA Silver)
+
+| # | Leccion | Categoria |
+| :- | :------- | :-------- |
+| 1 | Las estimaciones de distribucion post-limpieza en el contract.md son proyecciones orientativas, no invariantes vinculantes. Los invariantes vinculantes son los que tienen un operador de comparacion explicito (==, >=, <=). Al auditar el EDA, distinguir claramente entre "el invariante se cumple" y "la estimacion era exacta" evita falsas alarmas de calidad. | Calidad de Datos |
+| 2 | El criterio `keep='first'` en `drop_duplicates` es determinista pero su efecto sobre la distribucion de clases depende del orden de las filas en el CSV de origen. Si el CSV cambia de orden (ej. tras una re-exportacion), la distribucion Silver puede variar. Documentar el criterio en el EDA Silver garantiza reproducibilidad auditada. | Reproducibilidad de Datos |
+| 3 | Un desbalance del 4.2% entre clases en un dataset de 147 filas es estadisticamente irrelevante para clasificacion multi-clase con F1-Score Macro como metrica primaria. No escalar a CC ni a rediseno del pipeline por divergencias menores que el umbral definido es una aplicacion correcta del principio "Truth over Speed": registrar el hallazgo, no paralizarse por el. | Proceso de Toma de Decisiones |
+| 4 | El EDA de cada capa (Bronze, Silver, Gold) debe verificar no solo los invariantes del contract.md sino tambien la coherencia entre capas (deltas de media Bronze→Silver). Un delta de media < 0.022 en todas las features confirma que las transformaciones M-01 a M-04 no introducen sesgo estadistico — esta es la evidencia mas fuerte de que el pipeline es correcto. | Auditoria de Pipelines de Datos |
+
+---
+
+*Fin de entrada #15.*
+
+---
+
+---
+
+## Entrada #16 — Sesion 2026-04-24 | Phase Engineering — Gold Layer completa: Iteracion 2.3 DONE
+
+**Agente de Cierre:** ai-session-steward
+**Hora de Cierre:** Fin de jornada 2026-04-24
+**Rama activa:** `feat/F2-engineering`
+
+---
+
+### D-035: `TARGET_COLUMN` como constante de modulo explicita en `gold_builder.py`
+
+| Campo     | Valor |
+| :-------- | :---- |
+| **Fecha** | 2026-04-24 |
+| **Fase**  | Phase Engineering — Iteracion 2.3 (Gold) |
+| **Origen** | F2-T09a — REFACTOR de `src/data/gold_builder.py` |
+| **Tipo**  | Decision de diseno de codigo (contrato anti-leakage) |
+
+**Contexto:** Durante el refactor de `gold_builder.py` (F2-T09a), se detecto que el string literal `"species"` aparecia en multiples puntos del modulo: en la logica de separacion X/y, en las validaciones de invariantes y en el test. El patron de constantes de modulo ya estaba establecido en `silver_cleaner.py` con `RENAME_MAP` y `LABEL_MAP`.
+
+**Decision:** Se define `TARGET_COLUMN: str = "species"` como constante de nivel de modulo en `gold_builder.py`. Todas las referencias al nombre de la columna objetivo dentro del modulo usan esta constante. El string literal `"species"` no aparece duplicado en el cuerpo de las funciones.
+
+**Justificacion:** Una constante de modulo explicita hace visible el contrato anti-leakage: cualquier agente que lea el encabezado del modulo sabe inmediatamente cual es la columna objetivo que se separa del Feature Store. Si el nombre de la columna cambiara en una version futura del dataset, el cambio se hace en un unico punto. El patron es consistente con `RENAME_MAP` y `LABEL_MAP` en `silver_cleaner.py`, lo que reduce la curva de aprendizaje para el siguiente agente que trabaje en los modulos de datos.
+
+**Impacto Transversal:**
+- `src/data/gold_builder.py`: Unico archivo afectado. Constante definida en la cabecera del modulo.
+
+---
+
+### D-036: Correlaciones Gold reales vs. referencia contract.md §8.3 — desviacion maxima ±0.001
+
+| Campo     | Valor |
+| :-------- | :---- |
+| **Fecha** | 2026-04-24 |
+| **Fase**  | Phase Engineering — Iteracion 2.3 (Gold) |
+| **Origen** | F2-T09b — EDA Gold ejecutado por ai-data-auditor |
+| **Tipo**  | Decision de calidad de datos (reconciliacion de valores de referencia) |
+
+**Contexto:** El EDA Gold (F2-T09b) calculo las correlaciones reales entre features del dataset Gold y las comparo contra los valores de referencia documentados en `contract.md §8.3`. La desviacion maxima encontrada fue de ±0.001, consistente con diferencias de redondeo a 4 decimales vs. los valores estimados a 2 decimales en el feasibility report.
+
+**Decision:** Las correlaciones Gold calculadas son estadisticamente identicas a las del contrato. No se emite Control de Cambios. Los valores reales a 4 decimales se almacenan en `data/gold/reference_stats.json` como referencia canonica para drift detection en produccion. El contract.md no requiere actualizacion formal: la desviacion esta dentro de la tolerancia de redondeo esperada.
+
+**Justificacion:** Una desviacion de ±0.001 en correlaciones es ruido de redondeo, no una divergencia estadistica. El umbral de tolerancia implicito para este tipo de comparacion (estimacion a 2 decimales vs. valor real a 4 decimales) es del orden de ±0.005. Escalar a CC por una desviacion 5 veces menor que el umbral seria una aplicacion incorrecta del principio de Control de Cambios. Los valores reales en `reference_stats.json` son mas precisos que los del feasibility report y deben usarse como referencia operativa para cualquier verificacion de drift en el pipeline de produccion.
+
+**Impacto Transversal:**
+- `data/gold/reference_stats.json`: Contiene los valores reales a 4 decimales. Fuente de verdad para drift detection.
+- `docs/Phase_engineering/eda_gold.md`: Tabla de correlaciones con valores reales documentada.
+- `docs/governance/contract.md §8.3`: Sin cambios formales. Los valores estimados quedan como referencia orientativa; `reference_stats.json` es la fuente operativa.
+
+---
+
+### D-037: Alta correlacion petal_length/petal_width (0.962) — correlacion biologica documentada, no target leakage
+
+| Campo     | Valor |
+| :-------- | :---- |
+| **Fecha** | 2026-04-24 |
+| **Fase**  | Phase Engineering — Iteracion 2.3 (Gold) |
+| **Origen** | F2-T09b — EDA Gold, analisis de matriz de correlaciones |
+| **Tipo**  | Decision de diseno de features (inclusion/exclusion en Feature Store) |
+
+**Contexto:** El EDA Gold detecto una correlacion de 0.962 entre `petal_length` y `petal_width`. Esta correlacion es la mas alta del dataset y podria interpretarse superficialmente como redundancia de features o como riesgo de multicolinealidad en modelos lineales. Se evaluo si alguna de las dos features debia eliminarse del Feature Store Gold antes de Phase Modeling.
+
+**Decision:** Ambas features se preservan en el Feature Store Gold. La correlacion petal_length/petal_width (0.962) es una correlacion biologica documentada en la literatura botanica del genero Iris: las especies con petalos mas largos biologicamente tambien tienen petalos mas anchos como consecuencia del desarrollo del organo floral. No es leakage (ninguna feature es un proxy de la etiqueta `species` calculado a partir de `species`). Phase Modeling debe evaluar el VIF (Variance Inflation Factor) si usa modelos lineales (regresion logistica, LDA) para determinar si la multicolinealidad afecta los coeficientes. Para ensambles (Random Forest, Gradient Boosting) y SVM con kernel RBF, la alta correlacion entre features no es un bloqueador.
+
+**Justificacion:** Eliminar una feature del Feature Store por correlacion alta con otra feature sin evidencia de impacto negativo en el modelo es sobre-ingenieria prematura que viola el principio "Simplicidad Primero" del proyecto. La correlacion entre features no implica reduccion de poder discriminativo — ambas features contribuyen a la separacion de la zona de solapamiento versicolor/virginica en `petal_width` [1.4-1.8 cm]. La decision de eliminar features por multicolinealidad pertenece a Phase Modeling, donde se cuenta con metricas de modelo (VIF, feature importance, permutation importance) para tomar la decision con evidencia, no con heuristicas.
+
+**Impacto Transversal:**
+- `src/data/gold_builder.py`: Sin cambios. Las 4 features permanecen en el Feature Store.
+- `data/gold/X_gold.csv`: 4 columnas (sepal_length, sepal_width, petal_length, petal_width).
+- Phase Modeling: Evaluar VIF si se usa regresion logistica o LDA. Documentar el resultado en el reporte de seleccion de features.
+- `docs/Phase_engineering/eda_gold.md`: Hallazgo documentado con justificacion biologica y recomendacion para Phase Modeling.
+
+---
+
+### Lecciones Aprendidas — Sesion 2026-04-24 (Gold Layer — Iteracion 2.3 completa)
+
+| # | Leccion | Categoria |
+| :- | :------- | :-------- |
+| 1 | Verificar el orden de columnas de X con `np.array_equal(X, df_silver[config.FEATURE_COLUMNS].to_numpy())` es mas robusto que comparar solo shape. La comparacion de shape detecta que hay 4 columnas pero no detecta si estan en el orden incorrecto — un feature misalignment silencioso que producira predicciones incorrectas sin errores en tests. La comparacion con `array_equal` es el gold standard para esta verificacion. | Calidad de Tests |
+| 2 | La zona de solapamiento versicolor/virginica en `petal_width` [1.4-1.8 cm] (~17 instancias) es el limite fisico de separabilidad del dataset Iris. No es un defecto de los datos ni del pipeline — es una caracteristica intrinseca del problema biologico. Phase Modeling debe evaluar el modelo especificamente sobre estas instancias y reportar la metrica de error en este subconjunto como indicador de la dificultad real del problema. | Calidad de Datos / Modelado |
+| 3 | `data/gold/reference_stats.json` debe versionarse junto con el modelo en cada reentrenamiento. La trazabilidad del drift detection depende de que el archivo JSON de referencia corresponda exactamente al Feature Store con el que se entreno el modelo. Un modelo entrenado con Gold v1 y validado con `reference_stats.json` de Gold v2 produce metricas de drift incorrectas. | Trazabilidad de Linaje |
+| 4 | El patron `TARGET_COLUMN: str = "species"` a nivel de modulo es la documentacion mas eficiente del contrato anti-leakage: visible en el primer scroll del archivo, sin necesidad de leer las funciones. Este patron debe aplicarse a cualquier modulo de datos que tenga una columna objetivo explicita — es mejor que un comentario porque es verificable por los tests. | Calidad de Codigo |
+
+---
+
+---
+
+## Entrada #17 — Sesion 2026-04-24 | Phase Engineering — Iteracion 2.4 (Certificacion)
+
+**Agente de Cierre:** ai-session-steward
+**Hora de Cierre:** Fin de jornada 2026-04-24
+**Tarea:** F2-T10 [CERTIFICACION] — Entregable: `docs/Phase_engineering/certification_f2.md`
+
+---
+
+### D-038: Certificacion de linaje Bronze→Silver→Gold — 34/34 tests PASS como criterio de cierre de Phase Engineering
+
+| Campo     | Valor |
+| :-------- | :---- |
+| **Fecha** | 2026-04-24 |
+| **Fase**  | Phase Engineering — Iteracion 2.4 (Certificacion) |
+| **Origen** | F2-T10 — Certificacion tecnica ejecutada por @ai-data-qa-engineer |
+| **Tipo**  | Decision de proceso (criterio de certificacion de capa de datos) |
+
+**Contexto:** La certificacion tecnica de la Fase 2 se ejecuto mediante `pytest tests/unit/data/ -v`, que cubre las tres capas del Medallion Architecture: 10 tests Bronze (invariantes BR), 12 tests Silver (invariantes SR), 12 tests Gold (invariantes GR). La suite de 34 tests es el subconjunto del pipeline que valida el linaje de datos de extremo a extremo, sin incluir los 16 tests de configuracion.
+
+**Decision:** El criterio de certificacion de linaje para Phase Engineering es 34/34 tests en verde en `tests/unit/data/`, con 0 fallos y 0 errores. Este criterio se ejecuto y se cumplio. El reporte formal queda en `docs/Phase_engineering/certification_f2.md`. Adicionalmente se verifico: ausencia de rutas absolutas en codigo fuente y todas las dependencias declaradas en `requirements.txt`.
+
+**Justificacion:** Separar la suite de linaje (34 tests de data) de la suite completa (50 tests incluyendo config) permite auditar el pipeline de datos de forma aislada sin ruido de tests de infraestructura. Este es el patron que usara Phase Modeling para certificar el pipeline de entrenamiento de forma analoga.
+
+**Impacto Transversal:**
+- `docs/Phase_engineering/certification_f2.md`: Reporte formal de certificacion. Fuente de verdad para el GO de Phase Modeling.
+- Phase Modeling: El mismo patron de certificacion por capa debe aplicarse al pipeline de entrenamiento antes de emitir el GO de Phase Modeling.
+
+---
+
+---
+
+## Entrada #18 — Sesion 2026-04-24 | Phase Engineering — Iteracion 2.4 (Validacion)
+
+**Agente de Cierre:** ai-session-steward
+**Hora de Cierre:** Fin de jornada 2026-04-24
+**Tarea:** F2-T11 [VALIDACION] — Entregable: `docs/Phase_engineering/validation_f2.md`
+
+---
+
+### D-039: Baseline RandomForest 5-fold CV 95.20% sobre Gold dataset — umbral BRD superado, GO para Phase Modeling
+
+| Campo     | Valor |
+| :-------- | :---- |
+| **Fecha** | 2026-04-24 |
+| **Fase**  | Phase Engineering — Iteracion 2.4 (Validacion) |
+| **Origen** | F2-T11 — Validacion de negocio ejecutada por @ai-data-scientist |
+| **Tipo**  | Decision de validacion de negocio (GO/NO-GO para Phase Modeling) |
+
+**Contexto:** La validacion de la Fase 2 consistio en verificar que el Feature Set Gold es suficientemente informativo para el problema de clasificacion Iris. Se ejecuto un proxy de separabilidad: RandomForest sin hiperparametrizar, 5-fold cross-validation, sobre `data/gold/X_gold.csv` y `data/gold/y_gold.csv`. El resultado fue 95.20% accuracy ± 3.53%. El umbral del BRD es Accuracy >= 95%.
+
+**Decision:** El Feature Set Gold supera el umbral de accuracy del BRD. Se emite veredicto GO para Phase Modeling. El baseline de 95.20% queda registrado como referencia: el modelo final de produccion debe igualar o superar este valor. Los cuatro criterios de validacion se cumplieron: linaje 100% documentado, trazabilidad SpecDD completa, cobertura de tests 100%, baseline ≥ 95%.
+
+**Justificacion:** La validacion del Feature Set con un clasificador proxy (no el modelo de produccion final) antes de iniciar Phase Modeling es una practica de bajo costo y alto valor: si el baseline no supera el umbral, el problema esta en los features o en la limpieza de datos, no en el modelo. Detectarlo aqui evita iteraciones costosas en Phase Modeling. El RandomForest sin tuning es el proxy mas honesto: no puede hacer overfitting por hiperparametrizacion agresiva y su performance real en CV refleja la separabilidad intrinseca del Feature Store.
+
+**Impacto Transversal:**
+- `docs/Phase_engineering/validation_f2.md`: Reporte formal de validacion con veredicto GO.
+- Phase Modeling: El modelo final debe superar 95.20% accuracy en el conjunto de test. Este valor es el piso, no el techo.
+- `docs/governance/brd.md`: KPI de accuracy validado formalmente contra el Feature Set Gold.
+
+---
+
+### Lecciones Aprendidas — Sesion 2026-04-24 (Iteracion 2.4 — Certificacion y Validacion)
+
+| # | Leccion | Categoria |
+| :- | :------- | :-------- |
+| 1 | El ciclo AI-TDD (Red→Green→Refactor→Certificacion→Validacion) por capa fue completado de forma limpia en Fase 2. La separacion de responsabilidades entre @ai-data-qa-engineer (certificacion tecnica — 34 tests, ausencia de rutas absolutas, dependencias declaradas) y @ai-data-scientist (validacion de negocio — linaje, trazabilidad SpecDD, baseline KPI) funcionó correctamente. Cada agente tiene un criterio de exito diferente y complementario. | Proceso / Organizacion de Agentes |
+| 2 | El baseline proxy de separabilidad (RandomForest 5-fold CV sin hiperparametrizar) es la herramienta mas honesta para validar un Feature Store antes de Phase Modeling. Un resultado de 95.20% ± 3.53% sobre el Gold dataset confirma que los datos son suficientemente informativos. La desviacion estandar de 3.53% es aceptable para un dataset de 147 instancias con 5 folds — indica varianza de muestreo, no inestabilidad del clasificador. | Calidad de Datos / Modelado |
+| 3 | La certificacion tecnica del linaje mediante ejecucion directa de pytest (sin mocks ni fixtures artificiales) es la auditoria mas rigurosa del pipeline. Si los 34 tests de data pasan, el codigo que implementa Bronze→Silver→Gold es correcto por construccion. No existe documentacion de linaje mas fiable que una suite de tests que falla si el contrato se rompe. | Calidad de Tests |
+
+---
+
+*Fin de entrada #16.*
+
+---
+
+---
+
+## Entrada #17 — Sesion 2026-04-24 | Gobernanza: Atomizacion Backlog Fase 3
+
+**Agente de Cierre:** ai-session-steward
+**Hora de Cierre:** 2026-04-24 (sesion de gobernanza de backlog)
+
+---
+
+### D-040: Atomizacion del Backlog de Fase 3 siguiendo el patron IA-TDD de Fase 2
+
+| Campo | Valor |
+| :---- | :---- |
+| **Fecha** | 2026-04-24 |
+| **Fase** | Phase Modeling (Pre-ejecucion — Gobernanza) |
+| **Origen** | Auditoria del backlog.md §F3 contra el patron establecido en D-023 |
+| **Tipo** | Decision de proceso / estructura del backlog |
+
+**Contexto:** Al revisar el Backlog de Fase 3 previo a su ejecucion, se detecto que contenia solo 3 tareas vagas (F3-T01, F3-T02, F3-T03) que violaban los mismos principios corregidos en D-023 para Fase 2: DoDs imprecisos sin trazabilidad al SpecDD, ruta de tests no canonica (`tests/test_model_training.py` en lugar de `tests/unit/training/`), modulos `trainer.py` y `serializer.py` mezclados en una sola tarea (violacion de atomicidad), y ausencia de las iteraciones REFACTOR, CERTIFICACION y VALIDACION.
+
+**Decision:** Se atomizo completamente el Backlog F3 de 3 tareas a 9 tareas distribuidas en 4 iteraciones:
+- **Iter 3.1:** RED + GREEN + REFACTOR para `src/training/trainer.py` (SpecDD §9)
+- **Iter 3.2:** RED + GREEN + REFACTOR para `src/training/serializer.py` (SpecDD §10)
+- **Iter 3.3:** EXPERIMENT (notebook de seleccion) + BUILD (modelo certificado `.joblib`)
+- **Iter 3.4:** MODEL QA + CERTIFICACION (`certification_f3.md`) + VALIDACION (`validation_f3.md`)
+
+**Justificacion:** La D-023 establece que el ciclo completo RED→GREEN→REFACTOR es obligatorio por modulo, y que cada fase tecnica debe cerrar con CERTIFICACION y VALIDACION. Iniciar la ejecucion de F3 con un backlog incompleto habria producido el mismo problema que en Fase 2: completar el ciclo sin trazabilidad formal de linaje, calidad de codigo o cumplimiento de KPIs. El principio "Pensar antes de programar" (principles.md) exige que el backlog este completo y auditado antes de escribir la primera linea de codigo.
+
+**Impacto Transversal:**
+- `docs/governance/backlog.md`: F3 actualizado de 3 a 9 tareas atomicas con DoDs trazables al SpecDD §9–10, SAD §9.2 y BRD §4.
+- `docs/references/handoff.md`: Proximos pasos actualizados con la ruta canonica de tests `tests/unit/training/` y el responsable correcto por tarea.
+- Phase Modeling: La primera tarea ejecutable es F3-T01 [RED] con entregable `tests/unit/training/test_trainer.py`.
+
+---
+
+### D-041: Separacion de `trainer.py` y `serializer.py` como iteraciones independientes en F3
+
+| Campo | Valor |
+| :---- | :---- |
+| **Fecha** | 2026-04-24 |
+| **Fase** | Phase Modeling |
+| **Origen** | Auditoria de atomicidad del backlog F3 |
+| **Tipo** | Decision de estructura del backlog / atomicidad de tareas |
+
+**Contexto:** El backlog original de F3 agrupaba el entrenamiento del modelo y su serializacion en una unica tarea [GREEN] (F3-T02) con dos entregables: `notebooks/03_model_selection.ipynb` y `models/iris_model.joblib`. Esto viola el principio de atomicidad ("Un unico responsable por tarea. Un unico entregable por tarea.") y mezcla las responsabilidades de `trainer.py` (SpecDD §9) y `serializer.py` (SpecDD §10), que son modulos distintos con contratos de interfaz independientes.
+
+**Decision:** Se separan en iteraciones distintas: Iteracion 3.1 cubre `trainer.py` completo (RED + GREEN + REFACTOR), Iteracion 3.2 cubre `serializer.py` completo (RED + GREEN + REFACTOR). El notebook de seleccion y el build del modelo certificado se ubican en Iteracion 3.3, garantizando que los modulos productivos estean implementados y testeados antes de usarlos en experimentacion.
+
+**Justificacion:** El patron de Fase 2 (Bronze/Silver/Gold como iteraciones separadas) demostro que la separacion por modulo reduce la complejidad del ciclo TDD y facilita la certificacion de linaje. Un modulo = una iteracion = una suite de tests = un responsable. Este patron se aplica directamente a `trainer.py` y `serializer.py`.
+
+**Impacto Transversal:**
+- `docs/governance/backlog.md`: Iteraciones 3.1 y 3.2 son independientes.
+- `tests/unit/training/`: Contendra `test_trainer.py` (F3-T01) y `test_serializer.py` (F3-T03) como suites independientes.
+- `pytest tests/unit/training/` es el comando de verificacion del ciclo completo de Phase Modeling.
+
+---
+
+### Lecciones Aprendidas — Sesion 2026-04-24 (Gobernanza Backlog F3)
+
+| # | Leccion | Categoria |
+| :- | :------- | :-------- |
+| 1 | El backlog de una fase debe auditarse contra el patron IA-TDD (D-023) ANTES de iniciar la ejecucion, no durante. Un backlog incompleto en el momento de ejecucion obliga a pausar el trabajo para corregir la gobernanza, lo que interrumpe el flujo. La auditoria pre-ejecucion es una inversion que cuesta minutos y ahorra horas. | Proceso / Backlog |
+| 2 | Los principios de ingenieria (principles.md) y el catalogo de agentes (agents.md) deben leerse al inicio de cualquier sesion de gobernanza, no solo al inicio de sesiones de codigo. Las decisiones de backlog tambien son decisiones de ingenieria y deben cumplir los mismos estandares. | Proceso / Gobernanza |
+| 3 | Asignar agentes correctos desde agents.md en el momento de disenar las tareas (no al ejecutarlas) permite que el backlog sea autoexplicativo: cualquier colaborador sabe quien hace que sin necesidad de contexto adicional. La asignacion correcta en F3 fue: @ai-data-qa-engineer para suites RED, @ai-data-scientist para implementacion del trainer, @ai-ml-engineer para serializer y refactorizaciones, @ai-model-qa-validator para QA, @ai-mlops-specialist para validacion final. | Organizacion de Agentes |
+
+---
+
+*Fin de entrada #17.*
