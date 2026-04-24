@@ -1184,3 +1184,53 @@ Ver ficha completa en `docs/changes/CC-028.md`.
 ---
 
 *Fin de entrada #14.*
+
+---
+
+---
+
+## Entrada #15 — Sesion 2026-04-23 | Phase Engineering — EDA Silver y Cierre de Iteracion 2.2
+
+**Agente de Cierre:** ai-session-steward
+**Hora de Cierre:** Fin de jornada 2026-04-23
+**Rama activa:** `feat/F2-engineering`
+
+---
+
+### D-034: Distribucion real de clases Silver diverge de la estimacion del contract.md — los valores reales prevalecen
+
+| Campo     | Valor |
+| :-------- | :---- |
+| **Fecha** | 2026-04-23 |
+| **Fase**  | Phase Engineering — Iteracion 2.2 (Silver) |
+| **Origen** | F2-T06b — EDA Silver ejecutado por ai-data-auditor |
+| **Tipo**  | Decision de calidad de datos (reconciliacion de estimacion vs. valor real) |
+
+**Contexto:** El EDA Silver (F2-T06b) calculo la distribucion real de clases despues de aplicar las transformaciones M-01 a M-04 sobre el dataset Bronze (150 filas, 3 clases balanceadas). El contract.md §4.2 incluia una estimacion de la distribucion post-limpieza: setosa=49, virginica=48. Sin embargo, los valores reales calculados por el pipeline `clean_silver()` aplicando `drop_duplicates(keep='first')` son: setosa=48, versicolor=50, virginica=49 (total=147).
+
+La discrepancia se origina en que la estimacion del contract.md fue realizada antes de conocer exactamente que near-duplicates serian eliminados y con que criterio de ordenamiento. El criterio `keep='first'` retiene la primera ocurrencia en el orden de aparicion del CSV original, lo que determina de forma determinista cuales filas sobreviven en cada especie.
+
+**Decision:** Los valores reales de la distribucion Silver (setosa=48, versicolor=50, virginica=49) son los valores canonicos para cualquier operacion posterior. Al ejecutar F2-T09b, el archivo `data/gold/reference_stats.json` debe construirse usando estos valores reales, no la estimacion del contract.md §4.2. No se emite un Control de Cambios para el contract.md porque la estimacion era una proyeccion orientativa, no un invariante vinculante — el invariante vinculante SR-01 (`len(df) == 147`) se cumple correctamente.
+
+**Justificacion:** El contrato de datos define invariantes verificables (SR-01 a SR-07), no estimaciones de distribucion. El invariante SR-01 establece que el dataset Silver debe tener exactamente 147 filas — este invariante se cumple. El desbalance resultante entre clases es del 4.2% (maximo absoluto entre conteos: 50 vs. 48), que esta por debajo del umbral del 5% establecido en el contract.md como aceptable. Por lo tanto, la situacion no es un bloqueo ni requiere re-ejecucion del pipeline. El hallazgo no afecta la viabilidad del modelo: un desbalance del 4.2% en un dataset de 147 filas es estadisticamente irrelevante para las metricas de Accuracy y F1-Score Macro. La decision de preservar los valores reales en `reference_stats.json` garantiza que cualquier verificacion futura del linaje de datos encuentre consistencia entre el EDA Silver, el archivo JSON y los datos reales en `data/silver/`.
+
+**Impacto Transversal:**
+- `data/gold/reference_stats.json` (F2-T09b — pendiente): Debe contener `{"setosa": 48, "versicolor": 50, "virginica": 49, "total": 147}` como distribucion canonica de referencia.
+- `docs/Phase_engineering/eda_silver.md`: Hallazgo documentado en la seccion de distribucion de clases.
+- `docs/governance/contract.md` §4.2: La estimacion existente (setosa=49, virginica=48) queda obsoleta como referencia numerica pero el contrato no requiere actualizacion formal porque el invariante SR-01 sigue siendo `len==147` y los valores reales no lo contradicen. Si en el futuro se requiere precision numerica en el contract, se puede emitir un CC menor para actualizar la tabla de proyeccion.
+- `handoff.md`: Nota critica añadida en la seccion de proximos pasos para que el agente que ejecute F2-T09b use los valores reales.
+
+---
+
+### Lecciones Aprendidas — Sesion 2026-04-23 (EDA Silver)
+
+| # | Leccion | Categoria |
+| :- | :------- | :-------- |
+| 1 | Las estimaciones de distribucion post-limpieza en el contract.md son proyecciones orientativas, no invariantes vinculantes. Los invariantes vinculantes son los que tienen un operador de comparacion explicito (==, >=, <=). Al auditar el EDA, distinguir claramente entre "el invariante se cumple" y "la estimacion era exacta" evita falsas alarmas de calidad. | Calidad de Datos |
+| 2 | El criterio `keep='first'` en `drop_duplicates` es determinista pero su efecto sobre la distribucion de clases depende del orden de las filas en el CSV de origen. Si el CSV cambia de orden (ej. tras una re-exportacion), la distribucion Silver puede variar. Documentar el criterio en el EDA Silver garantiza reproducibilidad auditada. | Reproducibilidad de Datos |
+| 3 | Un desbalance del 4.2% entre clases en un dataset de 147 filas es estadisticamente irrelevante para clasificacion multi-clase con F1-Score Macro como metrica primaria. No escalar a CC ni a rediseno del pipeline por divergencias menores que el umbral definido es una aplicacion correcta del principio "Truth over Speed": registrar el hallazgo, no paralizarse por el. | Proceso de Toma de Decisiones |
+| 4 | El EDA de cada capa (Bronze, Silver, Gold) debe verificar no solo los invariantes del contract.md sino tambien la coherencia entre capas (deltas de media Bronze→Silver). Un delta de media < 0.022 en todas las features confirma que las transformaciones M-01 a M-04 no introducen sesgo estadistico — esta es la evidencia mas fuerte de que el pipeline es correcto. | Auditoria de Pipelines de Datos |
+
+---
+
+*Fin de entrada #15.*

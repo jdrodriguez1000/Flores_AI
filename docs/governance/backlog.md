@@ -149,7 +149,7 @@
 - **Entregable:** `tests/unit/data/test_silver_cleaner.py`
 - **Acción:** Testing
 - **DoD:** Suite falla de forma controlada. Cubre los invariantes SR-01 a SR-05 del contract.md §10.3: `len(df)==147`, columna `Id` ausente, nombres en snake_case, etiquetas sin prefijo `Iris-`, cero duplicados, cero nulos. Trazable al SpecDD §7 y contract.md §3.
-- **Estado:** TODO
+- **Estado:** DONE ✅ — 2026-04-23
 
 #### [F2-T05] [GREEN] Implementar pipeline de transformación Silver
 - **Responsable:** @ai-analytics-engineer
@@ -157,7 +157,7 @@
 - **Entregable:** `src/data/silver_cleaner.py`
 - **Acción:** Coding
 - **DoD:** Pasa la suite F2-T04. Aplica las transformaciones M-01 a M-04 en orden. Genera dataset limpio `(147, 5)` en `data/silver/iris_silver.csv`. Trazable al SpecDD §7.
-- **Estado:** TODO
+- **Estado:** DONE ✅ — 2026-04-23
 
 #### [F2-T06a] [REFACTOR] Refactorizar `src/data/silver_cleaner.py`
 - **Responsable:** @ai-analytics-engineer
@@ -165,7 +165,7 @@
 - **Entregable:** `src/data/silver_cleaner.py` (refactored)
 - **Acción:** Refactoring
 - **DoD:** Código modular con `RENAME_MAP` y `LABEL_MAP` como constantes de módulo (SpecDD §7). Sin rutas absolutas. Sin importar sklearn, streamlit ni pydantic. Todos los tests F2-T04 siguen en verde. Trazable al SpecDD §7 y SAD §5.1.
-- **Estado:** TODO
+- **Estado:** DONE ✅ — 2026-04-23
 
 #### [F2-T06b] [EDA] Reporte EDA Silver
 - **Responsable:** @ai-data-auditor
@@ -173,7 +173,7 @@
 - **Entregable:** `docs/Phase_engineering/eda_silver.md`
 - **Acción:** Documentation
 - **DoD:** Reporte certifica ausencia de sesgo introducido por la limpieza. Incluye comparativa de distribución Bronze → Silver por feature. Verifica los invariantes SR-01 a SR-05 del contract.md §3.2. Confirma que las 3 transformaciones M-01 a M-04 no alteran la distribución estadística de las features.
-- **Estado:** TODO
+- **Estado:** DONE ✅ — 2026-04-23
 
 ### Iteración 2.3: Feature Engineering y Capa Gold
 
