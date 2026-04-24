@@ -1397,3 +1397,74 @@ La discrepancia se origina en que la estimacion del contract.md fue realizada an
 ---
 
 *Fin de entrada #16.*
+
+---
+
+---
+
+## Entrada #17 — Sesion 2026-04-24 | Gobernanza: Atomizacion Backlog Fase 3
+
+**Agente de Cierre:** ai-session-steward
+**Hora de Cierre:** 2026-04-24 (sesion de gobernanza de backlog)
+
+---
+
+### D-040: Atomizacion del Backlog de Fase 3 siguiendo el patron IA-TDD de Fase 2
+
+| Campo | Valor |
+| :---- | :---- |
+| **Fecha** | 2026-04-24 |
+| **Fase** | Phase Modeling (Pre-ejecucion — Gobernanza) |
+| **Origen** | Auditoria del backlog.md §F3 contra el patron establecido en D-023 |
+| **Tipo** | Decision de proceso / estructura del backlog |
+
+**Contexto:** Al revisar el Backlog de Fase 3 previo a su ejecucion, se detecto que contenia solo 3 tareas vagas (F3-T01, F3-T02, F3-T03) que violaban los mismos principios corregidos en D-023 para Fase 2: DoDs imprecisos sin trazabilidad al SpecDD, ruta de tests no canonica (`tests/test_model_training.py` en lugar de `tests/unit/training/`), modulos `trainer.py` y `serializer.py` mezclados en una sola tarea (violacion de atomicidad), y ausencia de las iteraciones REFACTOR, CERTIFICACION y VALIDACION.
+
+**Decision:** Se atomizo completamente el Backlog F3 de 3 tareas a 9 tareas distribuidas en 4 iteraciones:
+- **Iter 3.1:** RED + GREEN + REFACTOR para `src/training/trainer.py` (SpecDD §9)
+- **Iter 3.2:** RED + GREEN + REFACTOR para `src/training/serializer.py` (SpecDD §10)
+- **Iter 3.3:** EXPERIMENT (notebook de seleccion) + BUILD (modelo certificado `.joblib`)
+- **Iter 3.4:** MODEL QA + CERTIFICACION (`certification_f3.md`) + VALIDACION (`validation_f3.md`)
+
+**Justificacion:** La D-023 establece que el ciclo completo RED→GREEN→REFACTOR es obligatorio por modulo, y que cada fase tecnica debe cerrar con CERTIFICACION y VALIDACION. Iniciar la ejecucion de F3 con un backlog incompleto habria producido el mismo problema que en Fase 2: completar el ciclo sin trazabilidad formal de linaje, calidad de codigo o cumplimiento de KPIs. El principio "Pensar antes de programar" (principles.md) exige que el backlog este completo y auditado antes de escribir la primera linea de codigo.
+
+**Impacto Transversal:**
+- `docs/governance/backlog.md`: F3 actualizado de 3 a 9 tareas atomicas con DoDs trazables al SpecDD §9–10, SAD §9.2 y BRD §4.
+- `docs/references/handoff.md`: Proximos pasos actualizados con la ruta canonica de tests `tests/unit/training/` y el responsable correcto por tarea.
+- Phase Modeling: La primera tarea ejecutable es F3-T01 [RED] con entregable `tests/unit/training/test_trainer.py`.
+
+---
+
+### D-041: Separacion de `trainer.py` y `serializer.py` como iteraciones independientes en F3
+
+| Campo | Valor |
+| :---- | :---- |
+| **Fecha** | 2026-04-24 |
+| **Fase** | Phase Modeling |
+| **Origen** | Auditoria de atomicidad del backlog F3 |
+| **Tipo** | Decision de estructura del backlog / atomicidad de tareas |
+
+**Contexto:** El backlog original de F3 agrupaba el entrenamiento del modelo y su serializacion en una unica tarea [GREEN] (F3-T02) con dos entregables: `notebooks/03_model_selection.ipynb` y `models/iris_model.joblib`. Esto viola el principio de atomicidad ("Un unico responsable por tarea. Un unico entregable por tarea.") y mezcla las responsabilidades de `trainer.py` (SpecDD §9) y `serializer.py` (SpecDD §10), que son modulos distintos con contratos de interfaz independientes.
+
+**Decision:** Se separan en iteraciones distintas: Iteracion 3.1 cubre `trainer.py` completo (RED + GREEN + REFACTOR), Iteracion 3.2 cubre `serializer.py` completo (RED + GREEN + REFACTOR). El notebook de seleccion y el build del modelo certificado se ubican en Iteracion 3.3, garantizando que los modulos productivos estean implementados y testeados antes de usarlos en experimentacion.
+
+**Justificacion:** El patron de Fase 2 (Bronze/Silver/Gold como iteraciones separadas) demostro que la separacion por modulo reduce la complejidad del ciclo TDD y facilita la certificacion de linaje. Un modulo = una iteracion = una suite de tests = un responsable. Este patron se aplica directamente a `trainer.py` y `serializer.py`.
+
+**Impacto Transversal:**
+- `docs/governance/backlog.md`: Iteraciones 3.1 y 3.2 son independientes.
+- `tests/unit/training/`: Contendra `test_trainer.py` (F3-T01) y `test_serializer.py` (F3-T03) como suites independientes.
+- `pytest tests/unit/training/` es el comando de verificacion del ciclo completo de Phase Modeling.
+
+---
+
+### Lecciones Aprendidas — Sesion 2026-04-24 (Gobernanza Backlog F3)
+
+| # | Leccion | Categoria |
+| :- | :------- | :-------- |
+| 1 | El backlog de una fase debe auditarse contra el patron IA-TDD (D-023) ANTES de iniciar la ejecucion, no durante. Un backlog incompleto en el momento de ejecucion obliga a pausar el trabajo para corregir la gobernanza, lo que interrumpe el flujo. La auditoria pre-ejecucion es una inversion que cuesta minutos y ahorra horas. | Proceso / Backlog |
+| 2 | Los principios de ingenieria (principles.md) y el catalogo de agentes (agents.md) deben leerse al inicio de cualquier sesion de gobernanza, no solo al inicio de sesiones de codigo. Las decisiones de backlog tambien son decisiones de ingenieria y deben cumplir los mismos estandares. | Proceso / Gobernanza |
+| 3 | Asignar agentes correctos desde agents.md en el momento de disenar las tareas (no al ejecutarlas) permite que el backlog sea autoexplicativo: cualquier colaborador sabe quien hace que sin necesidad de contexto adicional. La asignacion correcta en F3 fue: @ai-data-qa-engineer para suites RED, @ai-data-scientist para implementacion del trainer, @ai-ml-engineer para serializer y refactorizaciones, @ai-model-qa-validator para QA, @ai-mlops-specialist para validacion final. | Organizacion de Agentes |
+
+---
+
+*Fin de entrada #17.*

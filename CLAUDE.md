@@ -3,7 +3,7 @@
 Este archivo define las convenciones y protocolos agnósticos para Claude Code en proyectos de **Ciencia de Datos, Machine Learning e Ingeniería de IA**, siguiendo las metodologías **SpecDD** (Specification-Driven Development) y **TDD** (Test-Driven Development).
 
 ## Directrices de Comportamiento
-* **LECTURA OBLIGATORIA:** Todas tus acciones, sugerencias y generación de código deben cumplir estrictamente con los principios definidos en el archivo `principles.md`, ubicado en `docs/references`.
+* **LECTURA OBLIGATORIA:** Leer y comprender el archivo **[principles.md](docs/references/principles.md)**. Todas tus acciones, sugerencias y generación de código deben cumplir estrictamente con los principios definidos en este archivo.
 * **PROTOCOLO DE PENSAMIENTO:** Antes de realizar cualquier cambio (usando `write_file` o `edit_file`), debes validar internamente que tu solución respeta los pilares de "Simplicidad Primero" y "Cambios Quirúrgicos" detallados en `principles.md`.
 * **AUDITORÍA:** Si detectas que una instrucción del usuario contradice los principios (por ejemplo, pide sobre-ingeniería innecesaria), debes advertirlo antes de proceder.
 * **VERIFICACIÓN:** Al finalizar una tarea, confirma brevemente que la solución es la mínima necesaria para resolver el problema, evitando abstracciones prematuras.

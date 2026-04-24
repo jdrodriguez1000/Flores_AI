@@ -6,7 +6,7 @@
 >
 > **Ultima actualizacion:** 2026-04-24
 > **Responsable de cierre:** ai-session-steward
-> **Fase activa:** Phase Modeling (proxima) — Phase Engineering CERRADA
+> **Fase activa:** Phase Modeling — Backlog F3 atomizado y listo para ejecucion
 
 ---
 
@@ -23,13 +23,15 @@
 
 ---
 
-## 2. Logros de la Sesion (2026-04-24 — Iteracion 2.4: Certificacion y Validacion DONE)
+## 2. Logros de la Sesion (2026-04-24 — Gobernanza: Atomizacion Backlog Fase 3)
 
 | # | Entregable / Accion | Archivos Afectados | Estado |
 | :- | :------------------ | :----------------- | :----- |
-| 1 | F2-T10 [CERTIFICACION] — Reporte de certificacion tecnica del linaje Bronze→Silver→Gold generado por @ai-data-qa-engineer. 34 tests ejecutados: 10 Bronze + 12 Silver + 12 Gold. 0 fallos. Sin rutas absolutas en codigo fuente. Todas las dependencias declaradas en `requirements.txt`. Veredicto: CERTIFICADO. | `docs/Phase_engineering/certification_f2.md` | DONE |
-| 2 | F2-T11 [VALIDACION] — Reporte de validacion del Feature Set Gold contra KPIs del BRD generado por @ai-data-scientist. Linaje 100% documentado: PASS. Trazabilidad SpecDD (todos los modulos): PASS. Cobertura de tests ≥80%: PASS (100%). Baseline RandomForest 5-fold CV: 95.20% ± 3.53% (umbral BRD ≥95%): PASS. Veredicto: GO — Phase Modeling puede iniciarse. | `docs/Phase_engineering/validation_f2.md` | DONE |
-| 3 | `docs/governance/backlog.md` actualizado — F2-T10 y F2-T11 marcadas DONE 2026-04-24. Fase 2 marcada DONE ✅. | `docs/governance/backlog.md` | DONE |
+| 1 | Auditoria de `principles.md` integrada como contexto de gobernanza para la sesion. Los 4 principios (Pensar antes de programar, Simplicidad Primero, Cambios Quirurgicos, Ejecucion Orientada a Objetivos) fueron leidos y aplicados en la toma de decisiones. | `docs/references/principles.md` | DONE |
+| 2 | Diagnostico completo del Backlog F3: detectadas 5 tareas faltantes, DoDs vagos y ruta de tests no canonica (`tests/test_model_training.py` → correcto: `tests/unit/training/`). | `docs/governance/backlog.md` | DONE |
+| 3 | Backlog F3 atomizado: de 3 tareas vagas a 9 tareas atomicas siguiendo el patron RED→GREEN→REFACTOR de Fase 2. Modulos `trainer.py` y `serializer.py` separados en iteraciones propias (3.1 y 3.2). Iteracion 3.3 de experimentacion y build añadida. Iteracion 3.4 de cierre con MODEL QA + CERTIFICACION + VALIDACION añadida. | `docs/governance/backlog.md` | DONE |
+| 4 | Agentes asignados correctamente desde `agents.md`: @ai-data-qa-engineer (RED), @ai-data-scientist (GREEN trainer + experimentacion), @ai-ml-engineer (GREEN serializer + REFACTOR + BUILD), @ai-model-qa-validator (MODEL QA), @ai-mlops-specialist (VALIDACION). | `docs/governance/backlog.md` | DONE |
+| 5 | `CLAUDE.md` actualizado por el usuario: referencia a `principles.md` reforzada como hipervínculo directo. | `CLAUDE.md` | DONE |
 
 ---
 
@@ -46,7 +48,7 @@
 | specdd.md      | `docs/governance/specdd.md`                       | DONE — 2026-04-19 (v1.0.0)              |
 | contract.md    | `docs/governance/contract.md`                     | DONE — 2026-04-19 (v1.0.0)              |
 | design-system  | `docs/design-system/`                             | DONE — 2026-04-20                        |
-| backlog.md     | `docs/governance/backlog.md`                      | DONE — 2026-04-24 (F2: 16/16 tareas DONE, Fase 2 CERRADA) |
+| backlog.md     | `docs/governance/backlog.md`                      | DONE — 2026-04-24 (F2: 16/16 tareas DONE, F3: 9 tareas atomizadas, listo para ejecucion) |
 | agents.md      | `docs/references/agents.md`                       | DONE — 2026-04-23                        |
 | process.md     | `docs/methodology/process.md`                     | DONE — 2026-04-23                        |
 | CLAUDE.md      | `CLAUDE.md` (raiz)                                | DONE — 2026-04-23                        |
@@ -122,10 +124,11 @@ El mismo comando es ejecutado automaticamente por el workflow CI en cada push a 
 
 | Prioridad | ID Tarea | Descripcion | Responsable | Entregable |
 | :-------- | :------- | :---------- | :---------- | :--------- |
-| 1 (CRITICA) | F3-T01 | [RED] Suite de pruebas para el pipeline de entrenamiento (`trainer.py`) | @ai-data-qa-engineer | `tests/unit/model/test_trainer.py` |
-| 2 | F3-T02 | [GREEN] Implementacion de `trainer.py` — entrenamiento con sklearn.Pipeline + StandardScaler | @ai-ml-engineer | `src/model/trainer.py` |
+| 1 (CRITICA) | F3-T01 | [RED] Suite de pruebas para `src/training/trainer.py` — contratos SpecDD §9 | @ai-data-qa-engineer | `tests/unit/training/test_trainer.py` |
+| 2 | F3-T02 | [GREEN] Implementar `trainer.py` — `build_pipeline()` + `train_and_evaluate()` | @ai-data-scientist | `src/training/trainer.py` |
+| 3 | F3-T02b | [REFACTOR] `trainer.py` — tipado estricto, TypedDict, sin efectos secundarios | @ai-ml-engineer | `src/training/trainer.py` (refactored) |
 
-**Prerequisito para F3-T01:** Leer en orden: `brd.md §KPIs` → `specdd.md §trainer` → `behavior.md §escenarios de entrenamiento` → `contract.md §4`. El Feature Store de entrada es `data/gold/X_gold.csv` + `data/gold/y_gold.csv`.
+**Prerequisito para F3-T01:** Leer en orden: `brd.md §KPIs` → `specdd.md §9 (trainer)` → `specdd.md §10 (serializer)` → `contract.md §4`. El Feature Store de entrada es `data/gold/X_gold.csv` + `data/gold/y_gold.csv`.
 
 **Notas criticas para Phase Modeling:**
 - La zona de solapamiento versicolor/virginica en `petal_width` [1.4-1.8 cm] (~17 instancias) es el limite fisico de separabilidad. Phase Modeling debe evaluar el modelo especificamente sobre estas instancias.
@@ -133,6 +136,7 @@ El mismo comando es ejecutado automaticamente por el workflow CI en cada push a 
 - StandardScaler va dentro del sklearn.Pipeline en `trainer.py`, NO en `gold_builder.py` (Decision D-008).
 - El linaje DATOS (Gold) → CODIGO (src) → MODELO (models) debe mantenerse: versionar `data/gold/reference_stats.json` junto al artefacto del modelo entrenado.
 - Baseline de referencia: RandomForest 5-fold CV → 95.20% ± 3.53%. El modelo final debe igualar o superar este valor.
+- Ruta canonica de tests de modeling: `tests/unit/training/` (no `tests/test_model_training.py`).
 
 ---
 
