@@ -2,7 +2,7 @@
 
 > **Fuente de verdad:** [CLAUDE.md](../../CLAUDE.md) | **Metodología:** [process.md](../methodology/process.md)
 > **Proyecto:** Flores AI — Clasificación de especies Iris
-> **Última actualización:** 2026-04-21
+> **Última actualización:** 2026-04-26
 > **Responsable del backlog:** @ai-backlog-manager
 > **Auditoría aplicada:** 2026-04-21 — correcciones de rutas (SAD §5), tarea config.py añadida, tareas REFACTOR atomizadas, citas SpecDD corregidas (§6–8), reference_stats.json añadido al DoD.
 
@@ -245,7 +245,7 @@
 - **Entregable:** `tests/unit/training/test_trainer.py`
 - **Acción:** Testing
 - **DoD:** Suite falla de forma controlada (sin código productivo). Valida los contratos del SpecDD §9: que `build_pipeline()` retorna un `Pipeline` unfitted con steps `('scaler', StandardScaler())` y `('clf', <clasificador>)`; que `train_and_evaluate()` retorna un `Pipeline` fitted y un `TrainingMetrics` con las claves `accuracy_cv_mean`, `accuracy_cv_std`, `accuracy_test`, `f1_macro_test`, `f1_per_class`, `n_train`, `n_test`, `random_state`. Verifica que `metrics['n_train'] + metrics['n_test'] == len(X)` y que `metrics['random_state'] == 42`. Trazable al SpecDD §9 y SAD §9.2.
-- **Estado:** TODO
+- **Estado:** DONE ✅ — 2026-04-26
 
 #### [F3-T02] [GREEN] Implementar `src/training/trainer.py`
 - **Responsable:** @ai-data-scientist
@@ -253,7 +253,7 @@
 - **Entregable:** `src/training/trainer.py`
 - **Acción:** Coding
 - **DoD:** Pasa la suite F3-T01. Implementa `build_pipeline()` y `train_and_evaluate()` según el SpecDD §9. Ejecuta `train_test_split(stratify=y, random_state=42, test_size=0.20)`, K-Fold CV con `k=5`, y calcula `accuracy_test` y `f1_macro_test` sobre el hold-out set. No importa pandas, streamlit ni pydantic. Trazable al SpecDD §9.
-- **Estado:** TODO
+- **Estado:** DONE ✅ — 2026-04-26
 
 #### [F3-T02b] [REFACTOR] Refactorizar `src/training/trainer.py`
 - **Responsable:** @ai-ml-engineer
@@ -261,7 +261,7 @@
 - **Entregable:** `src/training/trainer.py` (refactored)
 - **Acción:** Refactoring
 - **DoD:** Código con tipado estricto (type hints en todas las firmas). Sin rutas absolutas. Sin efectos secundarios al importar. `TrainingMetrics` definido como `TypedDict`. Todos los tests F3-T01 siguen en verde. Trazable al SpecDD §9 y SAD §5.1.
-- **Estado:** TODO
+- **Estado:** DONE ✅ — 2026-04-26
 
 ### Iteración 3.2: Serializer — Persistencia del Modelo
 
@@ -271,7 +271,7 @@
 - **Entregable:** `tests/unit/training/test_serializer.py`
 - **Acción:** Testing
 - **DoD:** Suite falla de forma controlada. Valida los contratos del SpecDD §10: que `save_model()` crea el archivo `models/iris_model.joblib`; que el objeto guardado puede cargarse con `joblib.load()` y es instancia de `sklearn.pipeline.Pipeline`; que `load_model()` lanza `FileNotFoundError` si la ruta no existe; que `save_model()` lanza `TypeError` si el argumento no es un `Pipeline`. Trazable al SpecDD §10 y SAD §9.2.
-- **Estado:** TODO
+- **Estado:** DONE ✅ — 2026-04-26
 
 #### [F3-T04] [GREEN] Implementar `src/training/serializer.py`
 - **Responsable:** @ai-ml-engineer
@@ -279,7 +279,7 @@
 - **Entregable:** `src/training/serializer.py`
 - **Acción:** Coding
 - **DoD:** Pasa la suite F3-T03. Implementa `save_model()` y `load_model()` según el SpecDD §10. Usa `config.MODEL_PATH` como ruta default. Crea el directorio `models/` con `mkdir(parents=True, exist_ok=True)` si no existe. No importa pandas, streamlit ni pydantic. Trazable al SpecDD §10.
-- **Estado:** TODO
+- **Estado:** DONE ✅ — 2026-04-26
 
 #### [F3-T04b] [REFACTOR] Refactorizar `src/training/serializer.py`
 - **Responsable:** @ai-ml-engineer
@@ -287,7 +287,7 @@
 - **Entregable:** `src/training/serializer.py` (refactored)
 - **Acción:** Refactoring
 - **DoD:** Código con tipado estricto. Sin rutas absolutas (usa `config.MODEL_PATH`). Sin efectos secundarios al importar. Todos los tests F3-T03 siguen en verde. Trazable al SpecDD §10 y SAD §5.1.
-- **Estado:** TODO
+- **Estado:** DONE ✅ — 2026-04-26
 
 ### Iteración 3.3: Experimentación y Selección de Modelo
 
@@ -297,7 +297,7 @@
 - **Entregable:** `notebooks/03_model_selection.ipynb`
 - **Acción:** Coding
 - **DoD:** Notebook documenta la evaluación de al menos 3 algoritmos candidatos (e.g., `LogisticRegression`, `RandomForestClassifier`, `SVC`) usando `train_and_evaluate()` de `trainer.py`. Cada candidato reporta `accuracy_cv_mean`, `accuracy_cv_std` y `f1_macro_test`. El algoritmo seleccionado es el que maximiza `f1_macro_test` con menor complejidad (principio de Simplicidad Primero). El notebook justifica explícitamente la selección. Trazable al BRD KPI-01 y SpecDD §9.
-- **Estado:** TODO
+- **Estado:** DONE ✅ — 2026-04-26
 
 #### [F3-T06] [BUILD] Construir y persistir modelo certificado
 - **Responsable:** @ai-ml-engineer
@@ -305,7 +305,7 @@
 - **Entregable:** `models/iris_model.joblib`
 - **Acción:** Coding
 - **DoD:** Ejecuta `train_and_evaluate()` con el algoritmo seleccionado en F3-T05 sobre el dataset Gold completo. Persiste el pipeline con `serializer.save_model()`. El archivo `models/iris_model.joblib` existe, pesa < 10 MB y puede cargarse sin errores. `metrics['accuracy_test'] >= 0.95` (umbral BRD KPI-01). Trazable al SpecDD §9–10 y BRD §4.
-- **Estado:** TODO
+- **Estado:** DONE ✅ — 2026-04-26
 
 ### Iteración 3.4: Model QA y Certificación de Fase
 
@@ -315,7 +315,7 @@
 - **Entregable:** `docs/Phase_modeling/model_qa_report.md`
 - **Acción:** Testing
 - **DoD:** Reporte incluye: (1) métricas por clase (`f1_per_class` para setosa, versicolor, virginica ≥ 0.90 cada una); (2) matriz de confusión con interpretación; (3) análisis de sesgo por clase (verifica distribución de errores); (4) stress test con valores en los límites del contract.md §1 (`IrisInput` en rangos mínimos y máximos); (5) veredicto explícito GO/NO-GO. Trazable al BRD §4, SpecDD §4 y contract.md §1.
-- **Estado:** TODO
+- **Estado:** DONE ✅ — 2026-04-26
 
 #### [F3-T08] [CERTIFICACIÓN] Certificar linaje completo Gold → Pipeline → `.joblib`
 - **Responsable:** @ai-data-qa-engineer
@@ -323,7 +323,7 @@
 - **Entregable:** `docs/Phase_modeling/certification_f3.md`
 - **Acción:** Documentation
 - **DoD:** Reporte certifica: (1) trazabilidad total Gold → trainer → serializer → `iris_model.joblib`; (2) reproducibilidad: ejecutar el pipeline completo produce el mismo `.joblib` (semilla 42); (3) todos los tests de la fase pasan en conjunto con `pytest tests/unit/training/`; (4) sin rutas absolutas ni dependencias no declaradas en `requirements.txt`; (5) el modelo cargado desde `.joblib` retorna `PredictionResult` válido sobre el fixture de `conftest.py`. Trazable al SAD §9, SpecDD §9–10 y BRD §4.
-- **Estado:** TODO
+- **Estado:** DONE ✅ — 2026-04-26
 
 #### [F3-T09] [VALIDACIÓN] Validar modelo contra KPIs del BRD
 - **Responsable:** @ai-mlops-specialist
@@ -331,7 +331,7 @@
 - **Entregable:** `docs/Phase_modeling/validation_f3.md`
 - **Acción:** Documentation
 - **DoD:** Reporte verifica que el modelo certificado cumple **todos** los KPIs del BRD §4: `accuracy_test >= 0.95`, `f1_macro_test >= 0.95`, `f1_per_class >= 0.90` por clase, latencia de inferencia `<= 3000 ms` (medida con `time.perf_counter` sobre 100 predicciones). Incluye veredicto GO/NO-GO explícito para avanzar a Fase 4 (Delivery). Si el veredicto es NO-GO, especifica la tarea de F3 que debe repetirse.
-- **Estado:** TODO
+- **Estado:** DONE ✅ — 2026-04-26
 
 ---
 

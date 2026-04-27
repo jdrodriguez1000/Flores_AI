@@ -4,9 +4,9 @@
 > Este archivo es la foto nitida y actual del proyecto. Es sobrescribible al cierre de cada sesion.
 > Un nuevo agente debe poder retomar el trabajo leyendo unicamente este archivo.
 >
-> **Ultima actualizacion:** 2026-04-24
+> **Ultima actualizacion:** 2026-04-26
 > **Responsable de cierre:** ai-session-steward
-> **Fase activa:** Phase Modeling — Backlog F3 atomizado y listo para ejecucion
+> **Fase activa:** Phase Delivery — Phase Modeling CERRADA, lista para atomizar Backlog F4
 
 ---
 
@@ -15,65 +15,99 @@
 | Campo               | Valor                                                                              |
 | :------------------ | :--------------------------------------------------------------------------------- |
 | **Proyecto**        | Flores AI - Iris                                                                   |
-| **Fase Actual**     | Phase Engineering — Data & EDA CERRADA ✅ (2026-04-24)                            |
-| **Rama activa**     | `feat/F2-engineering`                                                              |
-| **Iteracion**       | Iteraciones 2.0, 2.1, 2.2, 2.3 y 2.4 completadas — Phase 2 DONE                  |
-| **Estado General**  | Fase 2 completamente cerrada. 34/34 tests de linaje en verde (Bronze + Silver + Gold). Linaje Bronze→Silver→Gold certificado. Baseline RandomForest 5-fold CV 95.20% supera umbral BRD (≥95%). Veredicto GO para Phase Modeling. |
-| **Progreso Global** | 85% — Phase Discovery cerrada al 100%. Phase Engineering cerrada al 100% (16/16 tareas F2 DONE). |
+| **Fase Actual**     | Phase Modeling CERRADA (2026-04-26) — Avanza a Phase Delivery                     |
+| **Rama activa**     | `feat/F3-modeling`                                                                 |
+| **Iteracion**       | Iteraciones 3.1, 3.2, 3.3 y 3.4 completadas — Phase 3 DONE                       |
+| **Estado General**  | Phase Modeling completamente cerrada. 70/70 tests en verde. Pipeline StandardScaler+RandomForestClassifier serializado y certificado como `models/iris_model.joblib`. Accuracy Global 0.9667 y F1-Score Macro 0.9666 superan umbral BRD (>=0.95). Veredicto GO para Phase Delivery. |
+| **Progreso Global** | 95% — Phases 1, 2 y 3 cerradas al 100%. Phase Delivery pendiente de atomizacion. |
 
 ---
 
-## 2. Logros de la Sesion (2026-04-24 — Gobernanza: Atomizacion Backlog Fase 3)
+## 2. Logros de la Sesion (2026-04-26 — Phase 3: Modeling completa)
 
-| # | Entregable / Accion | Archivos Afectados | Estado |
-| :- | :------------------ | :----------------- | :----- |
-| 1 | Auditoria de `principles.md` integrada como contexto de gobernanza para la sesion. Los 4 principios (Pensar antes de programar, Simplicidad Primero, Cambios Quirurgicos, Ejecucion Orientada a Objetivos) fueron leidos y aplicados en la toma de decisiones. | `docs/references/principles.md` | DONE |
-| 2 | Diagnostico completo del Backlog F3: detectadas 5 tareas faltantes, DoDs vagos y ruta de tests no canonica (`tests/test_model_training.py` → correcto: `tests/unit/training/`). | `docs/governance/backlog.md` | DONE |
-| 3 | Backlog F3 atomizado: de 3 tareas vagas a 9 tareas atomicas siguiendo el patron RED→GREEN→REFACTOR de Fase 2. Modulos `trainer.py` y `serializer.py` separados en iteraciones propias (3.1 y 3.2). Iteracion 3.3 de experimentacion y build añadida. Iteracion 3.4 de cierre con MODEL QA + CERTIFICACION + VALIDACION añadida. | `docs/governance/backlog.md` | DONE |
-| 4 | Agentes asignados correctamente desde `[[agents]].md`: @ai-data-qa-engineer (RED), @ai-data-scientist (GREEN trainer + experimentacion), @ai-ml-engineer (GREEN serializer + REFACTOR + BUILD), @ai-model-qa-validator (MODEL QA), @ai-mlops-specialist (VALIDACION). | `docs/governance/backlog.md` | DONE |
-| 5 | `CLAUDE.md` actualizado por el usuario: referencia a `principles.md` reforzada como hipervínculo directo. | `CLAUDE.md` | DONE |
-
----
-
-## 3. Estado Actual de Entregables de Gobernanza
-
-| Documento      | Ruta                                              | Estado                                   |
-| :------------- | :------------------------------------------------ | :--------------------------------------- |
-| config.md      | `docs/references/config.md`                       | DONE — 2026-04-20                        |
-| brd.md         | `docs/governance/brd.md`                          | DONE — 2026-04-20 (v1.1)                |
-| behavior.md    | `docs/governance/behavior.md`                     | DONE — 2026-04-20 (v1.0.0)              |
-| feasibility.md | `docs/Phase_discovery/feasibility.md`             | DONE — 2026-04-19                        |
-| mockup         | `mockup/index.html` + `docs/Phase_discovery/mockup.md` | DONE — 2026-04-20                  |
-| sad.md         | `docs/governance/sad.md`                          | DONE — 2026-04-19 (v1.0.0)              |
-| specdd.md      | `docs/governance/specdd.md`                       | DONE — 2026-04-19 (v1.0.0)              |
-| contract.md    | `docs/governance/contract.md`                     | DONE — 2026-04-19 (v1.0.0)              |
-| design-system  | `docs/design-system/`                             | DONE — 2026-04-20                        |
-| backlog.md     | `docs/governance/backlog.md`                      | DONE — 2026-04-24 (F2: 16/16 tareas DONE, F3: 9 tareas atomizadas, listo para ejecucion) |
-| [[agents]].md      | `docs/references/[[agents]].md`                       | DONE — 2026-04-23                        |
-| process.md     | `docs/methodology/process.md`                     | DONE — 2026-04-23                        |
-| CLAUDE.md      | `CLAUDE.md` (raiz)                                | DONE — 2026-04-23                        |
-| [[CC-028]].md      | `docs/changes/CC-028.md`                          | DONE — 2026-04-21                        |
-| eda_bronze.md  | `docs/Phase_engineering/eda_bronze.md`            | DONE — 2026-04-21 (veredicto GO)        |
-| eda_silver.md  | `docs/Phase_engineering/eda_silver.md`            | DONE — 2026-04-23 (veredicto GO)        |
-| eda_gold.md    | `docs/Phase_engineering/eda_gold.md`              | DONE — 2026-04-24 (veredicto GO)        |
-| certification_f2.md | `docs/Phase_engineering/certification_f2.md` | DONE — 2026-04-24 (CERTIFICADO)         |
-| [[validation_f2]].md | `docs/Phase_engineering/[[validation_f2]].md`      | DONE — 2026-04-24 (GO)                  |
-| silver_cleaner.py | `src/data/silver_cleaner.py`                   | DONE — 2026-04-23                        |
-| test_silver_cleaner.py | `tests/unit/data/test_silver_cleaner.py`  | DONE — 2026-04-23                        |
-| gold_builder.py | `src/data/gold_builder.py`                       | DONE — 2026-04-24 (refactored con TARGET_COLUMN) |
-| test_gold_builder.py | `tests/unit/data/test_gold_builder.py`      | DONE — 2026-04-24 (12 tests)            |
-| reference_stats.json | `data/gold/reference_stats.json`            | DONE — 2026-04-24                        |
-| X_gold.csv     | `data/gold/X_gold.csv`                            | DONE — 2026-04-24                        |
-| y_gold.csv     | `data/gold/y_gold.csv`                            | DONE — 2026-04-24                        |
-| principles.md  | `docs/references/principles.md`                   | DONE — 2026-04-23                        |
-| sources.md     | `docs/references/sources.md`                      | DONE — 2026-04-23                        |
-| requirements.txt | `requirements.txt`                              | DONE — 2026-04-22                        |
-| pytest.ini     | `pytest.ini`                                      | DONE — 2026-04-22                        |
-| ci.yml         | `.github/workflows/ci.yml`                        | DONE — 2026-04-22                        |
+| # | Tarea | Entregable | Estado |
+| :- | :---- | :--------- | :----- |
+| 1 | [F3-T01] RED — Suite tests trainer.py | `tests/unit/training/test_trainer.py` | DONE |
+| 2 | [F3-T02] GREEN — Implementar trainer.py | `src/training/trainer.py` | DONE |
+| 3 | [F3-T02b] REFACTOR — trainer.py con TypedDict | `src/training/trainer.py` (refactored) | DONE |
+| 4 | [F3-T03] RED — Suite tests serializer.py | `tests/unit/training/test_serializer.py` | DONE |
+| 5 | [F3-T04] GREEN — Implementar serializer.py | `src/training/serializer.py` | DONE |
+| 6 | [F3-T04b] REFACTOR — serializer.py | `src/training/serializer.py` (refactored) | DONE |
+| 7 | [F3-T05] EXPERIMENT — Seleccion de algoritmo | `notebooks/03_model_selection.ipynb` | DONE |
+| 8 | [F3-T06] BUILD — Construir y persistir modelo | `models/iris_model.joblib` | DONE |
+| 9 | [F3-T07] MODEL QA — Benchmarking, sesgo, stress | `docs/Phase_modeling/model_qa_report.md` | DONE |
+| 10 | [F3-T08] CERTIFICACION — Linaje Gold→Pipeline→.joblib | `docs/Phase_modeling/certification_f3.md` | DONE |
+| 11 | [F3-T09] VALIDACION — KPIs del BRD | `docs/Phase_modeling/validation_f3.md` | DONE |
 
 ---
 
-## 4. Estado de la Suite de Tests al Cierre
+## 3. Metricas del Modelo Certificado
+
+**Modelo:** RandomForestClassifier en Pipeline (StandardScaler + RF, semilla 42)
+**Artefacto:** `models/iris_model.joblib`
+
+| Metrica | Valor | Umbral BRD | Estado |
+| :------ | :---- | :--------- | :----- |
+| Accuracy Global | 0.9667 | >= 0.95 | PASS |
+| F1-Score Macro | 0.9666 | >= 0.95 | PASS |
+| F1 Setosa | 1.0000 | >= 0.90 | PASS |
+| F1 Versicolor | 0.9474 | >= 0.90 | PASS |
+| F1 Virginica | 0.9524 | >= 0.90 | PASS |
+| Latencia promedio | 8.30 ms/pred | <= 30 ms | PASS |
+| Latencia total (100 llamadas) | 830.41 ms | <= 3000 ms | PASS |
+
+**Veredicto Phase 3: GO** — Avanza a Phase Delivery (F4).
+
+El unico error de clasificacion fue 1 instancia de versicolor predicha como virginica, coherente con la zona de solapamiento petal_width [1.4-1.8 cm] identificada en Phase Engineering. Este es el limite fisico del dataset, no un defecto del modelo.
+
+---
+
+## 4. Estado Actual de Entregables de Gobernanza
+
+| Documento | Ruta | Estado |
+| :-------- | :--- | :----- |
+| config.md | `docs/references/config.md` | DONE — 2026-04-20 |
+| brd.md | `docs/governance/brd.md` | DONE — 2026-04-20 (v1.1) |
+| behavior.md | `docs/governance/behavior.md` | DONE — 2026-04-20 (v1.0.0) |
+| feasibility.md | `docs/Phase_discovery/feasibility.md` | DONE — 2026-04-19 |
+| mockup | `mockup/index.html` + `docs/Phase_discovery/mockup.md` | DONE — 2026-04-20 |
+| sad.md | `docs/governance/sad.md` | DONE — 2026-04-19 (v1.0.0) |
+| specdd.md | `docs/governance/specdd.md` | DONE — 2026-04-19 (v1.0.0) |
+| contract.md | `docs/governance/contract.md` | DONE — 2026-04-19 (v1.0.0) |
+| design-system | `docs/design-system/` | DONE — 2026-04-20 |
+| backlog.md | `docs/governance/backlog.md` | DONE — 2026-04-26 (F3: 9/9 tareas DONE, F4: pendiente atomizacion) |
+| agents.md | `docs/references/agents.md` | DONE — 2026-04-23 |
+| process.md | `docs/methodology/process.md` | DONE — 2026-04-23 |
+| CLAUDE.md | `CLAUDE.md` (raiz) | DONE — 2026-04-23 |
+| CC-028.md | `docs/changes/CC-028.md` | DONE — 2026-04-21 |
+| eda_bronze.md | `docs/Phase_engineering/eda_bronze.md` | DONE — 2026-04-21 (veredicto GO) |
+| eda_silver.md | `docs/Phase_engineering/eda_silver.md` | DONE — 2026-04-23 (veredicto GO) |
+| eda_gold.md | `docs/Phase_engineering/eda_gold.md` | DONE — 2026-04-24 (veredicto GO) |
+| certification_f2.md | `docs/Phase_engineering/certification_f2.md` | DONE — 2026-04-24 (CERTIFICADO) |
+| validation_f2.md | `docs/Phase_engineering/validation_f2.md` | DONE — 2026-04-24 (GO) |
+| trainer.py | `src/training/trainer.py` | DONE — 2026-04-26 (refactored con TypedDict) |
+| serializer.py | `src/training/serializer.py` | DONE — 2026-04-26 (refactored) |
+| test_trainer.py | `tests/unit/training/test_trainer.py` | DONE — 2026-04-26 (10 tests) |
+| test_serializer.py | `tests/unit/training/test_serializer.py` | DONE — 2026-04-26 (10 tests) |
+| 03_model_selection.ipynb | `notebooks/03_model_selection.ipynb` | DONE — 2026-04-26 |
+| iris_model.joblib | `models/iris_model.joblib` | DONE — 2026-04-26 (certificado) |
+| model_qa_report.md | `docs/Phase_modeling/model_qa_report.md` | DONE — 2026-04-26 |
+| certification_f3.md | `docs/Phase_modeling/certification_f3.md` | DONE — 2026-04-26 (CERTIFICADO) |
+| validation_f3.md | `docs/Phase_modeling/validation_f3.md` | DONE — 2026-04-26 (GO) |
+| silver_cleaner.py | `src/data/silver_cleaner.py` | DONE — 2026-04-23 |
+| gold_builder.py | `src/data/gold_builder.py` | DONE — 2026-04-24 (refactored con TARGET_COLUMN) |
+| reference_stats.json | `data/gold/reference_stats.json` | DONE — 2026-04-24 |
+| X_gold.csv | `data/gold/X_gold.csv` | DONE — 2026-04-24 |
+| y_gold.csv | `data/gold/y_gold.csv` | DONE — 2026-04-24 |
+| principles.md | `docs/references/principles.md` | DONE — 2026-04-23 |
+| sources.md | `docs/references/sources.md` | DONE — 2026-04-23 |
+| requirements.txt | `requirements.txt` | DONE — 2026-04-22 |
+| pytest.ini | `pytest.ini` | DONE — 2026-04-22 |
+| ci.yml | `.github/workflows/ci.yml` | DONE — 2026-04-22 |
+
+---
+
+## 5. Estado de la Suite de Tests al Cierre
 
 | Suite | Archivo | Tests | Estado |
 | :---- | :------ | :---- | :----- |
@@ -81,96 +115,106 @@
 | Bronze Loader | `tests/unit/data/test_bronze_loader.py` | 12 | 12/12 passed |
 | Silver Cleaner | `tests/unit/data/test_silver_cleaner.py` | 10 | 10/10 passed |
 | Gold Builder | `tests/unit/data/test_gold_builder.py` | 12 | 12/12 passed |
-| **Total** | | **50** | **50/50 passed — 0 errores, 0 warnings** |
+| Trainer | `tests/unit/training/test_trainer.py` | 10 | 10/10 passed |
+| Serializer | `tests/unit/training/test_serializer.py` | 10 | 10/10 passed |
+| **Total** | | **70** | **70/70 passed — 0 errores, 0 warnings** |
 
-Linaje (solo capas de datos): `pytest tests/unit/data/ -v` → 34/34 passed (10 BR + 12 SR + 12 GR).
-
-Comando completo de verificacion: `pytest tests/unit/ -v`
-
-El mismo comando es ejecutado automaticamente por el workflow CI en cada push a la rama `feat/F2-engineering` y en PRs hacia `main` o `dev`.
+Linaje completo (datos + training): `pytest tests/unit/ -v` → 70/70 passed.
+Linaje solo datos: `pytest tests/unit/data/ -v` → 34/34 passed.
+Linaje solo training: `pytest tests/unit/training/ -v` → 20/20 passed.
 
 ---
 
-## 5. Pendientes y Bloqueos
+## 6. Pendientes y Bloqueos
 
 **Bloqueos activos:** Ninguno.
 
 **Pendientes tecnicos:**
-- Sincronizar en NotebookLM: `decisions.md` (entradas #17, #18 y leccion aprendida de Iteracion 2.4 añadidas en esta sesion), `brd.md` (re-sincronizar, modificado 2026-04-20) y `behavior.md` (carga inicial, nuevo 2026-04-20). Esta sincronizacion debe realizarse antes de iniciar Phase Modeling.
-- El commit de cierre de Phase 2 debe incluir: `certification_f2.md`, `[[validation_f2]].md` y el `backlog.md` actualizado.
+- La atomizacion del Backlog F4 (Delivery) desde SpecDD §4.x es el siguiente paso obligatorio antes de iniciar Phase Delivery. Responsable: @ai-backlog-manager.
+- Sincronizar en NotebookLM (acumulado desde sesiones anteriores y esta sesion):
+  - `decisions.md` — SIEMPRE (entradas D-040 y D-041 de ejecucion de F3 añadidas)
+  - `backlog.md` — modificado (F3 actualizado a 9/9 DONE)
+  - `docs/Phase_modeling/model_qa_report.md` — nuevo (primera carga)
+  - `docs/Phase_modeling/certification_f3.md` — nuevo (primera carga)
+  - `docs/Phase_modeling/validation_f3.md` — nuevo (primera carga)
+  - `docs/governance/brd.md` — pendiente re-sincronizacion desde sesion 2026-04-20
+  - `docs/governance/behavior.md` — pendiente carga inicial desde sesion 2026-04-20
+- Los scripts temporales en `scripts/` (creados para F3-T09 MODEL QA) deben evaluarse: retener si son reutilizables en Phase Delivery o eliminar para mantener higiene del repositorio.
+- Commit de cierre de Phase 3 y PR hacia `main` pendiente (a cargo de @ai-repository-governor).
 
 ---
 
-## 6. Fuentes en NotebookLM (Estado al Cierre)
+## 7. Fuentes en NotebookLM (Estado al Cierre)
 
 **Notebook:** "Flores AI — Cerebro del Proyecto"
 **ID:** `35c8760b-4797-4df2-8c91-cbf5b2df0240`
 
-| Documento        | Ruta Local                                      | Estado en NotebookLM |
-| :--------------- | :---------------------------------------------- | :------------------- |
-| process.md       | `docs/methodology/process.md`                   | Sincronizado — 2026-04-23 |
-| brd.md           | `docs/governance/brd.md`                        | **Pendiente re-sincronizacion** (modificado en sesion 2026-04-20) |
-| behavior.md      | `docs/governance/behavior.md`                   | **Pendiente carga inicial** (nuevo en sesion 2026-04-20) |
-| sad.md           | `docs/governance/sad.md`                        | Cargado — 2026-04-20 |
-| specdd.md        | `docs/governance/specdd.md`                     | Cargado — 2026-04-20 |
-| contract.md      | `docs/governance/contract.md`                   | Cargado — 2026-04-20 |
-| feasibility.md   | `docs/Phase_discovery/feasibility.md`           | Cargado — 2026-04-20 |
-| decisions.md     | `docs/references/decisions.md`                  | **Pendiente sincronizacion** (entradas #17, #18 y leccion de Iteracion 2.4 añadidas) |
-| CC-028.md        | `docs/changes/CC-028.md`                        | Cargado — 2026-04-21 |
+| Documento | Ruta Local | Estado en NotebookLM |
+| :-------- | :--------- | :------------------- |
+| process.md | `docs/methodology/process.md` | Sincronizado — 2026-04-23 |
+| brd.md | `docs/governance/brd.md` | **Pendiente re-sincronizacion** (modificado sesion 2026-04-20) |
+| behavior.md | `docs/governance/behavior.md` | **Pendiente carga inicial** (nuevo sesion 2026-04-20) |
+| sad.md | `docs/governance/sad.md` | Cargado — 2026-04-20 |
+| specdd.md | `docs/governance/specdd.md` | Cargado — 2026-04-20 |
+| contract.md | `docs/governance/contract.md` | Cargado — 2026-04-20 |
+| feasibility.md | `docs/Phase_discovery/feasibility.md` | Cargado — 2026-04-20 |
+| decisions.md | `docs/references/decisions.md` | **Pendiente sincronizacion** (entradas D-040/D-041 de ejecucion F3 añadidas) |
+| CC-028.md | `docs/changes/CC-028.md` | Cargado — 2026-04-21 |
+| backlog.md | `docs/governance/backlog.md` | **Pendiente sincronizacion** (F3 actualizado a DONE) |
+| model_qa_report.md | `docs/Phase_modeling/model_qa_report.md` | **Pendiente carga inicial** (nuevo 2026-04-26) |
+| certification_f3.md | `docs/Phase_modeling/certification_f3.md` | **Pendiente carga inicial** (nuevo 2026-04-26) |
+| validation_f3.md | `docs/Phase_modeling/validation_f3.md` | **Pendiente carga inicial** (nuevo 2026-04-26) |
 
 ---
 
-## 7. Proximos Pasos — Phase Modeling (Iteracion 3.1)
+## 8. Proximos Pasos — Phase Delivery (Atomizacion Backlog F4)
 
-| Prioridad | ID Tarea | Descripcion | Responsable | Entregable |
-| :-------- | :------- | :---------- | :---------- | :--------- |
-| 1 (CRITICA) | F3-T01 | [RED] Suite de pruebas para `src/training/trainer.py` — contratos SpecDD §9 | @ai-data-qa-engineer | `tests/unit/training/test_trainer.py` |
-| 2 | F3-T02 | [GREEN] Implementar `trainer.py` — `build_pipeline()` + `train_and_evaluate()` | @ai-data-scientist | `src/training/trainer.py` |
-| 3 | F3-T02b | [REFACTOR] `trainer.py` — tipado estricto, TypedDict, sin efectos secundarios | @ai-ml-engineer | `src/training/trainer.py` (refactored) |
+| Prioridad | Accion | Responsable | Prerequisito |
+| :-------- | :----- | :---------- | :----------- |
+| 1 (CRITICA) | Atomizar Backlog F4 desde SpecDD §4.x aplicando patron IA-TDD (D-023): RED + GREEN + REFACTOR por modulo + CERTIFICACION + VALIDACION al cierre | @ai-backlog-manager | Leer SpecDD §4.x (contratos de `src/app.py`) + BRD §5 (KPIs de UI/Delivery) + behavior.md (escenarios Gherkin de la interfaz Streamlit) |
+| 2 | Commit de cierre de Phase 3 con: `trainer.py`, `serializer.py`, `test_trainer.py`, `test_serializer.py`, `notebooks/03_model_selection.ipynb`, `models/iris_model.joblib`, `model_qa_report.md`, `certification_f3.md`, `validation_f3.md`, `backlog.md` | @ai-repository-governor | Suite 70/70 en verde |
+| 3 | PR `feat/F3-modeling` → `main` | @ai-repository-governor | Commit de cierre completado |
+| 4 | Sincronizacion NotebookLM (documentos listados en seccion 7) | @ai-session-steward | decisions.md actualizado |
 
-**Prerequisito para F3-T01:** Leer en orden: `brd.md §KPIs` → `specdd.md §9 (trainer)` → `specdd.md §10 (serializer)` → `contract.md §4`. El Feature Store de entrada es `data/gold/X_gold.csv` + `data/gold/y_gold.csv`.
-
-**Notas criticas para Phase Modeling:**
-- La zona de solapamiento versicolor/virginica en `petal_width` [1.4-1.8 cm] (~17 instancias) es el limite fisico de separabilidad. Phase Modeling debe evaluar el modelo especificamente sobre estas instancias.
-- La correlacion petal_length/petal_width (0.962) es biologica, no leakage. Evaluar VIF solo si se usan modelos lineales (regresion logistica, LDA). No es bloqueador para ensambles o SVM.
-- StandardScaler va dentro del sklearn.Pipeline en `trainer.py`, NO en `gold_builder.py` (Decision D-008).
-- El linaje DATOS (Gold) → CODIGO (src) → MODELO (models) debe mantenerse: versionar `data/gold/reference_stats.json` junto al artefacto del modelo entrenado.
-- Baseline de referencia: RandomForest 5-fold CV → 95.20% ± 3.53%. El modelo final debe igualar o superar este valor.
-- Ruta canonica de tests de modeling: `tests/unit/training/` (no `tests/test_model_training.py`).
+**Notas criticas para Phase Delivery:**
+- El modelo de produccion es `models/iris_model.joblib` — un Pipeline serializado con joblib que incluye StandardScaler + RandomForestClassifier. La interfaz Streamlit debe llamar a `serializer.load_model()`, no cargar el archivo directamente.
+- El linaje DATOS (Gold) → CODIGO (src) → MODELO (models) → APP (src/app.py) debe mantenerse. `reference_stats.json` debe versionarse junto al modelo si se reentrana.
+- La UI debe implementar los 4 estados del BRD (formulario, exito, baja confianza, error) siguiendo el mockup aprobado y el design system "The Clinical Sanctuary".
+- El boton CTA de Streamlit requiere CSS custom inyectado via `st.markdown` con el selector `.stButton > button` para aplicar el gradiente a 135 grados (ver D-021).
+- StandardScaler esta dentro del Pipeline — la app no debe normalizar los inputs manualmente antes de llamar al modelo. El Pipeline hace el preprocessing internamente.
 
 ---
 
-## 8. Decisiones Criticas Activas (Consultar decisions.md para contexto completo)
+## 9. Decisiones Criticas Activas (Consultar decisions.md para contexto completo)
 
-| ID    | Decision                                                              | Impacto en Phase Modeling                                               |
-| :---- | :-------------------------------------------------------------------- | :---------------------------------------------------------------------- |
-| D-001 | Eliminar columna `Id` antes de cualquier entrenamiento                | Accion M-01 implementada y verificada en Silver — no negociable         |
-| D-002 | Metrica primaria: Accuracy Global + F1-Score Macro >= 0.95            | El modelo debe superar ambas metricas en el conjunto de test            |
-| D-003 | Stack confirmado: Python 3.12+ y Streamlit                            | `trainer.py` debe cumplir este stack                                    |
-| D-006 | Monolito Modular + Medallion Architecture (Bronze/Silver/Gold)        | La entrada a Phase Modeling es siempre el Gold layer                    |
-| D-008 | StandardScaler dentro de sklearn.Pipeline                             | El pipeline de entrenamiento normaliza; `gold_builder.py` no normaliza  |
-| D-009 | pathlib.Path en `src/config.py` como unico gestor de rutas            | Todos los paths en `src/model/` deben importarse desde `config.py`     |
-| D-025 | Jerarquia BDD: BRD → behavior.md → SpecDD → TDD                      | behavior.md es la fuente de verdad para los tests RED de Phase Modeling |
-| D-028 | Patron de inyeccion de dependencias en tests de data modules          | Aplicar mismo patron en tests de `trainer.py`                           |
-| D-033 | Toolchain de calidad: ruff + pytest + GitHub Actions                  | `requirements.txt` y `pytest.ini` vigentes para Phase Modeling          |
-| D-037 | Alta correlacion petal_length/petal_width (0.962) — biologica, no leakage | Evaluar VIF si se usan modelos lineales; no bloqueador para ensambles  |
-| D-038 | Baseline RandomForest 5-fold CV: 95.20% ± 3.53% sobre Gold dataset   | Umbral de referencia que el modelo de produccion debe igualar o superar |
-| D-039 | Ciclo AI-TDD completado limpiamente en Fase 2 por capas               | El mismo ciclo Red→Green→Refactor→Certificacion→Validacion aplica a Phase Modeling |
-| CC-028 | docs/changes/ como ubicacion oficial de fichas CC                   | Todo cambio formal debe tener ficha en docs/changes/ + referencia en decisions.md |
+| ID | Decision | Impacto en Phase Delivery |
+| :- | :------- | :------------------------ |
+| D-001 | Eliminar columna `Id` antes de cualquier entrenamiento | Accion implementada en Silver — no negociable |
+| D-002 | Metrica primaria: Accuracy >= 0.95 y F1-Score Macro >= 0.95 | Cumplidos: 0.9667 y 0.9666 respectivamente |
+| D-003 | Stack confirmado: Python 3.12+ y Streamlit | `src/app.py` debe usar este stack |
+| D-006 | Monolito Modular + Medallion Architecture | La app consume el modelo — no reconstruye el pipeline de datos |
+| D-008 | StandardScaler dentro del sklearn.Pipeline | El Pipeline ya normaliza; la app no debe normalizar manualmente |
+| D-009 | pathlib.Path en `src/config.py` como unico gestor de rutas | Todos los paths en `src/app.py` deben importarse desde `config.py` |
+| D-021 | Gradiente a 135 grados en boton CTA | Aplicar via `st.markdown` con selector `.stButton > button` |
+| D-022 | Mockup reconstruido con paleta "The Clinical Sanctuary" | La UI Streamlit debe replicar estilos del mockup actualizado |
+| D-025 | Jerarquia BDD: BRD → behavior.md → SpecDD → TDD | behavior.md es la fuente de verdad para tests E2E de Phase Delivery |
+| D-033 | Toolchain: ruff + pytest + GitHub Actions | `requirements.txt` y CI vigentes para Phase Delivery |
+| D-040 | RandomForestClassifier seleccionado como algoritmo de produccion | Artefacto listo: `models/iris_model.joblib` |
+| D-041 | Ciclo AI-TDD Phase Modeling completado 9/9 tareas | Patron RED→GREEN→REFACTOR→QA→CERT→VALID aplica a Phase Delivery |
+| CC-028 | docs/changes/ como ubicacion oficial de fichas CC | Todo cambio formal en Phase Delivery → ficha en docs/changes/ |
 
 ---
 
-## 9. Contexto para el Siguiente Agente
+## 10. Contexto para el Siguiente Agente
 
-La Phase Discovery esta cerrada. La Phase Engineering esta completamente cerrada (Iteraciones 2.0 a 2.4, 16/16 tareas DONE). El Feature Store Gold esta implementado, certificado (34/34 tests) y validado contra el BRD con veredicto GO. El ciclo Red→Green→Refactor→Certificacion→Validacion se completo de forma limpia por las tres capas del Medallion Architecture.
+Las Phases 1, 2 y 3 estan completamente cerradas. El modelo de produccion esta construido, certificado y validado contra los KPIs del BRD. El ciclo AI-TDD se completo limpiamente en tres fases consecutivas.
 
-- **Rama activa:** `feat/F2-engineering`. Pendiente commit de cierre de Phase 2 con: `certification_f2.md`, `validation_f2.md` y `backlog.md` actualizado.
-- **Suite de tests:** `pytest tests/unit/ -v` → 50/50 passed. `pytest tests/unit/data/ -v` → 34/34 passed (linaje). Ejecutar localmente antes de iniciar cualquier tarea nueva. El CI ejecuta esto mismo en cada push.
-- **Feature Store Gold:** `data/gold/X_gold.csv` (147x4), `data/gold/y_gold.csv` (147x1), `data/gold/reference_stats.json`. Versionar siempre junto al artefacto del modelo.
-- **Zona de solapamiento critica:** ~17 instancias versicolor/virginica en `petal_width` [1.4-1.8 cm] son el limite fisico de separabilidad del dataset. Phase Modeling debe evaluar el modelo especificamente sobre estas instancias.
-- **Correlacion alta:** petal_length/petal_width (0.962) es biologica, no leakage. No requiere eliminacion de features. VIF relevante solo para modelos lineales.
-- **Verificacion de orden de columnas X:** usar `np.array_equal(X, df_silver[config.FEATURE_COLUMNS].to_numpy())` es mas robusto que comparar solo shape — detecta feature misalignment silencioso.
-- **Protocolo CC activo:** Cualquier deriva tecnica debe pasar por `ai-change-manager` → ficha en `docs/changes/` → referencia en `decisions.md`.
+- **Rama activa:** `feat/F3-modeling`. Pendiente commit de cierre de Phase 3.
+- **Suite de tests:** `pytest tests/unit/ -v` → 70/70 passed. Ejecutar localmente antes de iniciar cualquier tarea nueva.
+- **Modelo certificado:** `models/iris_model.joblib` — Pipeline(StandardScaler + RandomForestClassifier, semilla 42). Cargarlo con `serializer.load_model(path)` definido en `src/training/serializer.py`.
+- **Feature Store Gold:** `data/gold/X_gold.csv` (147x4), `data/gold/y_gold.csv` (147x1), `data/gold/reference_stats.json`. Linaje certificado.
+- **Zona de solapamiento permanente:** ~17 instancias versicolor/virginica en `petal_width` [1.4-1.8 cm] son el limite fisico del dataset. El modelo comete exactamente 1 error en este subconjunto — no es un defecto, es el techo de performance del dataset.
+- **F1 Versicolor (0.9474):** Marginalmente por debajo del umbral aspiracional GREEN (>=0.95) pero claramente sobre el umbral minimo RED (>=0.90). No activa NO-GO segun BRD §4.1. La causa es la zona de solapamiento, no un defecto del modelo.
+- **Protocolo CC activo:** Cualquier deriva tecnica en Phase Delivery debe pasar por `ai-change-manager` → ficha en `docs/changes/` → referencia en `decisions.md`.
 - **Linter activo:** `ruff check` es parte del pipeline CI. Todo codigo nuevo en `src/` debe pasar ruff antes de hacer push.
-- **NotebookLM:** Pendientes: `decisions.md` (sincronizar entradas #17, #18 y leccion Iteracion 2.4), `brd.md` (re-sincronizar), `behavior.md` (carga inicial).
-- **Baseline de referencia para Phase Modeling:** RandomForest sin hiperparametrizar, 5-fold CV → 95.20% accuracy. El modelo final debe igualar o superar este valor para cumplir el KPI del BRD.
+- **Primera accion obligatoria en Phase Delivery:** Atomizar Backlog F4 desde SpecDD §4.x antes de escribir codigo. Leer en orden: `brd.md §5` → `behavior.md §Delivery` → `specdd.md §4.x` → `sad.md §Delivery`.
