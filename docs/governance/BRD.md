@@ -66,7 +66,7 @@ Este proyecto opera como un **proyecto de portafolio academico-profesional**. Su
 | :-- | :--------------------------------------------------------------------------------------------- | :---------------------------------------------- |
 | OS1 | Demostrar dominio de la metodologia SpecDD y TDD aplicada a proyectos de ML.                  | 100% de los modulos `.py` trazables al SpecDD.  |
 | OS2 | Construir una aplicacion web funcional que no requiera conocimiento tecnico para ser utilizada.| UAT aprobada por el Stakeholder Principal.      |
-| OS3 | Mantener trazabilidad completa de datos (Bronze -> Silver -> Gold -> Modelo -> UI).            | Linaje documentado sin gaps en el decisions.|
+| OS3 | Mantener trazabilidad completa de datos (Bronze -> Silver -> Gold -> Modelo -> UI).            | Linaje documentado sin gaps en el [[decisions]].|
 | OS4 | Generar un repositorio Git limpio, versionado y publico que pueda ser presentado en entrevistas.| Repo publico en GitHub con historial semantico. |
 
 ---
@@ -240,7 +240,7 @@ Aplicando el protocolo `value-driven-product-mapper` con estructura de IA-UX:
 
 **Explicabilidad Requerida (XAI):** No obligatoria en v1.0. La prediccion de la clase y su probabilidad es suficiente para el usuario final.
 
-**Escenarios de Comportamiento (BDD):** *(Especificaciones completas en `docs/governance/behavior.md`)*
+**Escenarios de Comportamiento (BDD):** *(Especificaciones completas en `docs/governance/[[behavior]].md`)*
 
 ```gherkin
 Escenario: Clasificacion exitosa de Iris Setosa (Happy Path)
@@ -338,7 +338,7 @@ La Phase Delivery se considera exitosa y el proyecto es aprobado por el ai-busin
 
 | ID   | Criterio                                                                                               | Verificacion                              |
 | :--- | :----------------------------------------------------------------------------------------------------- | :---------------------------------------- |
-| CA10 | El linaje Bronze->Silver->Gold->Modelo esta documentado sin gaps.                                     | Revision del decisions.               |
+| CA10 | El linaje Bronze->Silver->Gold->Modelo esta documentado sin gaps.                                     | Revision del [[decisions]].               |
 | CA11 | Todos los modulos en `src/` tienen su contrato en el SpecDD.                                          | Revision cruzada SpecDD vs. `src/`.       |
 | CA12 | La cobertura de tests unitarios en `src/` es >= 80%.                                                  | Reporte de Pytest coverage.               |
 | CA13 | El `requirements.txt` refleja exactamente las dependencias instaladas en el venv.                     | Comparacion `pip freeze` vs. `requirements.txt`. |

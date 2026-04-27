@@ -1,0 +1,127 @@
+{
+  "accuracy_test": 0.9666666666666667,
+  "f1_macro_test": 0.9665831244778612,
+  "f1_per_class": {
+    "setosa": 1.0,
+    "versicolor": 0.9473684210526315,
+    "virginica": 0.9523809523809523
+  },
+  "confusion_matrix": [
+    [
+      10,
+      0,
+      0
+    ],
+    [
+      0,
+      9,
+      1
+    ],
+    [
+      0,
+      0,
+      10
+    ]
+  ],
+  "error_rates": {
+    "setosa": {
+      "n": 10,
+      "errors": 0,
+      "error_rate": 0.0
+    },
+    "versicolor": {
+      "n": 10,
+      "errors": 1,
+      "error_rate": 0.1
+    },
+    "virginica": {
+      "n": 10,
+      "errors": 0,
+      "error_rate": 0.0
+    }
+  },
+  "vc_vg_confusion": {
+    "versicolor_as_virginica": 1,
+    "virginica_as_versicolor": 0
+  },
+  "disparity_max_min_error": 0.1,
+  "stress_results": {
+    "min_boundary": {
+      "status": "OK",
+      "predicted": "setosa",
+      "confidence": 0.97,
+      "valid_class": true
+    },
+    "max_boundary": {
+      "status": "OK",
+      "predicted": "virginica",
+      "confidence": 1.0,
+      "valid_class": true
+    },
+    "typical_setosa": {
+      "status": "OK",
+      "predicted": "setosa",
+      "confidence": 1.0,
+      "valid_class": true
+    },
+    "ambiguous_boundary": {
+      "status": "OK",
+      "predicted": "versicolor",
+      "confidence": 0.93,
+      "valid_class": true
+    },
+    "sepal_only": {
+      "status": "OK",
+      "predicted": "versicolor",
+      "confidence": 0.99,
+      "valid_class": true
+    }
+  },
+  "oor_results": {
+    "below_min_sepal_length": {
+      "status": "PREDICTED_WITHOUT_ERROR",
+      "predicted": "setosa",
+      "confidence": 1.0,
+      "valid_class": true
+    },
+    "above_max_sepal_length": {
+      "status": "PREDICTED_WITHOUT_ERROR",
+      "predicted": "setosa",
+      "confidence": 0.92,
+      "valid_class": true
+    },
+    "extreme_petal": {
+      "status": "PREDICTED_WITHOUT_ERROR",
+      "predicted": "virginica",
+      "confidence": 0.86,
+      "valid_class": true
+    },
+    "negative_values": {
+      "status": "PREDICTED_WITHOUT_ERROR",
+      "predicted": "setosa",
+      "confidence": 0.97,
+      "valid_class": true
+    },
+    "zeros": {
+      "status": "PREDICTED_WITHOUT_ERROR",
+      "predicted": "setosa",
+      "confidence": 0.97,
+      "valid_class": true
+    }
+  },
+  "verdict": "GO",
+  "checks": {
+    "accuracy_test >= 0.95": true,
+    "f1_macro_test >= 0.95": true,
+    "f1_setosa >= 0.90": true,
+    "f1_versicolor >= 0.90": true,
+    "f1_virginica >= 0.90": true,
+    "stress_boundary_no_exception": true,
+    "stress_boundary_valid_class": true
+  },
+  "n_train": 117,
+  "n_test": 30,
+  "random_state": 42,
+  "test_size": 0.2,
+  "classifier_type": "RandomForestClassifier"
+}

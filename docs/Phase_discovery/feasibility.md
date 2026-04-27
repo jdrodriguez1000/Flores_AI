@@ -329,7 +329,7 @@ El equipo de ingenieria de datos puede proceder a la Phase Engineering (Silver L
 - [x] Se confirmo que la volumetria soporta el modelo propuesto (150 registros, ML clasico)
 - [x] Se notifico al estratega sobre los KPIs que son alcanzables con los datos actuales (todos factibles)
 - [x] Se valido que no hay fugas de datos obvias (columna Id documentada como riesgo prevenible G-03)
-- [x] El plan de mitigacion es realista con el stack tecnologico (pandas + scikit-learn, documentado en SAD pendiente)
+- [x] El plan de mitigacion es realista con el stack tecnologico (pandas + scikit-learn, documentado en [[SAD]] pendiente)
 - [x] Se detecto desbalance de clases (resultado: balance perfecto, no requiere accion)
 - [x] Se confirmo o refruto la hipotesis de confusion Versicolor/Virginica del BRD (CONFIRMADA con datos)
 - [x] Se documento el linaje completo de la fuente de datos

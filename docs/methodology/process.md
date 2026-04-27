@@ -102,11 +102,11 @@ Este es el componente más crítico para la comunicación entre agentes. Debe in
 ---
 
 ## 5. Preparación para TDD y Desarrollo Modular
-Al finalizar esta fase, el **SAD**, el **behavior.md** y el **SpecDD** permiten que la creación de módulos sea una tarea de "ensamblaje" bajo la jerarquía SpecDD + BDD + TDD:
+Al finalizar esta fase, el **SAD**, el **[[behavior]].md** y el **SpecDD** permiten que la creación de módulos sea una tarea de "ensamblaje" bajo la jerarquía SpecDD + BDD + TDD:
 
 1. El **SAD** dicta la arquitectura (ej: Arquitectura de Cebolla o Hexagonal).
 2. El **SpecDD** dicta la interfaz (qué hace el código — contratos y firmas).
-3. El **behavior.md** dicta el comportamiento observable (cómo reacciona el sistema ante ejemplos reales — Gherkin).
+3. El **[[behavior]].md** dicta el comportamiento observable (cómo reacciona el sistema ante ejemplos reales — Gherkin).
 4. El **TDD** dicta la prueba (qué debe validar el código para que cumpla los dos anteriores).
 
 ---
@@ -351,7 +351,7 @@ En esta etapa, el enfoque se desplaza de la precisión del modelo hacia la **dis
 **Nombre:** ai-full-stack-sdet
 **Misión:** Aplicar la metodología **TDD** a nivel de integración total. Certifica que el "todo" es funcional.
 * **Funciones Detalladas:**
-    * **End-to-End (E2E) Testing:** Crea scripts que simulan un usuario real cargando un archivo y verificando que la gráfica final sea correcta. Cada test E2E valida específicamente un escenario Gherkin definido en `docs/governance/behavior.md`: el Happy Path, la advertencia de baja confianza y el rechazo de entradas fuera de rango. El **behavior.md** es la fuente de verdad para la cobertura E2E.
+    * **End-to-End (E2E) Testing:** Crea scripts que simulan un usuario real cargando un archivo y verificando que la gráfica final sea correcta. Cada test E2E valida específicamente un escenario Gherkin definido en `docs/governance/behavior.md`: el Happy Path, la advertencia de baja confianza y el rechazo de entradas fuera de rango. El **[[behavior]].md** es la fuente de verdad para la cobertura E2E.
     * **Load & Stress Testing:** Somete a la API a cargas masivas para identificar el punto de ruptura.
     * **Validación de Seguridad:** Realiza pruebas de penetración básicas y asegura que no haya fugas de datos sensibles en los logs.
 

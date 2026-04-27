@@ -510,7 +510,7 @@ Cada entrada debe contener: Fecha, Fase, ID de Decision, Contexto, Decision, Jus
 | # | Leccion | Categoria |
 | :- | :------- | :-------- |
 | 1 | El agnosticismo de los skills no es solo cuestion de nombres de proyecto — tambien aplica a IDs de herramientas externas. Un ID hardcodeado en un skill es tan acoplado como un nombre de proyecto. La regla es: todo identificador especifico del proyecto vive en `config.md`. | Arquitectura de Agentes |
-| 2 | Al disenar la sincronizacion de una herramienta externa, la primera pregunta no es "que sincronizar" sino "que documentos tienen valor semantico persistente". `handoff.md` parece importante pero es transitorio; excluirlo del notebook evita confusion en consultas futuras. | Diseno de Integraciones |
+| 2 | Al disenar la sincronizacion de una herramienta externa, la primera pregunta no es "que sincronizar" sino "que documentos tienen valor semantico persistente". `[[handoff]].md` parece importante pero es transitorio; excluirlo del notebook evita confusion en consultas futuras. | Diseno de Integraciones |
 | 3 | Auditar el agnosticismo de 63+ archivos es viable si se hace con busqueda sistematica de strings especificos del proyecto. El patron es: buscar el nombre del proyecto, el nombre del dataset y los IDs conocidos. Si no aparecen fuera de config.md, el repositorio es agnostico. | Proceso de Auditoria |
 | 4 | La sincronizacion con herramientas de consulta semantica (NotebookLM, embeddings, RAG) debe diseñarse en Phase Discovery, no en Phase Delivery. Integrarla tarde obliga a re-leer documentos que ya se leyeron y puede generar inconsistencias si el notebook no esta al dia durante el desarrollo. | Proceso / Metodologia |
 
@@ -538,7 +538,7 @@ Cada entrada debe contener: Fecha, Fase, ID de Decision, Contexto, Decision, Jus
 | **Origen** | Necesidad de estandarizar el manejo de brand del cliente en proyectos de ML/IA |
 | **Tipo**  | Decision de convencion de organizacion de artefactos y gobernanza de UI |
 
-**Contexto:** Los clientes ocasionalmente entregan materiales de identidad corporativa (paletas de colores, tipografias, reglas de componentes, prototipos HTML) que los agentes de UI deben respetar al generar interfaces. Sin una convencion estandar, estos materiales se almacenaban en carpetas ad-hoc (ej: `parameters/`) sin integracion formal con el ecosistema de agentes. El proyecto tenia una carpeta `parameters/` con tres archivos: `DESIGN.md` (sistema de diseno), `code.html` (tokens Tailwind completos) y `screen.png` (referencia visual).
+**Contexto:** Los clientes ocasionalmente entregan materiales de identidad corporativa (paletas de colores, tipografias, reglas de componentes, prototipos HTML) que los agentes de UI deben respetar al generar interfaces. Sin una convencion estandar, estos materiales se almacenaban en carpetas ad-hoc (ej: `parameters/`) sin integracion formal con el ecosistema de agentes. El proyecto tenia una carpeta `parameters/` con tres archivos: `[[DESIGN]].md` (sistema de diseno), `code.html` (tokens Tailwind completos) y `screen.png` (referencia visual).
 
 **Decision:** Se establece `docs/design-system/` como la ubicacion estandar y agnostica para los materiales de identidad visual del cliente en cualquier proyecto que adopte este framework. Los contenidos de `parameters/` fueron migrados a esta ubicacion. El nombre `design-system` es el termino estandar de la industria. La ubicacion dentro de `docs/` es correcta porque es documentacion de referencia, no codigo productivo.
 
@@ -876,7 +876,7 @@ Cada entrada debe contener: Fecha, Fase, ID de Decision, Contexto, Decision, Jus
 | # | Leccion | Categoria |
 | :- | :------- | :-------- |
 | 1 | Un SpecDD disenado con rigor de contratos (campos tipados, nombres semanticos) tiene alta probabilidad de cubrir los escenarios BDD sin modificacion. La alineacion perfecta entre behavior.md v1.0.0 y specdd.md v1.0.0 valida que el esfuerzo de precision en Phase Discovery se amortiza en cero deuda tecnica al incorporar BDD. | Calidad de Arquitectura |
-| 2 | El orden correcto de artefactos es BRD → behavior.md → SAD → SpecDD. Crear el SpecDD antes del BDD es un riesgo calculado: si el SpecDD es robusto, no hay retrabajo; si el BDD revela gaps en el SpecDD, hay que versionar el SpecDD y actualizar el backlog. Documentar este riesgo en el handoff evita que el proximo agente asuma que el orden fue intencional. | Proceso / Metodologia |
+| 2 | El orden correcto de artefactos es BRD → behavior.md → SAD → SpecDD. Crear el SpecDD antes del BDD es un riesgo calculado: si el SpecDD es robusto, no hay retrabajo; si el BDD revela gaps en el SpecDD, hay que versionar el SpecDD y actualizar el backlog. Documentar este riesgo en el [[handoff]] evita que el proximo agente asuma que el orden fue intencional. | Proceso / Metodologia |
 | 3 | Los escenarios de frontera (baja confianza con umbral exacto del 60%, valores en los limites exactos del rango de validacion) son mas faciles de identificar en Gherkin que en TDD. El lenguaje de comportamiento observable obliga al autor a pensar en terminos de "dado este input exacto, que muestra la pantalla" antes de pensar en aserciones de codigo. | Calidad de Tests |
 | 4 | Crear un skill para una capacidad nueva (gherkin-scenario-author) inmediatamente al usarla por primera vez garantiza que la capacidad es reproducible en sesiones futuras sin depender de la memoria del agente. El skill es la documentacion ejecutable de la habilidad. | Gestion de Conocimiento |
 
@@ -892,13 +892,13 @@ Cada entrada debe contener: Fecha, Fase, ID de Decision, Contexto, Decision, Jus
 
 ---
 
-### CC-028 (referencia): Expansión del Protocolo de Control de Cambios
+### [[CC-028]] (referencia): Expansión del Protocolo de Control de Cambios
 
 | Campo | Valor |
 |---|---|
 | **Tipo** | Control de Cambios |
 | **Estado** | APROBADO |
-| **Ficha completa** | `docs/changes/CC-028.md` |
+| **Ficha completa** | `docs/changes/[[CC-028]].md` |
 | **Resumen** | Protocolo CC expandido en CLAUDE.md Sección 5. Creación de `docs/changes/` como ubicación oficial de fichas CC. El ritual de cierre de sesión sincroniza `docs/changes/` a NotebookLM. |
 
 ---
@@ -919,7 +919,7 @@ Cada entrada debe contener: Fecha, Fase, ID de Decision, Contexto, Decision, Jus
 | Campo | Valor |
 |---|---|
 | **Contexto** | Se debatio si el ritual de apertura debia incluir una lectura de NotebookLM como paso obligatorio. |
-| **Decision** | NotebookLM es una base de conocimiento profundo que se consulta a demanda durante la sesion, no en apertura. Los 4 documentos operativos (handoff, decisions, backlog, config) son suficientes para reconstruir el contexto de arranque. |
+| **Decision** | NotebookLM es una base de conocimiento profundo que se consulta a demanda durante la sesion, no en apertura. Los 4 documentos operativos ([[handoff]], decisions, backlog, config) son suficientes para reconstruir el contexto de arranque. |
 | **Justificacion** | Cargar el cerebro completo en cada apertura es costoso y generalmente innecesario. El conocimiento profundo solo es relevante cuando los documentos operativos no responden una pregunta especifica. |
 | **Impacto** | CLAUDE.md Seccion 8 (Ritual de Apertura) incluye nota explicita de este diseño. |
 
@@ -1156,7 +1156,7 @@ Ver ficha completa en `docs/changes/CC-028.md`.
 **Contexto:** El proyecto tenia dos artefactos de gobernanza agnostica con nombres no estandarizados: `AGENTS.md` en la raiz del repositorio (nombre en mayusculas, fuera de la estructura `docs/`) y `docs/methodology/ai_process.md` (con prefijo `ai_` redundante que no aplica a ningun otro documento del proyecto). La raiz del repositorio debe contener unicamente archivos de configuracion del proyecto (`CLAUDE.md`, `requirements.txt`, `pytest.ini`, etc.), no documentacion de referencia.
 
 **Decision:**
-1. `AGENTS.md` (raiz) → `docs/references/agents.md`: Centraliza el catalogo de agentes en el directorio de referencias junto con `config.md`, `decisions.md`, `handoff.md`, `principles.md` y `sources.md`. El titulo interno del archivo fue actualizado a `# agents.md`.
+1. `AGENTS.md` (raiz) → `docs/references/agents.md`: Centraliza el catalogo de agentes en el directorio de referencias junto con `config.md`, `decisions.md`, `[[handoff]].md`, `principles.md` y `sources.md`. El titulo interno del archivo fue actualizado a `# agents.md`.
 2. `docs/methodology/ai_process.md` → `docs/methodology/process.md`: Elimina el prefijo `ai_` para uniformizar la nomenclatura. El archivo permanece en `docs/methodology/` — su ubicacion es correcta, solo el nombre cambia.
 3. Ambos cambios se ejecutaron con `git mv` para preservar el historial de commits de cada archivo.
 
@@ -1165,7 +1165,7 @@ Ver ficha completa en `docs/changes/CC-028.md`.
 **Impacto Transversal:**
 - `CLAUDE.md`: 3 referencias actualizadas (Seccion de metodologia, encabezado de tabla de gobernanza, Seccion 7 de agentes).
 - `docs/governance/backlog.md`: Enlace de metodologia actualizado.
-- `docs/references/handoff.md`: 3 referencias actualizadas (tabla de inventario, tabla NotebookLM, notas de contexto).
+- `docs/references/[[handoff]].md`: 3 referencias actualizadas (tabla de inventario, tabla NotebookLM, notas de contexto).
 - `docs/references/config.md`: Entrada en fuentes cargadas en NotebookLM actualizada.
 - `.claude/skills/session-management/SKILL.md`: Tabla de sincronizacion actualizada.
 - `.claude/skills/repository-governance/SKILL.md`: Cabecera de fuente de verdad actualizada.
@@ -1218,7 +1218,7 @@ La discrepancia se origina en que la estimacion del contract.md fue realizada an
 - `data/gold/reference_stats.json` (F2-T09b — pendiente): Debe contener `{"setosa": 48, "versicolor": 50, "virginica": 49, "total": 147}` como distribucion canonica de referencia.
 - `docs/Phase_engineering/eda_silver.md`: Hallazgo documentado en la seccion de distribucion de clases.
 - `docs/governance/contract.md` §4.2: La estimacion existente (setosa=49, virginica=48) queda obsoleta como referencia numerica pero el contrato no requiere actualizacion formal porque el invariante SR-01 sigue siendo `len==147` y los valores reales no lo contradicen. Si en el futuro se requiere precision numerica en el contract, se puede emitir un CC menor para actualizar la tabla de proyeccion.
-- `handoff.md`: Nota critica añadida en la seccion de proximos pasos para que el agente que ejecute F2-T09b use los valores reales.
+- `[[handoff]].md`: Nota critica añadida en la seccion de proximos pasos para que el agente que ejecute F2-T09b use los valores reales.
 
 ---
 
@@ -1430,7 +1430,7 @@ La discrepancia se origina en que la estimacion del contract.md fue realizada an
 
 **Impacto Transversal:**
 - `docs/governance/backlog.md`: F3 actualizado de 3 a 9 tareas atomicas con DoDs trazables al SpecDD §9–10, SAD §9.2 y BRD §4.
-- `docs/references/handoff.md`: Proximos pasos actualizados con la ruta canonica de tests `tests/unit/training/` y el responsable correcto por tarea.
+- `docs/references/[[handoff]].md`: Proximos pasos actualizados con la ruta canonica de tests `tests/unit/training/` y el responsable correcto por tarea.
 - Phase Modeling: La primera tarea ejecutable es F3-T01 [RED] con entregable `tests/unit/training/test_trainer.py`.
 
 ---
@@ -1468,3 +1468,73 @@ La discrepancia se origina en que la estimacion del contract.md fue realizada an
 ---
 
 *Fin de entrada #17.*
+
+---
+
+---
+
+## Entrada #18 — Sesion 2026-04-26 | Phase Modeling — Ejecucion completa F3 (9/9 tareas DONE)
+
+**Agente de Cierre:** ai-session-steward
+**Hora de Cierre:** Fin de jornada 2026-04-26
+**Rama activa:** `feat/F3-modeling`
+
+---
+
+### D-040 (Ejecucion): RandomForestClassifier seleccionado como algoritmo de produccion
+
+| Campo | Valor |
+| :---- | :---- |
+| **Fecha** | 2026-04-26 |
+| **Fase** | Phase Modeling — Iteracion 3.3 (Experimentacion) |
+| **Origen** | F3-T05 — Seleccion de algoritmo en `notebooks/03_model_selection.ipynb` |
+| **Tipo** | Decision de algoritmo de produccion |
+
+**Contexto:** La iteracion de experimentacion (F3-T05) evaluo tres algoritmos candidatos sobre el Feature Store Gold (147x4): LogisticRegression, RandomForestClassifier y SVC con kernel RBF. La evaluacion se realizo mediante validacion cruzada estratificada 5-fold usando F1-Score Macro como metrica primaria, en coherencia con el umbral del BRD (>=0.95).
+
+**Decision:** RandomForestClassifier seleccionado como algoritmo de produccion. El pipeline final es Pipeline(StandardScaler + RandomForestClassifier, random_state=42). Los resultados del experimento confirmaron que RF maximiza F1-macro con menor complejidad operativa que SVC (sin necesidad de ajuste de kernel ni de parametro C) y sin los supuestos de linealidad de LogisticRegression que serian problematicos dado el solapamiento versicolor/virginica en `petal_width`.
+
+**Justificacion:** En linea con el principio "Simplicidad Primero" de `principles.md`: entre algoritmos que superan el umbral del BRD, se elige el de menor complejidad de configuracion y mantenimiento. RandomForest no requiere ajuste de hiperparametros para superar el umbral en este dataset, es interpretable via feature importance y su comportamiento ante multicolinealidad (petal_length/petal_width 0.962) es robusto por diseno (subsampling de features en cada arbol).
+
+**Impacto Transversal:**
+- `notebooks/03_model_selection.ipynb`: Experimento documentado con resultados comparativos de los tres algoritmos.
+- `models/iris_model.joblib`: Artefacto final serializado con joblib. Pipeline certificado.
+- Phase Delivery: `src/app.py` debe cargar el modelo via `serializer.load_model()`. No instanciar el pipeline manualmente en la app.
+
+---
+
+### D-041 (Ejecucion): Ciclo AI-TDD Phase Modeling completado — 9/9 tareas, 20/20 tests, veredicto GO
+
+| Campo | Valor |
+| :---- | :---- |
+| **Fecha** | 2026-04-26 |
+| **Fase** | Phase Modeling — Iteracion 3.4 (Certificacion y Validacion) |
+| **Origen** | F3-T08 (CERTIFICACION) + F3-T09 (VALIDACION) |
+| **Tipo** | Decision de proceso (cierre de fase con veredicto GO) |
+
+**Contexto:** Phase Modeling se ejecuto siguiendo el ciclo AI-TDD completo: Iteracion 3.1 (RED+GREEN+REFACTOR para `trainer.py`), Iteracion 3.2 (RED+GREEN+REFACTOR para `serializer.py`), Iteracion 3.3 (EXPERIMENT + BUILD), Iteracion 3.4 (MODEL QA + CERTIFICACION + VALIDACION). El ciclo completo cubre 9 tareas atomicas en 4 iteraciones.
+
+**Decision:** Se emite veredicto GO para Phase Delivery. Los criterios de cierre se cumplen en su totalidad: (1) 20/20 tests de training en verde (`test_trainer.py` + `test_serializer.py`); (2) 70/70 tests totales en verde; (3) Accuracy Global 0.9667 >= 0.95; (4) F1-Score Macro 0.9666 >= 0.95; (5) F1 por clase: Setosa 1.0000, Versicolor 0.9474, Virginica 0.9524 — todas >= 0.90; (6) Latencia 8.30 ms/pred <= 30 ms; (7) Linaje Gold→Pipeline→.joblib documentado y certificado en `certification_f3.md`.
+
+**Justificacion:** El ciclo AI-TDD aplicado a Phase Modeling demostro la misma solidez que en Phase Engineering: la separacion de `trainer.py` y `serializer.py` en iteraciones independientes (D-041 de gobernanza, sesion 2026-04-24) redujo la complejidad del ciclo TDD, facilito la certificacion por modulo y produjo un codigo industrializable sin retrabajo. El patron RED→GREEN→REFACTOR por modulo es la estructura mandatoria para Phase Delivery.
+
+**Impacto Transversal:**
+- `docs/Phase_modeling/certification_f3.md`: Certificado tecnico de linaje. Fuente de verdad para el GO de Phase Delivery.
+- `docs/Phase_modeling/validation_f3.md`: Reporte de validacion de negocio con veredicto GO.
+- `docs/Phase_modeling/model_qa_report.md`: Benchmarking, analisis de sesgo y stress testing documentados.
+- Phase Delivery: El mismo ciclo RED→GREEN→REFACTOR→QA→CERTIFICACION→VALIDACION aplica a `src/app.py` y los modulos de entrega.
+
+---
+
+### Lecciones Aprendidas — Sesion 2026-04-26 (Phase Modeling completa)
+
+| # | Leccion | Categoria |
+| :- | :------- | :-------- |
+| 1 | F1 Versicolor (0.9474) esta marginalmente por debajo del umbral aspiracional GREEN (>=0.95) pero claramente sobre el umbral minimo RED (>=0.90). La zona de solapamiento petal_width [1.4-1.8 cm] (~17 instancias) es el limite fisico del dataset Iris, no un defecto del modelo. El BRD §4.1 establece que el NO-GO se activa solo si se incumple el umbral minimo RED — esta situacion no lo activa. Documentar la causa del limite (biologica, no tecnica) en el reporte de QA es mas valioso que intentar sobreajustar el modelo para alcanzar el 0.95 aspiracional. | Calidad de Modelos / Toma de Decisiones |
+| 2 | El unico error de clasificacion fue 1 instancia de versicolor predicha como virginica. Este hallazgo es coherente con el analisis de EDA Gold de Phase Engineering (zona de solapamiento documentada en D-037). La continuidad entre fases — donde los hallazgos de datos predicen exactamente los errores del modelo — es la evidencia mas fuerte de que el linaje Bronze→Silver→Gold→Modelo es correcto. | Trazabilidad de Linaje |
+| 3 | La separacion de `trainer.py` y `serializer.py` como iteraciones independientes (Iter 3.1 y 3.2) fue la decision correcta: cada modulo tiene su suite de 10 tests, su ciclo RED→GREEN→REFACTOR independiente y su responsable distinto. Al momento de ejecutar el BUILD (Iter 3.3), los dos modulos ya estaban certificados individualmente, lo que elimino ambiguedad sobre donde localizar errores durante la construccion del pipeline final. | Proceso / Arquitectura de Tests |
+| 4 | Un Pipeline de sklearn (StandardScaler + Clasificador) serializado con joblib es el artefacto de produccion correcto para una app Streamlit: el preprocessing esta encapsulado, la app no puede olvidar normalizar los inputs, y el pipeline es versionable como una unidad atomica. Este patron debe replicarse sin cambios en Phase Delivery — la app llama a `predict()` sobre el pipeline, no sobre el clasificador desnudo. | Arquitectura de Produccion |
+
+---
+
+*Fin de entrada #18.*

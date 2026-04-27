@@ -207,4 +207,4 @@ Criterio de aprobacion: el Stakeholder confirma por escrito que las 4 pantallas 
 
 ---
 
-> **Nota de Gobernanza:** Este artefacto es el entregable de la tarea de prototipado de la Phase Discovery. Su aprobacion por el Stakeholder es prerequisito para el inicio de la Phase Engineering (EDA y preprocesamiento de datos). Cualquier cambio solicitado debe registrarse en el decisions.md antes de ser implementado.
+> **Nota de Gobernanza:** Este artefacto es el entregable de la tarea de prototipado de la Phase Discovery. Su aprobacion por el Stakeholder es prerequisito para el inicio de la Phase Engineering (EDA y preprocesamiento de datos). Cualquier cambio solicitado debe registrarse en el [[decisions]].md antes de ser implementado.
